@@ -1,0 +1,23 @@
+- name: "Create a Swarm"
+  hosts: systemslab
+  remote_user: issdm
+  tasks:
+  - name: "swarm create token ID"
+    local_action: command docker run --rm swarm create
+    run_once: true
+    register: token_id
+  - name: "initiate swarm agents"
+    command: docker -H tcp://0.0.0.0:2375 run -d swarm join --addr={{ ansible_default_ipv4.address }}:2375 token://{{ token_id.stdout }}
+    when: token_id.stdout|default("") != "" 
+  - name: "swarm create token ID failed"
+    local_action: command echo 'swarm create failed'
+    run_once: true
+    when: token_id.stdout|default("") == "" 
+  - name: "write token ID to file"
+    local_action: command echo {{ token_id.stdout }} > token
+    run_once: true
+    when: token_id.stdout|default("") != "" 
+  - name: "write token ID to file"
+    local_action: shell echo {{ token_id.stdout }} > token
+    run_once: true
+    when: token_id.stdout|default("") != "" 

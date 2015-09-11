@@ -1,0 +1,8 @@
+- name: "Cat a file"
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: "cat"
+    command: cat '/sys/fs/cgroup/blkio/ceph/blkio.throttle.write_bps_device'
+    register: cat
+  - debug: var=cat.stdout_lines

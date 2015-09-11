@@ -1,0 +1,45 @@
+# create ext4 partitions on sdb1 for rackform servers
+ansible rackform \
+  -u issdm -b -i inventory \
+  -m filesystem -a 'fstype=ext4 dev=/dev/sdb1 force=true'
+
+# display disks, partitions and fs type for all machines
+ansible all -u issdm -b -i inventory -a 'lsblk -f'
+
+# mount a filesystem
+ansible rackform \
+  -u issdm -b -i inventory \
+  -m mount -a 'name=/mnt/vol1 src=/dev/sdb1 state=mounted'
+
+# ensure a package is installed
+ansible all \
+  -u issdm -b -i inventory \
+  -m apt -a 'package=cgroup-bin state=present'
+
+## experiments
+
+# create ext4 partitions on sdb1 for rackform servers
+ansible all \
+  -u issdm -b -i inventory \
+  -m filesystem -a 'fstype=ext4 dev=/dev/sdb1 force=true'
+
+# create cgroup for ceph OSDs
+ansible all \
+  -u issdm -b -i inventory \
+  -a 'mkdir /sys/fs/cgroup/blkio/ceph'
+
+# add blkio constraint
+ansible all \
+  -u issdm -b -i inventory \
+  -m shell -a 'echo "8:16 20000000" > /sys/fs/cgroup/blkio/ceph/blkio.throttle.write_bps_device'
+
+# mount sdb
+ansible all \
+  -u issdm -b -i inventory \
+  -m mount -a 'name=/var/lib/ceph src=/dev/sdb1 state=mounted'
+
+# clean /var/lib
+ansible all \
+  -u issdm -b -i inventory \
+  -a 'rm -r /var/lib/ceph/*'
+

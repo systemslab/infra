@@ -1,7 +1,5 @@
 - name: "Install docker"
-  hosts: systemslab
-  remote_user: issdm
-  sudo: yes
+  hosts: all
   roles:
   - role: docker.ubuntu
     docker_opts: "--host tcp://0.0.0.0:2375"

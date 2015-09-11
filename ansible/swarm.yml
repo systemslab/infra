@@ -1,6 +1,5 @@
 - name: "Create a Swarm"
-  hosts: systemslab
-  remote_user: issdm
+  hosts: all
   tasks:
   - name: "swarm create token ID"
     local_action: command docker run --rm swarm create

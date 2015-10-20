@@ -7,3 +7,6 @@
 [submodule "images/docker-tachyondev"]
 	path = images/docker-tachyondev
 	url = https://github.com/michaelsevilla/docker-tachyondev.git
+[submodule "images/docker-emaster"]
+	path = images/docker-emaster
+	url = https://github.com/michaelsevilla/docker-emaster.git

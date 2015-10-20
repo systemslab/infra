@@ -7,7 +7,7 @@
 
 - name: pull/install a tachyon container
   docker:
-    image: michaelsevilla/hathisar-dev:tachyon
+    image: michaelsevilla/tachyondev
     name: tachyon
     detach: yes
     tty: yes

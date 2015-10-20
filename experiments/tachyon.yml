@@ -1,16 +1,14 @@
 # Author: Michael Sevilla
 # Create a Tachyon development node (with the source code)
 
-- hosts: localhost
-  roles: 
-    - emaster
+- name: setup the tachyon master
+  hosts: localhost
+  roles: [emaster]
   tasks: 
-    - name: setup the tachyon master
-      include: ../roles/emaster/tasks/tachyon.yml
+    - include: ../roles/emaster/tasks/tachyon.yml
 
 - hosts: all
-  roles: 
-    - tachyon
+  roles: [tachyon]
 
 - name: add the tachyon masters to the hosts
   hosts: TachyonMasters
@@ -31,7 +29,7 @@
 - name: start the masters
   hosts: tachyon_master_containers
   tasks: 
-    - shell: /tachyon/bin/tachyon-start.sh master -f
+      - shell: /tachyon/bin/tachyon-start.sh master -f
 
 - name: start the workers
   hosts: tachyon_worker_containers

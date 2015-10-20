@@ -1,8 +1,8 @@
 ===================================================
-Hathisar -- The Hadoop integration testing framework
+Infra: a framework for deploying systems and running experiments
 ===================================================
 
-This is the SRL's infrastructure repository.
+This is the SRL's infrastructure repository. Originally, it was called "Hathisar - the Hadoop integration testing framework". 
 
 ``hathisar`` is an automation framework for Hadoop, written in Bash and Python. It contains scripts for deploying object stores (e.g., Swift), connecting them to Hadoop, running Hadoop jobs, and graphing results. It is based on Ceph's `teuthology <https://github.com/ceph/teuthology>`__ test framework. 
 
@@ -13,11 +13,11 @@ Directory Structure
 
 - ``experiments``: where you go to launch experiments. The user should only have to cd to this directory.
 
-- ``deploy``: this folder has the Ansible scripts for deploying the systems and running experiments.
+- ``deploy``: scripts for deploying the systems and running experiments using Ansible.
 
-- ``install``: this folder has the Docker image scripts for installing the systems. Stuff in here gets built into an image and automatically uploaded to the Docker Hub.
+- ``images``: scripts for installing the systems using containers. Stuff in here gets built into an image and automatically uploaded to the Docker Hub.
 
-- ``bin``: scripts that setup a minimal environment.
+- ``bin``: scripts that orchestrate the Experiment Master.
 
 Setup
 ========

@@ -40,20 +40,16 @@ Q: The container fails to pull down Ubuntu repos and can't seem to reach the int
 
 A: This connectivity issue [1] is fixed with:
 
-    ```bash
     sudo apt-get install bridge-utils
     pkill docker
     iptables -t nat -F
     ifconfig docker0 down
     brctl delbr docker0
     sudo service docker start
-    ```
 
 Q: On Centos6, I get:
 
-    ```bash
     NameError: global name 'DEFAULT_DOCKER_API_VERSION' is not defined
-    ```
 
 A: Centos6 is not supported but a workaround [2] is to yum install python-docker-py.x86_64
 

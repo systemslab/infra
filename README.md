@@ -2,31 +2,29 @@
 Infra: a framework for deploying systems and running experiments
 ============================================
 
-This is the SRL's infrastructure repository. Originally, it was called "Hathisar - the Hadoop integration testing framework". 
+This is the SRL's infrastructure repository. 
 
-    ./test.sh
+Quickstart
+==========
 
-``hathisar`` is an automation framework for Hadoop, written in Bash and Python. It contains scripts for deploying object stores (e.g., Swift), connecting them to Hadoop, running Hadoop jobs, and graphing results. It is based on Ceph's `teuthology <https://github.com/ceph/teuthology>`__ test framework. 
+1. On all nodes, [install Docker](https://docs.docker.com/installation).
+2. On this node, start an ``experiment master``:
+    cd bin; ./emaster.sh
+3. Run an experiment:
+    root@experiment_master# ansible-playbook tachyon.yml 
 
-`Hathisars <http://www.asesg.org/PDFfiles/Gajah/23-01-Glossary.pdf>`__ are elephant stables managed by mahout families in Nepal.
+Description
+===========
+
+The experiment master orchestrates the installation, deployment, and experiment tasks using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed and the ssh keys are setup. To push the keys, the script asks for a password.
 
 Directory Structure
-========
+-------------------
 
 - ``experiments``: where you go to launch experiments. The user should only have to cd to this directory.
-
 - ``deploy``: scripts for deploying the systems and running experiments using Ansible.
-
 - ``images``: scripts for installing the systems using containers. Stuff in here gets built into an image and automatically uploaded to the Docker Hub.
-
 - ``bin``: scripts that orchestrate the Experiment Master.
-
-Setup
-========
-
-1. On all nodes, install Docker using their directions `here <https://docs.docker.com/installation/>`__
-#. On the node that this code is on (i.e., our ``experiment master``), run: ./deploy/master.sh
-- this will instantiate an Ansible Docker container
 
 FAQ
 ========
@@ -58,6 +56,3 @@ A: This is a kernel bug, according to [3].
 [1] http://serverfault.com/questions/642981/docker-containers-cant-resolve-dns-on-ubuntu-14-04-desktop-host
 [2] https://github.com/ansible/ansible-modules-core/issues/1792
 [3] https://github.com/docker/docker/issues/5704
-
-
-TODO: Figure out how to run sudo! Pull down the container and figure out how to get the tachyon container to launch wtih sudo

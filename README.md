@@ -9,14 +9,22 @@ Quickstart
 
 1. On all nodes, [install Docker](https://docs.docker.com/installation).
 2. On this node, start an ``experiment master``:
-    cd bin; ./emaster.sh
+
+    ```bash
+     cd bin
+     ./emaster.sh
+     ```
+
 3. Run an experiment:
-    root@experiment_master# ansible-playbook tachyon.yml 
+
+    ```bash
+    root@experiment_master# ansible-playbook tachyon.yml
+    ```
 
 Description
 ===========
 
-The experiment master orchestrates the installation, deployment, and experiment tasks using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed and the ssh keys are setup. To push the keys, the script asks for a password.
+The experiment master orchestrates the installation/deployment and runs experiments using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed and sets up passwordless login. To push the keys the script asks for a password.
 
 Directory Structure
 -------------------
@@ -26,32 +34,32 @@ Directory Structure
 - ``images``: scripts for installing the systems using containers. Stuff in here gets built into an image and automatically uploaded to the Docker Hub.
 - ``bin``: scripts that orchestrate the Experiment Master.
 
-FAQ
-========
-
-Q: Why is this all so insecure
-
-A: Because I couldn't figure out how to initialize docker containers with specific SSH keys
-
+Troubleshooting
+---
 Q: The container fails to pull down Ubuntu repos and can't seem to reach the internet.
 
 A: This connectivity issue [1] is fixed with:
-sudo apt-get install bridge-utils
-pkill docker
-iptables -t nat -F
-ifconfig docker0 down
-brctl delbr docker0
-sudo service docker start
 
+    ```bash
+    sudo apt-get install bridge-utils
+    pkill docker
+    iptables -t nat -F
+    ifconfig docker0 down
+    brctl delbr docker0
+    sudo service docker start
+    ```
 
 Q: On Centos6, I get:
-NameError: global name 'DEFAULT_DOCKER_API_VERSION' is not defined
+
+    ```bash
+    NameError: global name 'DEFAULT_DOCKER_API_VERSION' is not defined
+    ```
 
 A: Centos6 is not supported but a workaround [2] is to yum install python-docker-py.x86_64
 
 Q: I'm getting error for "chpasswd: (user root) pam_chauthtok() failed, error: System error"
 
-A: This is a kernel bug, according to [3].
+A: This is a kernel bug, according to [3]. Get out of the 3.13 kernel.
 
 [1] http://serverfault.com/questions/642981/docker-containers-cant-resolve-dns-on-ubuntu-14-04-desktop-host
 [2] https://github.com/ansible/ansible-modules-core/issues/1792

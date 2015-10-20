@@ -1,0 +1,7 @@
+# Author: Michael Sevilla
+# Push the keys
+
+- name: initialize provisioning
+  hosts: all
+  tasks:
+    - authorized_key: user={{ ansible_ssh_user }}  key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

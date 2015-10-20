@@ -1,0 +1,5 @@
+# Author: Michael Sevilla
+# Experiment master variables
+
+version: 0.7.1
+tmpdir: /tmp/docker

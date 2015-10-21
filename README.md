@@ -7,7 +7,13 @@ This is the SRL's infrastructure repository.
 Quickstart
 ==========
 
-1. On all nodes, [install Docker](https://docs.docker.com/installation).
+1. On all nodes, [install Docker](https://docs.docker.com/installation). For Ubuntu, you can use:
+
+    ```bash
+    cd bin
+    ./bootstrap.sh
+    ```
+
 2. On this node, start an ``experiment master``:
 
     ```bash

@@ -1,5 +1,5 @@
 [TachyonMasters]
-ike-nassi-ucsc.soe.ucsc.edu ansible_ssh_user=msevilla
+dexter.soe.ucsc.edu ansible_ssh_user=msevilla
 
 [TachyonWorkers]
 ike-nassi-ucsc.soe.ucsc.edu ansible_ssh_user=msevilla

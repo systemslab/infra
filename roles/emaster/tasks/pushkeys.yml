@@ -5,3 +5,5 @@
   hosts: all
   tasks:
     - authorized_key: user={{ ansible_ssh_user }}  key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    - shell: mkdir /tmp/docker
+      ignore_errors: true

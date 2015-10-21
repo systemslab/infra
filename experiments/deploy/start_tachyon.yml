@@ -1,0 +1,28 @@
+- hosts: all
+  roles: [tachyon]
+
+- name: add the tachyon masters to the hosts
+  hosts: TachyonMasters
+  tasks:
+    - add_host: name={{ inventory_hostname }} 
+                ansible_ssh_user=root 
+                ansible_ssh_port=2222
+                group=tachyon_master_containers
+
+- name: add the tachyon workers to the hosts
+  hosts: TachyonWorkers
+  tasks:
+    - add_host: name={{ inventory_hostname }} 
+                ansible_ssh_user=root 
+                ansible_ssh_port=2222
+                group=tachyon_worker_containers
+
+- name: start the masters
+  hosts: tachyon_master_containers
+  tasks: 
+      - shell: /tachyon/bin/tachyon-start.sh master -f
+
+- name: start the workers
+  hosts: tachyon_worker_containers
+  tasks:
+    - shell: /tachyon/bin/tachyon-start.sh worker SudoMount

@@ -1,30 +1,23 @@
 # Author: Michael Sevilla
 # Get the source code for Tachyon
 
-- name: get_src | figure out if the tachyon code is local
+- name: figure out if the tachyon code is local
   stat: path={{ tmpdir }}/tachyon
   register: p
 
-- name: get_src | download tachyon source
+- name: download tachyon source
   get_url: url=https://github.com/amplab/tachyon/releases/download/v{{ version }}/tachyon-{{ version }}-bin.tar.gz 
            dest={{ tmpdir }}/tachyon.tar.gz
            timeout=120
   when: p.stat.exists == False
 
-- name: get_src | unarchive tachyon source 
+- name: unarchive tachyon source 
   unarchive: src={{ tmpdir }}/tachyon.tar.gz
              dest={{ tmpdir }}
              copy=no
   when: p.stat.exists == False
 
-- name: get_src | move the code to location that Docker expects
+- name: move the code to location that Docker expects
   shell: mv "{{ tmpdir }}/tachyon-{{ version }}" "{{ tmpdir }}/tachyon"
   when: p.stat.exists == False
   ignore_errors: yes
-
-- name: get_src | delete archived tachyon code
-  file: path={{ tmpdir }}/tachyon.tar.gz state=absent
-
-- name: get_src | package up the tachyon code
-  shell: tar czvf {{ tmpdir }}/tachyon.tar.gz {{ tmpdir }}/tachyon
-

@@ -1,0 +1,6 @@
+# Author: Michael Sevilla
+# Install tachyon
+
+- include: download.yml
+- include: config.yml
+- include: package.yml

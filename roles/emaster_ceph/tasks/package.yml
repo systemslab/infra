@@ -1,0 +1,9 @@
+# Author: Michael Sevilla
+# Package up the source code in preparation for network transfer
+
+- name: delete archived ceph code
+  file: path={{ tmpdir }}/ceph.tar.gz state=absent
+
+- name: package up the ceph code
+  shell: tar czvf {{ tmpdir }}/ceph.tar.gz /ceph
+

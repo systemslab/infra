@@ -1,2 +1,8 @@
 # Author: Michael Sevilla
 # Create a Ceph development node
+
+- name: get the ceph source code
+  hosts: localhost
+  roles: [emaster_ceph]
+
+

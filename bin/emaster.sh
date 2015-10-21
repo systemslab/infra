@@ -1,10 +1,5 @@
 #! /bin/bash
 
-#sudo apt-get update
-#sudo apt-get install python-setuptools
-#sudo easy_install pip
-#sudo pip install docker-py
-
 # clear out existing docker containers
 ./cleanup.sh >> /dev/null 2>&1
 mkdir /tmp/docker >> /dev/null 2>&1

@@ -1,0 +1,13 @@
+# Author: Michael Sevilla
+# Get the source code for Tachyon
+
+- name: figure out if the ceph code is local
+  stat: path={{ tmpdir }}/tachyon
+  register: p
+
+- name: download tachyon source
+  get_url: url=https://github.com/amplab/tachyon/releases/download/v{{ version }}/tachyon-{{ version }}-bin.tar.gz 
+           dest={{ tmpdir }}/tachyon.tar.gz
+           timeout=120
+  when: p.stat.exists == False
+

@@ -6,6 +6,3 @@
   roles: [emaster_tachyon]
 
 - include: deploy/start_tachyon.yml
-
-#- name: push the code and start
-  #include: ../roles/emaster_tachyon/tasks/start.yml

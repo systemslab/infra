@@ -14,7 +14,9 @@ docker run -it \
 
 docker rm emaster
 
+echo "==============================================================================="
 echo "You are now in an experiment master shell!"
+echo "==============================================================================="
 docker run -it \
   --name="emaster" \
   --net=host \

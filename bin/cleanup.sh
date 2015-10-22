@@ -5,4 +5,4 @@ if [ "$1" == "remove" ]; then
     docker images -aq | xargs docker rmi -f
 fi
 
-sudo rm -r /tmp/docker /etc/ceph/*
+rm -r /tmp/docker /etc/ceph/* >> /dev/null 2>&1

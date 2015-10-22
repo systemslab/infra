@@ -7,8 +7,8 @@
     name: ceph
     tty: yes
     env:
-       CEPH_NETWORK: localhost
-       MON_IP: localhost
+       CEPH_NETWORK: 127.0.0.1/24
+       MON_IP: 127.0.0.1
     net: host
     volumes: /etc/ceph:/etc/ceph
     privileged: yes

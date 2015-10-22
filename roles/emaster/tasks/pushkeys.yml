@@ -3,7 +3,7 @@
 
 - name: initialize provisioning
   hosts: all
+  gather_facts: no
   tasks:
-    - authorized_key: user={{ ansible_ssh_user }}  key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-    - shell: mkdir /tmp/docker
-      ignore_errors: true
+    - name: enable passwordless login
+      authorized_key: user={{ ansible_ssh_user }}  key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

@@ -12,6 +12,11 @@ docker run -it \
   michaelsevilla/emaster \
   ansible-playbook -k ../roles/emaster/tasks/pushkeys.yml
 
+if [ "$?" -ne 0 ]; then
+  echo "... wrong password? Try again."
+  exit 
+fi
+
 docker rm emaster
 
 echo "==============================================================================="

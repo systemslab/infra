@@ -3,6 +3,7 @@
 docker ps -aq | xargs docker rm -f
 if [ "$1" == "remove" ]; then
     docker images -aq | xargs docker rmi -f
+    sudo rm -r /tmp/docker
 fi
 
-rm -r /tmp/docker /etc/ceph/* >> /dev/null 2>&1
+sudo rm -r /etc/ceph/* >> /dev/null 2>&1

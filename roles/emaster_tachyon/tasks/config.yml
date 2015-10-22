@@ -2,7 +2,8 @@
 # Configure Tachyon
 
 - name: create a tachyon environment variables file
-  shell: cp {{ tmpdir }}/tachyon/conf/tachyon-env.sh.template {{ tmpdir }}/tachyon/conf/tachyon-env.sh
+  copy: src="{{ tmpdir }}/tachyon/conf/tachyon-env.sh.template"
+        dest="{{ tmpdir }}/tachyon/conf/tachyon-env.sh"
 
 - name: set master address to the master
   lineinfile: dest={{ tmpdir }}/tachyon/conf/tachyon-env.sh 

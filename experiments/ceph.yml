@@ -1,8 +1,8 @@
 # Author: Michael Sevilla
-# Create a Ceph development node
+# Create a Ceph node
 
-- name: get the ceph source code
-  hosts: localhost
-  roles: [emaster_ceph]
+- name: make the localhost a ceph node
+  hosts: ike-nassi-ucsc.soe.ucsc.edu
+  roles: [ceph]
 
 

@@ -1,0 +1,15 @@
+# Author: Michael Sevilla
+# Create a Ceph node
+
+- name: pull/install a ceph container
+  docker:
+    image: ceph/demo
+    name: ceph
+    tty: yes
+    env:
+       CEPH_NETWORK: localhost
+       MON_IP: localhost
+    net: host
+    volumes: /etc/ceph:/etc/ceph
+    privileged: yes
+    state: started

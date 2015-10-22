@@ -6,7 +6,7 @@ mkdir /tmp/docker >> /dev/null 2>&1
 echo "Installing an Ansible Docker container and dropping you into an 'experiment shell'"
 docker run -it \
   --name="emaster" \
-  --net=host \
+  --hostname="emaster" \
   --volume="$(dirname `pwd`):/hathisar-dev/" \
   --volume="/tmp/:/tmp/" \
   --workdir="/hathisar-dev/experiments" \
@@ -17,13 +17,10 @@ docker rm emaster
 
 docker run -it \
   --name="emaster" \
-  --net=host \
+  --hostname="emaster" \
   --volume="$(dirname `pwd`):/hathisar-dev/" \
   --volume="/tmp/:/tmp/" \
   --workdir="/hathisar-dev/experiments" \
   michaelsevilla/emaster \
   /bin/bash
 
-
-  #--hostname="experiment_master" \
-  #--hostname="experiment_master" \

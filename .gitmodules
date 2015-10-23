@@ -10,3 +10,9 @@
 [submodule "images/docker-cephdev"]
 	path = images/docker-cephdev
 	url = https://github.com/ivotron/docker-cephdev.git
+[submodule "images/docker-jxiodev"]
+	path = images/docker-jxiodev
+	url = https://github.com/michaelsevilla/docker-jxiodev.git
+[submodule "images/docker-zlogdev"]
+	path = images/docker-zlogdev
+	url = https://github.com/michaelsevilla/docker-zlogdev.git

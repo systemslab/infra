@@ -5,5 +5,5 @@
   file: path={{ tmpdir }}/tachyon.tar.gz state=absent
 
 - name: package up the tachyon code
-  shell: tar czvf {{ tmpdir }}/tachyon.tar.gz {{ tmpdir }}/tachyon
+  shell: cd {{ tmpdir }}; tar czvf tachyon.tar.gz tachyon
 

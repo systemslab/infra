@@ -1,8 +1,8 @@
 # Author: Michael Sevilla
 # Create a Tachyon development node (with the source code)
 
-#- name: get the tachyon source and push to all nodes
-#  hosts: ike-nassi-ucsc.soe.ucsc.edu
-#  roles: [emaster_tachyon]
+- name: clone, compile, package tachyon src
+  hosts: ike-nassi-ucsc.soe.ucsc.edu
+  roles: [emaster_tachyon]
 
 - include: deploy/start_tachyon.yml

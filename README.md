@@ -35,9 +35,9 @@ The experiment master orchestrates the installation/deployment and runs experime
 Directory Structure
 -------------------
 
-- ``experiments``: where you go to launch experiments. The user should only have to cd to this directory.
+- ``experiments``: where you go to launch experiments. 
 - ``deploy``: scripts for deploying the systems and running experiments using Ansible.
-- ``images``: scripts for installing the systems using containers. Stuff in here gets built into an image and automatically uploaded to the Docker Hub.
+- ``images``: scripts for installing the systems using containers. 
 - ``bin``: scripts that orchestrate the Experiment Master.
 
 Troubleshooting

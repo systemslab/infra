@@ -1,14 +1,14 @@
 # Author: Michael Sevilla
 # Get the source code and compile it in a tachyon container
 
-- name: clone compile tachyon code using a container
+- name: compile tachyon code using a container
   docker:
     image: michaelsevilla/tachyondev-build
     name: tachyondev-build
     detach: false
     net: host
     env: 
-        SHA1_OR_REF: origin/branch-0.7
+        SHA1_OR_REF: {{ version }}
     volumes: /tmp/docker/tachyon:/tachyon
     privileged: yes
     state: started

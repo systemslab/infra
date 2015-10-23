@@ -1,5 +1,4 @@
 # Author: Michael Sevilla
-# Install tachyon
+# The code is already cloned so we just need to pacakge it up
 
-- include: download.yml
 - include: package.yml

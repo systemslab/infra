@@ -8,7 +8,6 @@
 
 - name: add the tachyon masters to the hosts
   hosts: TachyonMasters
-  gather_facts: no
   tasks:
     - add_host: name={{ inventory_hostname }} 
                 ansible_ssh_user=root 
@@ -17,7 +16,6 @@
 
 - name: add the tachyon workers to the hosts
   hosts: TachyonWorkers
-  gather_facts: no
   tasks:
     - add_host: name={{ inventory_hostname }} 
                 ansible_ssh_user=root 

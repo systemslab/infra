@@ -8,7 +8,7 @@
     detach: false
     net: host
     env: 
-        SHA1_OR_REF: {{ version }}
+        SHA1_OR_REF: origin/branch-0.7
     volumes: /tmp/docker/tachyon:/tachyon
     privileged: yes
     state: started

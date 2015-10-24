@@ -10,6 +10,8 @@
        CEPH_NETWORK: 127.0.0.1/24
        MON_IP: 127.0.0.1
     net: host
-    volumes: /etc/ceph:/etc/ceph
+    volumes: 
+        - /etc/ceph:/etc/ceph
+        - /tmp/docker/usr/lib/rados-classes/:/usr/lib/rados-classes/
     privileged: yes
     state: started

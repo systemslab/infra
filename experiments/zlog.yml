@@ -1,7 +1,10 @@
 # Author: Michael Sevilla
-# Create a Ceph node
+# Create a Zlog node
 
 - name: make the localhost a ceph node
   hosts: ike-nassi-ucsc.soe.ucsc.edu
   roles: [ceph]
 
+- name: make the localhost a zlog node
+  hosts: ike-nassi-ucsc.soe.ucsc.edu
+  roles: [zlog]

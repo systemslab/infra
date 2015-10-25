@@ -39,6 +39,7 @@ Directory Structure
 - ``deploy``: scripts for deploying the systems and running experiments using Ansible.
 - ``images``: scripts for installing the systems using containers. 
 - ``bin``: scripts that orchestrate the Experiment Master.
+- ``roles``: scripts (used by Ansible) that add services to nodes.
 
 Troubleshooting
 ---

@@ -12,6 +12,5 @@
     net: host
     volumes: 
         - /etc/ceph:/etc/ceph
-        - /tmp/docker/usr/lib/rados-classes/:/usr/lib/rados-classes/
     privileged: yes
     state: started

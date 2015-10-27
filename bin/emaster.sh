@@ -3,8 +3,8 @@
 # clear out existing docker containers
 ./cleanup.sh >> /dev/null 2>&1
 mkdir /tmp/docker >> /dev/null 2>&1
-echo "Installing an Ansible Docker container and dropping you into an 'experiment shell'"
-docker run -it \
+echo "===> Installing an Ansible Docker container and dropping you into an 'experiment shell'"
+docker run -it --rm \
   --name="emaster" \
   --net=host \
   --volume="$(dirname `pwd`):/infra/" \
@@ -17,11 +17,15 @@ if [ "$?" -ne 0 ]; then
   echo "... wrong password? Try again."
   exit 
 fi
-docker rm emaster
 
+echo "===> Here are the specs of your environment:"
+docker run -it --rm \
+  --name="emaster" \
+  michaelsevilla/emaster \
+  cat /etc/*release
 
 echo "==============================================================================="
-echo "You are now in an experiment master shell!"
+echo "===> ou are now in an experiment master shell!"
 cat << "EOF"
  _____                      _                      _     __  __           _            
 | ____|_  ___ __   ___ _ __(_)_ __ ___   ___ _ __ | |_  |  \/  | __ _ ___| |_ ___ _ __ 
@@ -31,13 +35,7 @@ cat << "EOF"
            |_|                                                                         
 EOF
 echo "==============================================================================="
-docker run -it \
-  --name="emaster" \
-  michaelsevilla/emaster \
-  cat /etc/*release
-docker rm emaster
-
-docker run -it \
+docker run -it --rm \
   --name="emaster" \
   --net=host \
   --volume="$(dirname `pwd`):/infra/" \

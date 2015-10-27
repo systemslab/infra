@@ -7,8 +7,9 @@ echo "Installing an Ansible Docker container and dropping you into an 'experimen
 docker run -it \
   --name="emaster" \
   --net=host \
-  --volume="$(dirname `pwd`):/hathisar-dev/" \
-  --workdir="/hathisar-dev/experiments" \
+  --volume="$(dirname `pwd`):/infra/" \
+  --workdir="/infra/experiments" \
+  --privileged \
   michaelsevilla/emaster \
   ansible-playbook -k ../roles/emaster/tasks/pushkeys.yml
 
@@ -32,9 +33,6 @@ EOF
 echo "==============================================================================="
 docker run -it \
   --name="emaster" \
-  --net=host \
-  --volume="$(dirname `pwd`):/hathisar-dev/" \
-  --workdir="/hathisar-dev/experiments" \
   michaelsevilla/emaster \
   cat /etc/*release
 docker rm emaster
@@ -42,10 +40,11 @@ docker rm emaster
 docker run -it \
   --name="emaster" \
   --net=host \
-  --volume="$(dirname `pwd`):/hathisar-dev/" \
+  --volume="$(dirname `pwd`):/infra/" \
   --volume="/tmp/:/tmp/" \
   --volume="/etc/ceph:/etc/ceph" \
-  --workdir="/hathisar-dev/experiments" \
+  --workdir="/infra/experiments" \
+  --volume="/var/run/docker.sock:/var/run/docker.sock" \
+  --privileged \
   michaelsevilla/emaster \
   /bin/bash
-

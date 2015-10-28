@@ -1,4 +1,5 @@
 # Author: Michael Sevilla
 # The code is already cloned so we just need to pacakge it up
 
-- include: package.yml
+- include: build.yml
+#- include: package.yml

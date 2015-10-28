@@ -1,16 +1,26 @@
 # Author: Michael Sevilla
 # Create a Ceph node
 
-- name: pull/install a ceph container
+#- name: pull/install a ceph container
+#  docker:
+#    image: ceph/demo
+#    name: ceph
+#    tty: yes
+#    env:
+#       CEPH_NETWORK: 127.0.0.1/24
+#       MON_IP: 127.0.0.1
+#    net: host
+#    volumes: 
+#        - /etc/ceph:/etc/ceph
+#    privileged: yes
+#    state: started
+
+- name: build ceph
   docker:
-    image: ceph/demo
-    name: ceph
-    tty: yes
+    image: ivotron/cephdev-build
+    name: cephdev-build
     env:
-       CEPH_NETWORK: 127.0.0.1/24
-       MON_IP: 127.0.0.1
-    net: host
-    volumes: 
-        - /etc/ceph:/etc/ceph
-    privileged: yes
-    state: started
+      BUILD_THREADS: 32
+      CEPH_PKGS: --with-lttng
+    volumes:
+      - /tmp/docker/src/ceph:/ceph

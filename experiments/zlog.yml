@@ -1,7 +1,21 @@
 # Author: Michael Sevilla
 # Create a Zlog node
 
-- name: make the localhost a zlog node
-  hosts: ike-nassi-ucsc.soe.ucsc.edu
+- hosts: ike-nassi-ucsc.soe.ucsc.edu
   roles: [zlog]
+  tasks: 
+    - name: check to see if ceph came up
+      shell: docker run <
+             --rm --name=ceph-client --net=host -v /etc/ceph:/etc/ceph --entrypoint=ceph -it  michaelsevilla/zlogdev-build -s
+      register: result
+    - debug: var=result.stdout_lines
+
+
+- hosts: ike-nassi-ucsc.soe.ucsc.edu
+  tasks:
+    - name: run the unit tests
+      shell: docker run --rm --name=zlog-client --net=host -v /etc/ceph:/etc/ceph --entrypoint=/src/zlog/src/test michaelsevilla/zlogdev-build
+      register: result
+    - debug: var=result.stdout_lines
+
 

@@ -1,7 +1,7 @@
 # Author: Michael Sevilla
 # Build zlog and put the binaries in /tmp/docker/{ceph, ceph-zlog, zlog}
 
-- name: install the zlog binaries
+- name: build the zlog binaries
   docker:
     image: michaelsevilla/zlogdev-build
     name: zlogdev-build

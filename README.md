@@ -9,11 +9,6 @@ Quickstart
 
 1. On all nodes, [install Docker](https://docs.docker.com/installation). For Ubuntu, you can use:
 
-    ```bash
-    cd bin
-    ./bootstrap.sh
-    ```
-
 2. On this node, start an ``experiment master``:
 
     ```bash
@@ -24,13 +19,15 @@ Quickstart
 3. Run an experiment:
 
     ```bash
-    root@experiment_master# ansible-playbook tachyon.yml
+    ansible-playbook zlog.yml
     ```
 
 Description
 ===========
 
 The experiment master orchestrates the installation/deployment and runs experiments using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed and sets up passwordless login. To push the keys the script asks for a password.
+
+Each system has two roles, for example foo and foo-build. The foo-build role pulls the code, builds it, and packages it up for network transfer. The foo role pushes the code to the remote node and launches, unarchives it, and attaches a container to the code base. Then it starts the container and starts the daemons for the service in the container.
 
 Directory Structure
 -------------------

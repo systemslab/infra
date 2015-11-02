@@ -1,13 +1,16 @@
 # Author: Michael Sevilla
 # Get the source code and compile it in a tachyon container
 
+- name: check to see if user already checked out tachyon src
+  shell: ls -alh {{ code_dir }}/tachyon/.git
+
 - name: compile tachyon code using a container
   docker:
     image: michaelsevilla/tachyondev-build
     name: tachyondev-build
     env: 
         SHA1_OR_REF: remotes/origin/3par
-    volumes: /tmp/docker/tachyon:/tachyon
+    volumes: "{{ code_dir }}/tachyon:/tachyon"
     state: started
 
 - name: wait for compile... (to see progress, ssh to node and run -> docker logs tachyondev-build)

@@ -1,5 +1,2 @@
 # Author: Michael Sevilla
 # Experiment master variables
-
-version: origin/branch-0.7
-tmpdir: /tmp/docker

@@ -1,0 +1,31 @@
+# Author: Michael Sevilla
+# Create a Tachyon development node (with the source code) and start it on the localhost
+
+#- name: clone, compile, package tachyon src
+#  hosts: ike-nassi-ucsc.soe.ucsc.edu
+#  roles: [tachyon-build]
+
+#- name: put the code over there
+#  hosts: all
+#  tasks: 
+#    - unarchive: src={{ codedir }}/tachyon.tar.gz 
+#                 dest={{ tmpdir }}/
+
+- name: start tachyon containers on all hosts
+  hosts: all
+  vars: 
+    - codedir: "/tmp/docker/"
+  roles: [tachyon]
+
+- hosts: TachyonMasters
+  gather_facts: True
+  tasks:
+    - name: add the tachyon container to the ansible hosts
+      add_host: name={{ inventory_hostname }} ansible_ssh_user=root ansible_ssh_port=2222 group=tachyon_master_containers
+
+- name: start tachyon
+  hosts: tachyon_master_containers
+  tasks: 
+      - shell: /tachyon/bin/tachyon format
+      - shell: /tachyon/bin/tachyon-start.sh local
+

@@ -1,10 +1,6 @@
 # Author: Michael Sevilla
 # Create a Tachyon node (with the source code)
 
-- name: put the code over there
-  unarchive: src={{ codedir }}/tachyon.tar.gz 
-             dest={{ tmpdir }}/
-
 - name: pull/install a tachyon container
   docker:
     image: michaelsevilla/tachyondev
@@ -15,6 +11,6 @@
       SSHD_PORT: 2222
       AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     net: host
-    volumes: /tmp/docker/tachyon:/tachyon
+    volumes: "{{ code_dir }}/tachyon:/tachyon"
     privileged: yes
     state: started

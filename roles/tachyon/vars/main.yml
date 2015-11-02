@@ -3,4 +3,3 @@
 
 version: origin/branch-0.7
 tmpdir: /tmp/docker/deploy
-codedir: /tmp/docker

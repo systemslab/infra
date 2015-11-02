@@ -1,0 +1,5 @@
+[TachyonMasters]
+ike-nassi-ucsc.soe.ucsc.edu ansible_ssh_user=msevilla
+
+[TachyonMasters:vars]
+code_dir="/tmp/docker/src"

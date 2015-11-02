@@ -1,0 +1,10 @@
+# Author: Michael Sevilla
+# Stop all containers on all nodes
+
+- name: stop all containers, effectively killing all services
+  hosts: all
+  tasks: 
+    - shell: docker ps -a | grep -v "emaster\|CONTAINER" | awk '{print $1}' | xargs docker stop
+      ignore_errors: True
+    - shell: docker ps -a | grep -v "emaster\|CONTAINER" | awk '{print $1}' | xargs docker rm
+      ignore_errors: True

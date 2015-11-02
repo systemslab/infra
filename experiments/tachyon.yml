@@ -3,6 +3,6 @@
 
 - name: clone, compile, package tachyon src
   hosts: ike-nassi-ucsc.soe.ucsc.edu
-  roles: [emaster_tachyon]
+  roles: [tachyon-build]
 
 - include: deploy/start_tachyon.yml

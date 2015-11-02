@@ -5,12 +5,9 @@
   docker:
     image: michaelsevilla/tachyondev-build
     name: tachyondev-build
-    detach: false
-    net: host
     env: 
-        SHA1_OR_REF: origin/branch-0.7
+        SHA1_OR_REF: remotes/origin/3par
     volumes: /tmp/docker/tachyon:/tachyon
-    privileged: yes
     state: started
 
 - name: wait for compile... (to see progress, ssh to node and run -> docker logs tachyondev-build)

@@ -7,3 +7,10 @@
   tasks:
     - name: enable passwordless login
       authorized_key: user={{ ansible_ssh_user }}  key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: make the directories
+  hosts: all
+  gather_facts: no
+  tasks:
+    - shell: mkdir /tmp/docker/; mkdir /tmp/docker/deploy
+      ignore_errors: True 

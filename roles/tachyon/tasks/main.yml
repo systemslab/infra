@@ -2,7 +2,7 @@
 # Create a Tachyon node (with the source code)
 
 - name: put the code over there
-  unarchive: src={{ tmpdir }}/tachyon.tar.gz 
+  unarchive: src={{ codedir }}/tachyon.tar.gz 
              dest={{ tmpdir }}/
 
 - name: pull/install a tachyon container

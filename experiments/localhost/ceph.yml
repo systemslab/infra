@@ -2,5 +2,5 @@
 # Create a Ceph node
 
 - name: have the localhost prepare the code
-  hosts: dexter.soe.ucsc.edu
+  hosts: Builder
   roles: [emaster_ceph]

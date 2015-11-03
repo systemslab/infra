@@ -2,4 +2,3 @@
 # Install tachyon
 
 - include: build.yml
-- include: package.yml

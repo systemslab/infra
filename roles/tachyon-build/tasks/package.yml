@@ -1,9 +1,0 @@
-# Author: Michael Sevilla
-# Package up the source code in preparation for network transfer
-
-- name: delete archived tachyon code
-  file: path={{ tmpdir }}/tachyon.tar.gz state=absent
-
-- name: package up the tachyon code
-  shell: cd {{ code_dir }}; tar czvf tachyon.tar.gz tachyon
-

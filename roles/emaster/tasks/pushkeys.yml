@@ -13,4 +13,6 @@
   gather_facts: no
   tasks:
     - shell: mkdir /tmp/docker/; mkdir /tmp/docker/deploy
+      no_log: True
       ignore_errors: True 
+      

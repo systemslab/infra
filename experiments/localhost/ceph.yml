@@ -1,6 +1,6 @@
 # Author: Michael Sevilla
-# Create a Ceph node
+# Create a Ceph development node (with the source code) and start it on the localhost
 
-- name: have the localhost prepare the code
+- name: compile ceph src
   hosts: Builder
-  roles: [emaster_ceph]
+  roles: [ceph-build]

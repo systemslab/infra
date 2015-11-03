@@ -1,10 +1,19 @@
 # Author: Michael Sevilla
-# Get the source code and compile it in a tachyon container
+# Build Tachyon in a container
 
 - name: check to see if user already checked out tachyon src
-  shell: ls -alh {{ code_dir }}/tachyon/.git
+  command: ls -alh {{ code_dir }}/tachyon/.git
+  register: result
+  no_log: True
+  ignore_errors: True
+  changed_when: False
 
-- name: compile tachyon code using a container
+- name: fail if code does not exist
+  fail: msg="Please put the Tachyon source code in {{ code_dir }}/tachyon/.git"
+  when: "result.rc != 0"
+
+- name: build tachyon
+  changed_when: False
   docker:
     image: michaelsevilla/tachyondev-build
     name: tachyondev-build
@@ -16,4 +25,3 @@
 - name: wait for compile... (to see progress, ssh to node and run -> docker logs tachyondev-build)
   shell: > 
     docker wait tachyondev-build
-

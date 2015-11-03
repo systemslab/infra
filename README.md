@@ -25,9 +25,11 @@ Quickstart
 Description
 ===========
 
-The experiment master orchestrates the installation/deployment and runs experiments using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed and sets up passwordless login. To push the keys the script asks for a password.
+The experiment master orchestrates installation/deployment and runs experiments using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed and sets up passwordless login. To push the keys the script asks for a password.
 
-Each system has two roles, for example foo and foo-build. The foo-build role pulls the code, builds it, and packages it up for network transfer. The foo role pushes the code to the remote node and launches, unarchives it, and attaches a container to the code base. Then it starts the container and starts the daemons for the service in the container.
+Each system has two roles, for example foo and foo-build. The foo-build role builds code that is already sitting in a directory*. The foo role pushes the code to the remote node and launches, unarchives it, and attaches a container to the code base. Then it starts the container and starts the daemons for the service in the container.
+
+* We don't pull the code because some of the repositories we clone from are private and setting up the keys is a pain.
 
 Directory Structure
 -------------------

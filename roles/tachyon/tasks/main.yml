@@ -14,3 +14,6 @@
     volumes: "{{ code_dir }}/tachyon:/tachyon"
     privileged: yes
     state: started
+
+- name: wait for the container to initialize
+  pause: seconds=5 

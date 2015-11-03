@@ -1,7 +1,19 @@
 # Author: Michael Sevilla
-# Build ceph
+# Build Ceph in a container
+
+- name: check to see if user already checkout ceph src
+  command: ls -alh {{ code_dir }}/ceph/.git
+  register: result
+  no_log: True
+  ignore_errors: True
+  changed_when: False
+
+- name: fail if code does not exist
+  fail: msg="Please put the Tachyon source code in {{ code_dir }}/tachyon/.git"
+  when: "result.rc != 0"
 
 - name: build ceph
+  changed_when: False
   docker:
     image: ivotron/cephdev-build
     name: cephdev-build

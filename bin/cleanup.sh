@@ -6,5 +6,5 @@ if [ "$1" == "remove" ]; then
     sudo rm -r /tmp/docker >> /dev/null 2>&1
 fi
 
-sudo rm -r /etc/ceph/* >> /dev/null 2>&1
+sudo rm -r /etc/ceph/* /var/lib/ceph/* >> /dev/null 2>&1
 exit 0

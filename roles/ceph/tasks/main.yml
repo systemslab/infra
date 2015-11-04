@@ -1,26 +1,27 @@
 # Author: Michael Sevilla
-# Create a Ceph node
+# Start a Ceph node
 
-#- name: pull/install a ceph container
-#  docker:
-#    image: ceph/demo
-#    name: ceph
-#    tty: yes
-#    env:
-#       CEPH_NETWORK: 127.0.0.1/24
-#       MON_IP: 127.0.0.1
-#    net: host
-#    volumes: 
-#        - /etc/ceph:/etc/ceph
-#    privileged: yes
-#    state: started
-
-- name: build ceph
+- name: start ceph
   docker:
-    image: ivotron/cephdev-build
-    name: cephdev-build
+    image: ivotron/cephdev
+    name: cephdev
+    detach: yes
+    tty: yes
     env:
-      BUILD_THREADS: 32
-      CEPH_PKGS: --with-lttng
-    volumes:
-      - /tmp/docker/src/ceph:/ceph
+      SSHD_PORT: 2222
+      AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      CEPH_NETWORK: 127.0.0.1/24
+      MON_IP: 127.0.0.1
+    net: host
+    volumes: 
+      - "{{ code_dir }}/ceph:/ceph"
+      - "/etc/ceph:/etc/ceph"
+      - "/var/lib/ceph:/var/lib/ceph"
+    privileged: yes
+    state: started
+
+- name: wait for the container to initialize
+  pause: seconds=5
+
+- name: add the ceph container to the ansible hosts
+  add_host: name={{ inventory_hostname }} ansible_ssh_user=root ansible_ssh_port=2222 group=ceph_mon_containers

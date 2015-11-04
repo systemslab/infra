@@ -10,7 +10,7 @@
 
 - name: fail if code does not exist
   fail: msg="Please put the Tachyon source code in {{ code_dir }}/tachyon/.git"
-  when: "result.rc != 0"
+  when: result.rc != 0
 
 - name: build tachyon
   changed_when: False

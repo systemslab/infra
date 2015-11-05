@@ -4,7 +4,7 @@
 - name: pull/install a tachyon container
   docker:
     image: michaelsevilla/tachyondev
-    name: tachyon
+    name: tachyondev
     detach: yes
     tty: yes
     env:
@@ -13,7 +13,10 @@
     net: host
     volumes: "{{ code_dir }}/tachyon:/tachyon"
     privileged: yes
-    state: started
+    state: restarted
 
-- name: wait for the container to initialize
-  pause: seconds=5 
+- name: setup tachyon in said container
+  command: docker exec tachyondev /tachyon/bin/tachyon format
+
+- name: start tachyon in said container
+  command: docker exec tachyondev /tachyon/bin/tachyon-start.sh local

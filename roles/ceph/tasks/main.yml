@@ -1,7 +1,7 @@
 # Author: Michael Sevilla
 # Start a Ceph node
 
-- name: start ceph
+- name: start ceph container 
   docker:
     image: ivotron/cephdev
     name: cephdev
@@ -19,13 +19,6 @@
       - "/var/lib/ceph:/var/lib/ceph"
     privileged: yes
     state: restarted
-    command: standalone.sh
 
-#- name: wait for the container to initialize
-#  pause: seconds=1
-#
-#- name: add the ceph container to the ansible hosts
-#  add_host: <
-#            name={{ inventory_hostname }}:2222
-#            ansible_ssh_user=root
-#            group=ceph_mon_containers
+- name: start ceph in said container 
+  command: docker exec cephdev /standalone.sh

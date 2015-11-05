@@ -6,20 +6,20 @@ This is the SRL's infrastructure repository.
 
 Quickstart
 ==========
+It's as easy as 1, 2, 3.
 
 1. On all nodes, [install Docker](https://docs.docker.com/installation). For Ubuntu, you can use:
 
 2. On this node, start an ``experiment master``:
 
     ```bash
-     cd bin
-     ./emaster.sh
+     cd bin; ./emaster.sh
      ```
 
 3. Run an experiment:
 
     ```bash
-    ansible-playbook zlog.yml
+    ansible-playbook tachyondev-experiment.yml
     ```
 
 Description
@@ -39,6 +39,7 @@ Directory Structure
 - ``images``: scripts for installing the systems using containers. 
 - ``bin``: scripts that orchestrate the Experiment Master.
 - ``roles``: scripts (used by Ansible) that add services to nodes.
+- ``test``: re-run all experiments.
 
 Troubleshooting
 ---

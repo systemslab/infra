@@ -18,8 +18,8 @@
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
     privileged: yes
-    state: started
-    command: standalone.sh && /run.sh
+    state: restarted
+    command: standalone.sh
 
 #- name: wait for the container to initialize
 #  pause: seconds=1

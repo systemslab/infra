@@ -14,26 +14,14 @@
   hosts: Workers
   roles: [ceph]
 
-- hosts: Builder
-  gather_facts: True
-  tasks: 
-    - name: run the ceph client in a docker image
-      shell: >
-             /usr/bin/docker run -d -it
-             --name=ceph-client 
-             --net=host 
-             --volume=/tmp/docker/src/ceph/:/ceph 
-             --volume=/etc/ceph:/etc/ceph 
-             --entrypoint=/bin/bash
-             ivotron/cephdev
-      ignore_errors: True
-      changed_when: False
-      no_log: True
+- name: start ceph client
+  hosts: Builder
+  roles: [ceph-client]
 
-- hosts: Builder
+- name: check to see if ceph started; timeout if it takes too long
+  hosts: Builder
   tasks:
-    - name: check to see if ceph started
-      command: docker exec ceph-client ceph -s
+    - command: docker exec ceph-client ceph -s
       register: result
       changed_when: False
       async: 10

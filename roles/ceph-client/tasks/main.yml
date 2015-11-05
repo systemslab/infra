@@ -1,0 +1,12 @@
+- name: run the ceph client in a docker image
+  shell: >
+         /usr/bin/docker run -d -it
+         --name=ceph-client 
+         --net=host 
+         --volume=/tmp/docker/src/ceph/:/ceph 
+         --volume=/etc/ceph:/etc/ceph 
+         --entrypoint=/bin/bash
+         ivotron/cephdev
+  ignore_errors: True
+  changed_when: False
+  no_log: True

@@ -8,7 +8,7 @@ Quickstart
 ==========
 It's as easy as 1, 2, 3.
 
-1. On all nodes, [install Docker](https://docs.docker.com/installation). For Ubuntu, you can use:
+1. On all nodes, [install Docker](https://docs.docker.com/installation). 
 
 2. On this node, start an ``experiment master``:
 

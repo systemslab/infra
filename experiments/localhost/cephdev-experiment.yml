@@ -1,0 +1,30 @@
+# Author: Michael Sevilla
+# Create a Ceph development node (with the source code) and start it on the localhost
+
+#- name: compile ceph src
+#  hosts: Builder
+#  vars:
+#    - BUILD_THREADS: 32
+#    - CEPH_PKGS: --with-lttng
+#    - GIT_URL: https://github.com/michaelsevilla/ceph.git
+#    - SHA1_OR_REF: remotes/origin/wip-reqlatency
+#  roles: [ceph-build]
+
+- name: start ceph
+  include: deploy/cephdev.yml
+
+#- hosts: Builder
+#  gather_facts: True
+#  tasks: 
+#    - name: run the ceph client in a docker image
+#      changed_when: False
+#      shell: >
+#             /usr/bin/docker run --rm 
+#             --name=ceph-client 
+#             --net=host 
+#             --volume=/tmp/docker/src/ceph/:/ceph 
+#             --volume=/etc/ceph:/etc/ceph 
+#             --entrypoint=/ceph/src/ceph 
+#             ivotron/cephdev --status
+#      register: result
+#    - debug: var=result.stdout_lines

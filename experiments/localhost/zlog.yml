@@ -3,18 +3,15 @@
 
 - hosts: Builder
   roles: [zlog-build]
-  #tasks: 
-  #  - name: check to see if ceph came up
-  #    shell: docker run --rm --name=ceph-client --net=host -v /etc/ceph:/etc/ceph -it michaelsevilla/zlogdev-build bin/single-node-ceph.sh
-  #    register: result
-  #  - debug: var=result.stdout_lines
+  tasks: 
+    - name: check to see if ceph came up
+      shell: docker run --rm --name=ceph-client --net=host -v /etc/ceph:/etc/ceph -it michaelsevilla/zlogdev-build bin/single-node-ceph.sh
+      register: result
+    - debug: var=result.stdout_lines
 
-
-#- hosts: ike-nassi-ucsc.soe.ucsc.edu
-#  tasks:
-#    - name: run the unit tests
-#      shell: docker run --rm --name=zlog-client --net=host -v /etc/ceph:/etc/ceph --entrypoint=/src/zlog/src/test michaelsevilla/zlogdev-build
-#      register: result
-#    - debug: var=result.stdout_lines
-
-
+- hosts: Workers
+  tasks:
+    - name: run the unit tests
+      shell: docker run --rm --name=zlog-client --net=host -v /etc/ceph:/etc/ceph --entrypoint=/src/zlog/src/test michaelsevilla/zlogdev-build
+      register: result
+    - debug: var=result.stdout_lines

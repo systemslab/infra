@@ -20,4 +20,3 @@
         changed_when: False
       - shell: /tachyon/bin/tachyon-start.sh local
         changed_when: False
-

@@ -1,0 +1,10 @@
+- name: start ceph containers on all workers
+  hosts: Workers
+  roles: [ceph]
+
+#- name: log into those containers and launch the ceph daemons
+#  hosts: ceph_mon_containers
+#  gather_facts: True
+#  tasks:
+#    - copy: src=/infra/roles/ceph/files/standalone.sh dest=/standalone.sh
+#    - shell: chmod 755 /standalone.sh; /standalone.sh

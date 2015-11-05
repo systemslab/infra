@@ -19,9 +19,13 @@
       - "/var/lib/ceph:/var/lib/ceph"
     privileged: yes
     state: started
+    command: standalone.sh && /run.sh
 
-- name: wait for the container to initialize
-  pause: seconds=5
-
-- name: add the ceph container to the ansible hosts
-  add_host: name={{ inventory_hostname }} ansible_ssh_user=root ansible_ssh_port=2222 group=ceph_mon_containers
+#- name: wait for the container to initialize
+#  pause: seconds=1
+#
+#- name: add the ceph container to the ansible hosts
+#  add_host: <
+#            name={{ inventory_hostname }}:2222
+#            ansible_ssh_user=root
+#            group=ceph_mon_containers

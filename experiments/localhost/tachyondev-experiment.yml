@@ -1,6 +1,10 @@
 # Author: Michael Sevilla
 # Create a Tachyon development node (with the source code) and start it on the localhost
 
+#- name: compile jxio src
+#  hosts: Builder
+#  roles: [jxio-build]
+
 #- name: compile tachyon src
 #  hosts: Builder
 #  roles: [tachyon-build]

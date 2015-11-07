@@ -1,0 +1,12 @@
+# Author: Michael Sevilla
+# Build jxio and put the binaries in /tmp/docker/{ceph, ceph-jxio, jxio}
+
+- name: build the jxio binaries
+  docker:
+    image: michaelsevilla/jxiodev-build
+    name: jxiodev-build
+    net: host
+    volumes:
+      - "{{ code_dir }}/JXIO:/JXIO"
+    state: started
+

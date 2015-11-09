@@ -25,7 +25,7 @@
         - "{{ code_dir }}/JXIO:/JXIO"
     state: started
 
-- name: wait for compile... (to see progress, ssh to node and run -> docker logs tachyondev-build)
+- name: wait for compile... (to see progress, ssh to node and run [docker logs tachyondev-build])
   shell: > 
     docker wait tachyondev-build
   register: result

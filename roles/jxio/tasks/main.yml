@@ -1,0 +1,18 @@
+# Author: Michael Sevilla
+# Create a Tachyon node (with the source code)
+
+- name: start the jxio server in a tachyon container
+  changed_when: False
+  docker:
+    image: michaelsevilla/tachyondev
+    name: jxio-server
+    detach: yes
+    tty: yes
+    net: host
+    volumes: 
+      - "{{ code_dir }}/tachyon:/tachyon"
+      - "{{ code_dir }}/JXIO:/JXIO"
+    privileged: yes
+    state: restarted
+    command: /JXIO/examples/runHelloWorld.sh server {{ inventory_hostname }} 1234
+

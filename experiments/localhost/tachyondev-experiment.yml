@@ -1,14 +1,36 @@
 # Author: Michael Sevilla
 # Create a Tachyon development node (with the source code) and start it on the localhost
 
+- hosts: Builder
+  tasks:
+    - name: check if any other jobs are running
+      shell: docker ps | grep -v emaster | grep -v CONTAINER
+      register: result
+      ignore_errors: True
+    - name: fail if other jobs are running
+      fail: msg="Other jobs are running, please run -> ansible-playbook ../cleanup.yml"
+      when: result.rc == 0
+
 #- name: compile jxio src
 #  hosts: Builder
 #  roles: [jxio-build]
 
-#- name: compile tachyon src
-#  hosts: Builder
-#  roles: [tachyon-build]
+- name: compile tachyon src
+  hosts: Builder
+  roles: [tachyon-build]
 
-- name: start tachyon container 
+- name: start JXIO server and tachyon container on the same node
   hosts: Workers
-  roles: [tachyon]
+  roles: [jxio, tachyon]  
+
+- hosts: Builder
+  tasks: 
+    - name: Go look at the jxio server logs in another terminal
+      pause: prompt="After running [docker logs -f jxio-server] in another terminal, press enter to continue..."
+
+- name: create a file in tachyon
+  hosts: Builder
+  tasks:
+    - command: docker exec tachyondev /tachyon/bin/tachyon tfs copyFromLocal /tachyon/bin/tachyon /blah
+      no_log: True
+      ignore_errors: True

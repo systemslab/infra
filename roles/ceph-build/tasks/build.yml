@@ -14,7 +14,7 @@
     volumes:
       - '{{ code_dir }}/ceph:/ceph'
 
-- name: wait for compile... (to see progress, ssh to node and run -> docker logs cephdev-build)
+- name: wait for compile... (to see progress, ssh to node and run [docker logs cephdev-build])
   shell: >
     docker wait cephdev-build
   register: result

@@ -1,7 +1,8 @@
 # Author: Michael Sevilla
 # Create a Tachyon node (with the source code)
 
-- name: pull/install a tachyon container
+- name: start a tachyon container
+  changed_when: False
   docker:
     image: michaelsevilla/tachyondev
     name: tachyondev
@@ -15,8 +16,10 @@
     privileged: yes
     state: restarted
 
-- name: setup tachyon in said container
+- name: format tachyon in the container
   command: docker exec tachyondev /tachyon/bin/tachyon format
+  changed_when: False
 
-- name: start tachyon in said container
+- name: start tachyon daemon in the container
   command: docker exec tachyondev /tachyon/bin/tachyon-start.sh local
+  changed_when: False

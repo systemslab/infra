@@ -8,9 +8,9 @@
   hosts: Builder
   roles: [jxio-build]
 
-#- name: compile tachyon src
-#  hosts: Builder
-#  roles: [tachyon-build]
+- name: compile tachyon src
+  hosts: Builder
+  roles: [tachyon-build]
 
 - name: start JXIO server and tachyon container on the same node
   hosts: Workers

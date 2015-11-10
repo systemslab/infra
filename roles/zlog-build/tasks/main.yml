@@ -12,5 +12,5 @@
     volumes:
       - /etc/ceph:/etc/ceph
     state: started
-    command: /bin/bash single-node-ceph.sh
+    #command: /bin/bash single-node-ceph.sh
 

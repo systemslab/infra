@@ -1,6 +1,0 @@
-# Author: Michael Sevilla
-# Create a JXIO development node (with the source code) and start it on the localhost
-
-- name: compile jxio src
-  hosts: Builder
-  roles: [jxio-build]

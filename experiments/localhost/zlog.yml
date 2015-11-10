@@ -1,13 +1,11 @@
 # Author: Michael Sevilla
 # Create a Zlog node
 
+- hosts: all
+  roles: [cleanup]
+
 - hosts: Builder
   roles: [zlog-build]
-  tasks: 
-    - name: check to see if ceph came up
-      shell: docker run --rm --name=ceph-client --net=host -v /etc/ceph:/etc/ceph -it michaelsevilla/zlogdev-build bin/single-node-ceph.sh
-      register: result
-    - debug: var=result.stdout_lines
 
 - hosts: Workers
   tasks:

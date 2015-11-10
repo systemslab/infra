@@ -10,3 +10,10 @@
       - "{{ code_dir }}/JXIO:/JXIO"
     state: started
 
+- name: wait for compile... (to see progress, ssh to node and run [docker logs jxiodev-build])
+  shell: docker wait jxiodev-build
+  register: result
+
+- name: fail if docker build fails
+  fail: msg="JXIO build failed; log into the Builder and run - docker logs jxiodev-build"
+  when: result.stdout.find("0") == -1

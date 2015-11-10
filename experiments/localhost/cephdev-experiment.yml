@@ -1,5 +1,7 @@
 # Author: Michael Sevilla
 # Create a Ceph development node (with the source code) and start it on the localhost
+- hosts: all
+  roles: [cleanup]
 
 #- name: compile ceph src
 #  hosts: Builder
@@ -10,9 +12,12 @@
 #    - SHA1_OR_REF: remotes/origin/wip-reqlatency
 #  roles: [ceph-build]
 
-- name: start ceph
+- name: start ceph container
   hosts: Workers
   roles: [ceph]
+  tasks:
+    - name: start ceph daemons
+      command: docker exec cephdev /ceph-scripts/standalone.sh
 
 - name: start ceph client
   hosts: Builder
@@ -27,3 +32,4 @@
       async: 10
       poll: 1
     - debug: var=result.stdout_lines
+

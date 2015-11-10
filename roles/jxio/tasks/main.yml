@@ -14,5 +14,4 @@
       - "{{ code_dir }}/JXIO:/JXIO"
     privileged: yes
     state: restarted
-    command: /JXIO/examples/runHelloWorld.sh server {{ inventory_hostname }} 1234
-
+    command: /JXIO/examples/runHelloWorld.sh server tcp {{ inventory_hostname }} 1234

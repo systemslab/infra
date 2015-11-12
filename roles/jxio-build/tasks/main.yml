@@ -6,6 +6,9 @@
     image: michaelsevilla/jxiodev-build
     name: jxiodev-build
     net: host
+    env:
+      SHA1_OR_REF: "{{ SHA1_OR_REF }}"
+      GIT_URL: "{{ GIT_URL }}"
     volumes:
       - "{{ code_dir }}/JXIO:/JXIO"
     state: started

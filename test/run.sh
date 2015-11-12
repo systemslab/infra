@@ -5,7 +5,7 @@ ARGS="-it --rm \
       --net=host \
       --volume=\"/tmp/:/tmp/\" \
       --volume=\"/etc/ceph:/etc/ceph\" \
-      --volume=\"/var/run/docker.sock:/var/run/docker.sock\"
+      --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
       --volume=\"$(dirname `pwd`):/infra\" \
       --workdir=\"/infra/experiments/localhost\" \
       --privileged"

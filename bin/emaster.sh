@@ -21,6 +21,15 @@ else
   CLUSTER="$1"
 fi
 echo "===> Experiment master will control all hosts listed in $CLUSTER"
+ARGS="-it --rm \
+      --name=\"emaster\"\
+      --net=host \
+      --volume=\"/tmp/:/tmp/\" \
+      --volume=\"/etc/ceph:/etc/ceph\" \
+      --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
+      --volume=\"$(dirname `pwd`):/infra\" \
+      --workdir=\"/infra/experiments/localhost\" \
+      --privileged"
 
 if [ ! -d "../experiments/$CLUSTER" ]; then
   echo "===> Couldn't find directory with hosts listed in ../experiments/$CLUSTER"
@@ -32,25 +41,12 @@ echo "===> Cleaning up old docker containers - this may require a sudo password"
 mkdir -p /tmp/docker/src /tmp/docker/deploy >> /dev/null 2>&1
 
 echo "===> Installing an Ansible Docker container and dropping you into an 'experiment shell'"
-docker run -it --rm \
-  --name="emaster" \
-  --net=host \
-  --volume="$(dirname `pwd`):/infra/" \
-  --workdir="/infra/experiments/$CLUSTER" \
-  --privileged \
-  michaelsevilla/emaster \
-  ansible-playbook -k ../../roles/emaster/tasks/pushkeys.yml
+docker run $ARGS michaelsevilla/emaster ansible-playbook -k ../../roles/emaster/tasks/pushkeys.yml
 
 if [ "$?" -ne 0 ]; then
   echo "===> ... wrong password? Try again."
   fail
 fi
-
-echo "===> Here are the specs of your environment:"
-docker run -it --rm \
-  --name="emaster" \
-  michaelsevilla/emaster \
-  cat /etc/*release
 
 echo "==============================================================================="
 echo "===> You are now in an experiment master shell!"
@@ -69,14 +65,6 @@ cat << "EOF"
 |_|  |_| \__,_||___/ \__|\___||_|   
 EOF
 echo "==============================================================================="
-docker run -it --rm \
-  --name="emaster" \
-  --net=host \
-  --volume="$(dirname `pwd`):/infra/" \
-  --volume="/tmp/:/tmp/" \
-  --volume="/etc/ceph:/etc/ceph" \
-  --workdir="/infra/experiments/$CLUSTER" \
-  --volume="/var/run/docker.sock:/var/run/docker.sock" \
-  --privileged \
-  michaelsevilla/emaster \
-  /bin/bash
+echo "===> Here are the specs of your environment:"
+docker run $ARGS michaelsevilla/emaster cat /etc/lsb-release /etc/os-release
+docker run $ARGS michaelsevilla/emaster /bin/bash

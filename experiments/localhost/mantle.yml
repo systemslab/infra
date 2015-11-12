@@ -1,0 +1,35 @@
+# Author: Michael Sevilla
+# Create a Ceph development node (with the source code) and start it on the localhost
+- hosts: all
+  roles: [cleanup]
+
+- name: compile ceph src
+  hosts: Builder
+  roles: [mantle-build]
+  vars:
+    - BUILD_THREADS: 32
+    - CEPH_PKGS: --with-lua
+    - GIT_URL: https://github.com/michaelsevilla/ceph.git
+    - SHA1_OR_REF: wip-mantle-metadata-dev
+
+#- name: start ceph container
+#  hosts: Workers
+#  roles: [ceph]
+#  tasks:
+#    - name: start ceph daemons
+#      command: docker exec cephdev /ceph-scripts/standalone.sh
+#
+#- name: start ceph client
+#  hosts: Builder
+#  roles: [ceph-client]
+#
+#- name: check to see if ceph started; timeout if it takes too long
+#  hosts: Builder
+#  tasks:
+#    - command: docker exec ceph-client ceph -s
+#      register: result
+#      changed_when: False
+#      async: 10
+#      poll: 1
+#    - debug: var=result.stdout_lines
+

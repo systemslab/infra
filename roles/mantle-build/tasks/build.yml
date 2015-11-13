@@ -7,16 +7,15 @@
     image: michaelsevilla/mantledev-build
     name: mantledev-build
     env:
-      BUILD_THREADS: "{{ BUILD_THREADS }}"
-      CEPH_PKGS: "{{ CEPH_PKGS }}"
-      GIT_URL: "{{ GIT_URL }}"
-      SHA1_OR_REF: "{{ SHA1_OR_REF }}"
+      BUILD_THREADS:    "{{ BUILD_THREADS }}"
+      CEPH_PKGS:        "{{ CEPH_PKGS }}"
+      GIT_URL:          "{{ GIT_URL }}"
+      SHA1_OR_REF:      "{{ SHA1_OR_REF }}"
     volumes:
       - '{{ code_dir }}/mantle/ceph:/ceph'
 
-- name: wait for compile... (to see progress, ssh to node and run [docker logs cephdev-build])
-  shell: >
-    docker wait mantledev-build
+- name: compiling (run [docker logs mantledev-build] on Builder for progress)
+  shell: docker wait mantledev-build
   register: result
 
 - name: fail if docker build fails

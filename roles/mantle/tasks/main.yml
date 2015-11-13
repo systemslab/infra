@@ -2,14 +2,14 @@
 # Start a Ceph node
 
 - name: move some startup scripts over there
-  copy: src=/infra/roles/ceph/files/ dest={{ code_dir}}/
+  copy: src=/infra/roles/mantle/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
   command: chmod -R 750 {{ code_dir }}/ceph-scripts/
 
 - name: start ceph container 
   docker:
-    image: ivotron/cephdev
+    image: michaelsevilla/mantledev
     name: cephdev
     detach: yes
     tty: yes
@@ -20,11 +20,12 @@
       MON_IP: 127.0.0.1
     net: host
     volumes: 
-      - "{{ code_dir }}/ceph:/ceph"
+      - "{{ code_dir }}/mantle/ceph:/ceph"
       - "{{ code_dir }}/ceph-scripts:/ceph-scripts"
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
     privileged: yes
     state: restarted
+    command: /bin/bash
 
 

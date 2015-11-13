@@ -1,16 +1,11 @@
 # Author: Michael Sevilla
-# Start a Ceph node
+# The code is already cloned so we just need to pacakge it up
 
-- name: move some startup scripts over there
-  copy: src=/infra/roles/ceph/files/ dest={{ code_dir}}/
-
-- name: make scripts executable
-  command: chmod -R 750 {{ code_dir }}/ceph-scripts/
-
-- name: start ceph container 
+- name: mount CephFS
+  changed_when: False
   docker:
     image: ivotron/cephdev
-    name: cephdev
+    name: cephdev-fuse
     detach: yes
     tty: yes
     env:
@@ -26,5 +21,4 @@
       - "/var/lib/ceph:/var/lib/ceph"
     privileged: yes
     state: restarted
-
-
+    command: ceph-fuse /mnt/ -d

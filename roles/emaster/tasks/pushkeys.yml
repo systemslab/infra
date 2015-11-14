@@ -11,8 +11,8 @@
   hosts: all
   tasks:
     - name: make directory for docker volumes
-      file: path=/tmp/docker/ state=directory
+      file: path=/tmp/docker/ state=directory mode=0777
     - name: make directory for components' src code
-      file: path=/tmp/docker/src state=directory
+      file: path=/tmp/docker/src state=directory mode=0777
     - name: make directory for components' deploy code
-      file: path=/tmp/docker/deploy state=directory
+      file: path=/tmp/docker/deploy state=directory mode=0777

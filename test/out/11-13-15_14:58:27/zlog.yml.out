@@ -1,0 +1,108 @@
+
+PLAY [all] ******************************************************************** 
+
+TASK: [cleanup | check if any other jobs are running] ************************* 
+[0;31mfailed: [dexter.soe.ucsc.edu] => {"changed": true, "cmd": "docker ps | grep -v emaster | grep -v CONTAINER", "delta": "0:00:00.046064", "end": "2015-11-13 15:17:00.611612", "rc": 1, "start": "2015-11-13 15:17:00.565548", "warnings": []}[0m
+[0;36m...ignoring[0m
+
+TASK: [cleanup | stop all containers, effectively stop  all services] ********* 
+[0;36mskipping: [dexter.soe.ucsc.edu][0m
+
+TASK: [cleanup | remove all containers, effectively killing all services] ***** 
+[0;36mskipping: [dexter.soe.ucsc.edu][0m
+
+PLAY [Builder] **************************************************************** 
+
+TASK: [zlog-build | build the zlog binaries] ********************************** 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+PLAY [Workers] **************************************************************** 
+
+TASK: [run the unit tests] **************************************************** 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+TASK: [debug var=result.stdout_lines] ***************************************** 
+[0;32mok: [dexter.soe.ucsc.edu] => {
+    "var": {
+        "result.stdout_lines": [
+            "Running main() from gtest_main.cc", 
+            "[==========] Running 28 tests from 4 test cases.", 
+            "[----------] Global test environment set-up.", 
+            "[----------] 8 tests from LibZlog", 
+            "[ RUN      ] LibZlog.Create", 
+            "[       OK ] LibZlog.Create (7046 ms)", 
+            "[ RUN      ] LibZlog.Open", 
+            "[       OK ] LibZlog.Open (3145 ms)", 
+            "[ RUN      ] LibZlog.CheckTail", 
+            "[       OK ] LibZlog.CheckTail (4349 ms)", 
+            "[ RUN      ] LibZlog.CheckTailBatch", 
+            "[       OK ] LibZlog.CheckTailBatch (4199 ms)", 
+            "[ RUN      ] LibZlog.Append", 
+            "[       OK ] LibZlog.Append (4968 ms)", 
+            "[ RUN      ] LibZlog.Fill", 
+            "[       OK ] LibZlog.Fill (4187 ms)", 
+            "[ RUN      ] LibZlog.Read", 
+            "[       OK ] LibZlog.Read (4182 ms)", 
+            "[ RUN      ] LibZlog.Trim", 
+            "[       OK ] LibZlog.Trim (4183 ms)", 
+            "[----------] 8 tests from LibZlog (36259 ms total)", 
+            "", 
+            "[----------] 6 tests from LibZlogStream", 
+            "[ RUN      ] LibZlogStream.MultiAppend", 
+            "[       OK ] LibZlogStream.MultiAppend (5097 ms)", 
+            "[ RUN      ] LibZlogStream.StreamId", 
+            "[       OK ] LibZlogStream.StreamId (3210 ms)", 
+            "[ RUN      ] LibZlogStream.Append", 
+            "[       OK ] LibZlogStream.Append (4191 ms)", 
+            "[ RUN      ] LibZlogStream.ReadNext", 
+            "[       OK ] LibZlogStream.ReadNext (4185 ms)", 
+            "[ RUN      ] LibZlogStream.Reset", 
+            "[       OK ] LibZlogStream.Reset (4181 ms)", 
+            "[ RUN      ] LibZlogStream.Sync", 
+            "[       OK ] LibZlogStream.Sync (9304 ms)", 
+            "[----------] 6 tests from LibZlogStream (30168 ms total)", 
+            "", 
+            "[----------] 8 tests from LibZlogC", 
+            "[ RUN      ] LibZlogC.Trim", 
+            "[       OK ] LibZlogC.Trim (4080 ms)", 
+            "[ RUN      ] LibZlogC.Create", 
+            "[       OK ] LibZlogC.Create (3532 ms)", 
+            "[ RUN      ] LibZlogC.Open", 
+            "[       OK ] LibZlogC.Open (3088 ms)", 
+            "[ RUN      ] LibZlogC.CheckTail", 
+            "[       OK ] LibZlogC.CheckTail (4074 ms)", 
+            "[ RUN      ] LibZlogC.Append", 
+            "[       OK ] LibZlogC.Append (4405 ms)", 
+            "[ RUN      ] LibZlogC.Fill", 
+            "[       OK ] LibZlogC.Fill (4083 ms)", 
+            "[ RUN      ] LibZlogC.Read", 
+            "[       OK ] LibZlogC.Read (4500 ms)", 
+            "[ RUN      ] LibZlogC.CheckTailBatch", 
+            "[       OK ] LibZlogC.CheckTailBatch (4077 ms)", 
+            "[----------] 8 tests from LibZlogC (31840 ms total)", 
+            "", 
+            "[----------] 6 tests from LibZlogCStream", 
+            "[ RUN      ] LibZlogCStream.MultiAppend", 
+            "[       OK ] LibZlogCStream.MultiAppend (4172 ms)", 
+            "[ RUN      ] LibZlogCStream.ReadNext", 
+            "[       OK ] LibZlogCStream.ReadNext (4076 ms)", 
+            "[ RUN      ] LibZlogCStream.Reset", 
+            "[       OK ] LibZlogCStream.Reset (4078 ms)", 
+            "[ RUN      ] LibZlogCStream.Sync", 
+            "[       OK ] LibZlogCStream.Sync (7793 ms)", 
+            "[ RUN      ] LibZlogCStream.StreamId", 
+            "[       OK ] LibZlogCStream.StreamId (3383 ms)", 
+            "[ RUN      ] LibZlogCStream.Append", 
+            "[       OK ] LibZlogCStream.Append (4075 ms)", 
+            "[----------] 6 tests from LibZlogCStream (27577 ms total)", 
+            "", 
+            "[----------] Global test environment tear-down", 
+            "[==========] 28 tests from 4 test cases ran. (125844 ms total)", 
+            "[  PASSED  ] 28 tests."
+        ]
+    }
+}[0m
+
+PLAY RECAP ******************************************************************** 
+[0;33mdexter.soe.ucsc.edu[0m        : [0;32mok[0m[0;32m=[0m[0;32m4[0m    [0;33mchanged[0m[0;33m=[0m[0;33m3[0m    unreachable=0    failed=0   
+

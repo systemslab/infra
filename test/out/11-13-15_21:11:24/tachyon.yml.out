@@ -1,0 +1,63 @@
+
+PLAY [all] ******************************************************************** 
+
+TASK: [cleanup | check if any other jobs are running] ************************* 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+TASK: [cleanup | stop all containers, effectively stop  all services] ********* 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+TASK: [cleanup | remove all containers, effectively killing all services] ***** 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+PLAY [compile jxio src] ******************************************************* 
+
+TASK: [jxio-build | build the jxio binaries] ********************************** 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+TASK: [jxio-build | wait for compile... (to see progress, ssh to node and run [docker logs jxiodev-build])] *** 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+TASK: [jxio-build | fail if docker build fails] ******************************* 
+[0;36mskipping: [dexter.soe.ucsc.edu][0m
+
+PLAY [compile tachyon src] **************************************************** 
+
+TASK: [tachyon-build | check to see if user already checked out tachyon src] *** 
+[0;32mok: [dexter.soe.ucsc.edu][0m
+
+TASK: [tachyon-build | fail if code does not exist] *************************** 
+[0;36mskipping: [dexter.soe.ucsc.edu][0m
+
+TASK: [tachyon-build | build tachyon] ***************************************** 
+[0;32mok: [dexter.soe.ucsc.edu][0m
+
+TASK: [tachyon-build | wait for compile (run [docker logs -f tachyondev-build] on Builder for progress)] *** 
+[0;33mchanged: [dexter.soe.ucsc.edu][0m
+
+TASK: [tachyon-build | fail if docker build fails] **************************** 
+[0;36mskipping: [dexter.soe.ucsc.edu][0m
+
+PLAY [start JXIO server and tachyon container on the same node] *************** 
+
+TASK: [jxio | start the jxio server in a tachyon container] ******************* 
+[0;32mok: [dexter.soe.ucsc.edu][0m
+
+TASK: [tachyon | start a tachyon container] *********************************** 
+[0;32mok: [dexter.soe.ucsc.edu][0m
+
+TASK: [tachyon | format tachyon in the container] ***************************** 
+[0;32mok: [dexter.soe.ucsc.edu][0m
+
+TASK: [tachyon | start tachyon daemon in the container] *********************** 
+[0;32mok: [dexter.soe.ucsc.edu][0m
+
+PLAY [create a file in tachyon] *********************************************** 
+
+TASK: [command docker exec tachyondev /tachyon/bin/tachyon tfs copyFromLocal /tachyon/bin/tachyon /blah] *** 
+[0;31mfailed: [dexter.soe.ucsc.edu] => {"censored": "results hidden due to no_log parameter", "changed": true, "rc": 1}[0m
+[0;36m...ignoring[0m
+
+PLAY RECAP ******************************************************************** 
+[0;33mdexter.soe.ucsc.edu[0m        : [0;32mok[0m[0;32m=[0m[0;32m13[0m   [0;33mchanged[0m[0;33m=[0m[0;33m7[0m    unreachable=0    failed=0   
+

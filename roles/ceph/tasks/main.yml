@@ -24,6 +24,7 @@
       - "{{ code_dir }}/ceph-scripts:/ceph-scripts"
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
+      - "/dev:/dev"
     privileged: yes
     state: restarted
 

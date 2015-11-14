@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ARGS="-it --rm \
       --name=\"test\"\
       --net=host \
@@ -11,22 +10,28 @@ ARGS="-it --rm \
       --privileged"
 EMASTER="michaelsevilla/emaster"
 
-# Test standalone ceph
-docker run $ARGS $EMASTER ansible-playbook ceph.yml
-docker run $ARGS $EMASTER ansible-playbook zlog.yml
-docker run $ARGS $EMASTER ansible-playbook tachyon.yml
+echo "Cleaning up..."
+../bin/cleanup.sh
+sudo chown -R msevilla:msevilla ../
+sudo rm -r /tmp/docker >> /dev/null 2>&1
 
-## Test standalone tachyon
-#docker run -it --rm \
-#    --name="test" \
-#    --net=host \
-#    --volume="$(dirname `pwd`):/infra/" \
-#    --volume="/tmp/:/tmp/" \
-#    --volume="/etc/ceph:/etc/ceph" \
-#    --workdir="/infra/experiments/localhost" \
-#    --volume="/var/run/docker.sock:/var/run/docker.sock" \
-#    --privileged \
-#    michaelsevilla/emaster \
-#    ansible-playbook tachyondev-experiment.yml
-#
-#
+echo "Setup emaster environment..."
+docker run $ARGS $EMASTER ansible-playbook -k ../../roles/emaster/tasks/pushkeys.yml
+
+echo "Clone Tachyon..."
+cd /tmp/docker/src
+git clone https://github.com/michaelsevilla/3par-underfs.git
+mv 3par-underfs tachyon
+cd -
+
+echo "Create output directories..."
+OUTPUT=`date +%m-%d-%y_%T`
+mkdir -p out/${OUTPUT} >> /dev/null 2>&1
+
+echo "Starting tests..."
+for f in `ls ../experiments/localhost/*.yml`; do
+  EXPERIMENT=`basename $f`
+  echo -e "\t- Testing: $EXPERIMENT"
+  docker run $ARGS $EMASTER ansible-playbook $EXPERIMENT >> out/${OUTPUT}/${EXPERIMENT}.out
+done
+

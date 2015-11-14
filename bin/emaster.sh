@@ -38,7 +38,6 @@ fi
 
 echo "===> Cleaning up old docker containers - this may require a sudo password"
 ./cleanup.sh >> /dev/null 2>&1
-mkdir -p /tmp/docker/src /tmp/docker/deploy >> /dev/null 2>&1
 
 echo "===> Installing an Ansible Docker container and dropping you into an 'experiment shell'"
 docker run $ARGS michaelsevilla/emaster ansible-playbook -k ../../roles/emaster/tasks/pushkeys.yml

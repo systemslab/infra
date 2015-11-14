@@ -5,12 +5,12 @@
 
 #- name: compile ceph src
 #  hosts: Builder
+#  roles: [ceph-build]
 #  vars:
 #    - BUILD_THREADS: 32
 #    - CEPH_PKGS: --with-lttng
 #    - GIT_URL: https://github.com/michaelsevilla/ceph.git
 #    - SHA1_OR_REF: remotes/origin/wip-reqlatency
-#  roles: [ceph-build]
 
 - name: start ceph container
   hosts: Workers
@@ -18,18 +18,18 @@
   tasks:
     - name: start ceph daemons
       command: docker exec cephdev /ceph-scripts/standalone.sh
+    - name: start lttng
+      command: docker exec cephdev /ceph-scripts/lttng.sh
+    - name: wait while cluster comes up
+      pause: seconds=30
 
-- name: start ceph client
-  hosts: Builder
-  roles: [ceph-client]
-
-- name: check to see if ceph started; timeout if it takes too long
-  hosts: Builder
+- hosts: Workers
+  roles: [ceph-fuse]
   tasks:
-    - command: docker exec ceph-client ceph -s
-      register: result
-      changed_when: False
-      async: 10
-      poll: 1
-    - debug: var=result.stdout_lines
-
+    - name: run a benchmark
+      command: docker exec cephdev-fuse mdtest -F -C -n 1000 -d /mnt/testdir
+    
+- hosts: Workers
+  tasks:
+    - name: stop lttng
+      command: docker exec cephdev lttng stop

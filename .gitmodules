@@ -16,3 +16,6 @@
 [submodule "images/docker-zlogdev"]
 	path = images/docker-zlogdev
 	url = https://github.com/michaelsevilla/docker-zlogdev.git
+[submodule "images/docker-babeltrace"]
+	path = images/docker-babeltrace
+	url = https://github.com/michaelsevilla/docker-babeltrace.git

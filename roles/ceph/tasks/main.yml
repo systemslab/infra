@@ -22,6 +22,7 @@
     volumes: 
       - "{{ code_dir }}/ceph:/ceph"
       - "{{ code_dir }}/ceph-scripts:/ceph-scripts"
+      - "{{ code_dir }}/lttng-scripts:/lttng-scripts"
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
       - "/dev:/dev"

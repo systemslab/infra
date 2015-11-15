@@ -31,6 +31,7 @@ mkdir -p out/${OUTPUT} >> /dev/null 2>&1
 echo "Starting tests..."
 for f in `ls ../experiments/localhost/*.yml`; do
   EXPERIMENT=`basename $f`
+  ../bin/cleanup.sh
   echo -e "\t- Testing: $EXPERIMENT"
   docker run $ARGS $EMASTER ansible-playbook $EXPERIMENT >> out/${OUTPUT}/${EXPERIMENT}.out
 done

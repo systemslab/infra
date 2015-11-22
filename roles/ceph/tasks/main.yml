@@ -2,10 +2,10 @@
 # Start a Ceph node
 
 - name: move some startup scripts over there
-  copy: src=/infra/roles/ceph/files/ dest={{ code_dir}}/
+  copy: src=/infra/roles/ceph/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
-  command: chmod -R 750 {{ code_dir }}/ceph-scripts/
+  command: chmod -R 750 {{ code_dir }}/scripts/
 
 - name: start ceph container 
   docker:
@@ -21,12 +21,10 @@
     net: host
     volumes: 
       - "{{ code_dir }}/ceph:/ceph"
-      - "{{ code_dir }}/ceph-scripts:/ceph-scripts"
+      - "{{ code_dir }}/scripts:/scripts"
       - "{{ trace_dir }}/lttng:/lttng"
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
       - "/dev:/dev"
     privileged: yes
     state: restarted
-
-

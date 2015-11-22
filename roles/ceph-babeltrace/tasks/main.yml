@@ -1,11 +1,11 @@
 # Author: Michael Sevilla
-# Start a Ceph node
+# Start Ceph node with LTTnG
 
 - name: move some startup scripts over there
   copy: src=/infra/roles/ceph-babeltrace/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
-  command: chmod -R 750 {{ code_dir }}/lttng-scripts/
+  command: chmod -R 750 {{ code_dir }}/scripts/
 
 - name: start babeltrace container
   changed_when: False
@@ -14,10 +14,10 @@
     name: ceph-babetrace
     net: host
     volumes: 
-      - "{{ code_dir }}/lttng-scripts:/lttng-scripts"
+      - "{{ code_dir }}/scripts:/scripts"
       - "{{ trace_dir }}/lttng:/lttng"
     state: restarted
-    command: /lttng-scripts/latency.py -o /lttng/latencies.out -d /lttng/ust/uid/0/64-bit/
+    command: /scripts/latency.py -o /lttng/latencies.out -d /lttng/ust/uid/0/64-bit/
 
 - name: print out the results in {{ trace_dir }}/lttng/latencies.out
   changed_when: False

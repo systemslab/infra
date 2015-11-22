@@ -34,10 +34,9 @@ Each system has two roles, for example foo and foo-build. The foo-build role bui
 Directory Structure
 -------------------
 
-- ``experiments``: where you go to launch experiments. 
-- ``deploy``: scripts for deploying the systems and running experiments using Ansible.
-- ``images``: scripts for installing the systems using containers. 
 - ``bin``: scripts that orchestrate the Experiment Master.
+- ``experiments``: where you go to launch experiments. 
+- ``images``: scripts for installing the systems using containers. 
 - ``roles``: scripts (used by Ansible) that add services to nodes.
 - ``test``: re-run all experiments.
 

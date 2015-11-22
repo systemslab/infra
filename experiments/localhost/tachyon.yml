@@ -1,21 +1,21 @@
 # Author: Michael Sevilla
 # Create a Tachyon development node (with the source code) and start it on the localhost
 
-#- hosts: all
-#  roles: [cleanup]
+- hosts: all
+  roles: [cleanup]
 
-#- name: compile jxio src
-#  hosts: Builder
-#  roles: [jxio-build]
-#  vars: 
-#     - GIT_URL: "https://github.com/michaelsevilla/JXIO.git"
-#     - SHA1_OR_REF: ""
+- name: compile jxio src
+  hosts: Builder
+  roles: [jxio-build]
+  vars: 
+     - GIT_URL: "https://github.com/michaelsevilla/JXIO.git"
+     - SHA1_OR_REF: ""
 
-#- name: compile tachyon src
-#  hosts: Builder
-#  roles: [tachyon-build]
-#  vars:
-#    - SHA1_OR_REF: remotes/origin/3par
+- name: compile tachyon src
+  hosts: Builder
+  roles: [tachyon-build]
+  vars:
+    - SHA1_OR_REF: remotes/origin/3par
 
 - name: start JXIO server and tachyon container on the same node
   hosts: Workers

@@ -1,35 +1,39 @@
 # Author: Michael Sevilla
 # Create a Ceph development node (with the source code) and start it on the localhost
-- hosts: all
-  roles: [cleanup]
 
-#- name: compile ceph src
-#  hosts: Builder
-#  roles: [ceph-build]
-#  vars:
-#    - BUILD_THREADS: 32
-#    - CEPH_PKGS: --with-lttng
-#    - GIT_URL: https://github.com/michaelsevilla/ceph.git
-#    - SHA1_OR_REF: remotes/origin/wip-reqlatency
+#- hosts: all
+#  roles: [cleanup]
+#
+##- name: compile ceph src
+##  hosts: Builder
+##  roles: [ceph-build]
+##  vars:
+##    - BUILD_THREADS: 32
+##    - CEPH_PKGS: --with-lttng
+##    - GIT_URL: https://github.com/michaelsevilla/ceph.git
+##    - SHA1_OR_REF: remotes/origin/wip-reqlatency
+#
+#- name: start ceph container
+#  hosts: Workers
+#  roles: [ceph]
+#  tasks:
+#    - name: start ceph daemons
+#      command: docker exec cephdev /ceph-scripts/standalone.sh
+#    - name: start lttng
+#      command: docker exec cephdev /ceph-scripts/lttng.sh
+#    - name: wait while cluster comes up
+#      pause: seconds=30
+#
+#- hosts: Workers
+#  roles: [ceph-fuse]
+#  tasks:
+#    - name: run a benchmark
+#      command: docker exec cephdev-fuse mdtest -F -C -n 1000 -d /mnt/testdir
+#    
+#- hosts: Workers
+#  tasks:
+#    - name: stop lttng
+#      command: docker exec cephdev lttng stop
 
-- name: start ceph container
-  hosts: Workers
-  roles: [ceph]
-  tasks:
-    - name: start ceph daemons
-      command: docker exec cephdev /ceph-scripts/standalone.sh
-    - name: start lttng
-      command: docker exec cephdev /ceph-scripts/lttng.sh
-    - name: wait while cluster comes up
-      pause: seconds=30
-
-- hosts: Workers
-  roles: [ceph-fuse]
-  tasks:
-    - name: run a benchmark
-      command: docker exec cephdev-fuse mdtest -F -C -n 1000 -d /mnt/testdir
-    
-- hosts: Workers
-  tasks:
-    - name: stop lttng
-      command: docker exec cephdev lttng stop
+- hosts: Builder
+  roles: [ceph-babeltrace]

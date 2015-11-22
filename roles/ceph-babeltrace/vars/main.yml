@@ -1,0 +1,4 @@
+# Author: Michael Sevilla
+# Tachyon variables
+
+tmpdir: /tmp/docker/deploy

@@ -26,9 +26,12 @@ ARGS="-it --rm \
       --net=host \
       --volume=\"/tmp/:/tmp/\" \
       --volume=\"/etc/ceph:/etc/ceph\" \
+      --volume=\"/var/lib/ceph:/var/lib/ceph\" \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
       --volume=\"$(dirname `pwd`):/infra\" \
       --workdir=\"/infra/experiments/localhost\" \
+      -e DISPLAY=$DISPLAY \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
       --privileged"
 
 if [ ! -d "../experiments/$CLUSTER" ]; then

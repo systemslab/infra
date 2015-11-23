@@ -1,5 +1,0 @@
-# Author: Michael Sevilla
-# Tachyon variables
-
-version: origin/branch-0.7
-tmpdir: /tmp/docker/deploy

@@ -4,6 +4,7 @@
 - name: check if any other jobs are running
   shell: docker ps | grep -v emaster | grep -v CONTAINER
   register: result
+  no_log: True
   ignore_errors: True
 
 - name: stop all containers, effectively stop  all services
@@ -15,3 +16,7 @@
   shell: docker ps -a | grep -v "emaster\|CONTAINER" | awk '{print $1}' | xargs docker rm
   ignore_errors: True
   when: result.rc == 0
+
+- name: delete data
+  command: sudo rm -rf /var/lib/ceph
+

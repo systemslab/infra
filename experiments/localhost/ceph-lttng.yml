@@ -4,15 +4,15 @@
 - hosts: all
   roles: [cleanup]
 
-- name: compile ceph src
-  hosts: Builder
-  vars:
-    - BUILD_THREADS: 32
-    - CEPH_PKGS: --with-lttng
-    - GIT_URL: https://github.com/michaelsevilla/ceph.git
-    - SHA1_OR_REF: remotes/origin/wip-reqlatency
-  roles: [ceph-build]
-
+#- name: compile ceph src
+#  hosts: Builder
+#  roles: [ceph-build]
+#  vars:
+#    - BUILD_THREADS: 64
+#    - CEPH_PKGS: --with-lttng
+#    - GIT_URL: https://github.com/michaelsevilla/ceph.git
+#    - SHA1_OR_REF: remotes/origin/wip-reqlatency
+ 
 - name: start ceph container
   hosts: Workers
   roles: [ceph]

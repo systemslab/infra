@@ -28,3 +28,6 @@
       - "/dev:/dev"
     privileged: yes
     state: restarted
+
+- name: start ceph
+  command: docker exec {{ CONTAINER }} /scripts/{{ STARTUP }}

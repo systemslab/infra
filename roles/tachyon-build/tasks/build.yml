@@ -26,8 +26,7 @@
     state: started
 
 - name: wait for compile (run [docker logs -f tachyondev-build] on Builder for progress)
-  shell: > 
-    docker wait tachyondev-build
+  shell: docker wait tachyondev-build
   register: result
 
 - name: fail if docker build fails

@@ -35,10 +35,10 @@ ARGS="-it --rm \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
       --volume=\"$(dirname `pwd`):/infra\" \
       --workdir=\"/infra/experiments/localhost\" \
+      -e DISPLAY=$DISPLAY \
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
       --privileged"
 
-      #-e DISPLAY=$DISPLAY \
-      #-v /tmp/.X11-unix:/tmp/.X11-unix \
 
 if [ ! -d "../experiments/$CLUSTER" ]; then
   echo "===> Couldn't find directory with hosts listed in ../experiments/$CLUSTER"

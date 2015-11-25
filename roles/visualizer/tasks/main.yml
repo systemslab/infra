@@ -2,25 +2,28 @@
 # Start Ceph node with LTTnG
 
 - name: move some startup scripts over there
-  copy: src=/infra/roles/ceph-babeltrace/files/ dest={{ code_dir }}/
+  copy: src=/infra/roles/visualizer/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
   command: chmod -R 750 {{ code_dir }}/scripts/
 
-- name: start babeltrace container
+- name: start vizualizer container
   changed_when: False
   docker:
-    image: michaelsevilla/babeltrace
-    name: ceph-babetrace
-    net: host
+    image: michaelsevilla/visualizer
+    name: visualizer
     volumes: 
       - "{{ code_dir }}/scripts:/scripts"
       - "{{ trace_dir }}/lttng:/lttng"
     state: restarted
     command: /scripts/latency.py -o /lttng/latencies.out -d /lttng/ust/uid/0/64-bit/
 
+- name: parsing scripts...
+  shell: docker wait visualizer
+
 - name: print out the results in {{ trace_dir }}/lttng/latencies.out
   changed_when: False
   command: cat {{ trace_dir }}/lttng/latencies.out
   register: result
-- debug: var=result.stdout_lines
+- name: to graph, run ['tailplot -x 1 --field-format=1,date,HH:mm:ss --x-format=date,HH:mm:ss -f avglatency -s 3 /tmp/docker/trace/lttng/latencies.out']
+  debug: var=result.stdout_lines

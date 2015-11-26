@@ -1,20 +1,28 @@
 # Author: Michael Sevilla
 # Create a Tachyon node (with the source code)
 
+- name: pull dependencies for running tachyon
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/tachyondev
+    state: present
+
 - name: start a tachyon container
-  changed_when: False
+  no_log: True
   docker:
     image: michaelsevilla/tachyondev
     name: tachyondev
+    state: restarted
+    net: host
+    privileged: yes
     detach: yes
     tty: yes
     env:
       SSHD_PORT: 2222
       AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-    net: host
-    volumes: "{{ code_dir }}/tachyon:/tachyon"
-    privileged: yes
-    state: restarted
+    volumes: 
+      - "{{ code_dir }}/tachyon:/tachyon"
 
 - name: format tachyon in the container
   command: docker exec tachyondev /tachyon/bin/tachyon format

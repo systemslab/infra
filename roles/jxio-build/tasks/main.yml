@@ -1,22 +1,29 @@
 # Author: Michael Sevilla
-# Build jxio and put the binaries in /tmp/docker/{ceph, ceph-jxio, jxio}
+# Build jxio 
 
-- name: build the jxio binaries
+- name: pull dependencies for building jxio binaries
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/jxiodev-build
+    state: present
+
+- name: start jxio build container 
   docker:
     image: michaelsevilla/jxiodev-build
-    name: jxiodev-build
+    name: jxio-build
+    state: restarted
     net: host
     env:
       SHA1_OR_REF: "{{ SHA1_OR_REF }}"
       GIT_URL: "{{ GIT_URL }}"
     volumes:
       - "{{ code_dir }}/JXIO:/JXIO"
-    state: started
 
-- name: wait for compile... (to see progress, ssh to node and run [docker logs jxiodev-build])
-  shell: docker wait jxiodev-build
+- name: compiling (run [docker logs -f jxio-build] on Builder for progress)
+  shell: docker wait jxio-build
   register: result
 
 - name: fail if docker build fails
-  fail: msg="JXIO build failed; log into the Builder and run - docker logs jxiodev-build"
+  fail: msg="JXIO build failed; log into the Builder and run - docker logs jxio-build"
   when: result.stdout.find("0") == -1

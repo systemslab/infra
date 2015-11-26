@@ -1,8 +1,15 @@
 # Author: Michael Sevilla
-# Build Ceph in a container
+# Build Ceph with Mantle in a container
+
+- name: pull dependencies for building mantle
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/mantledev-build
+    state: present
 
 - name: build ceph
-  changed_when: False
+  no_log: True
   docker:
     image: michaelsevilla/mantledev-build
     name: mantledev-build

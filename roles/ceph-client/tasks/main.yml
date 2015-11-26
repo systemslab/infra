@@ -1,12 +1,28 @@
-- name: run the ceph client in a docker image
-  shell: >
-         /usr/bin/docker run -d -it
-         --name=ceph-client 
-         --net=host 
-         --volume=/tmp/docker/src/ceph/:/ceph 
-         --volume=/etc/ceph:/etc/ceph 
-         --entrypoint=/bin/bash
-         ivotron/cephdev
+# Author: Michael Sevilla
+# The code is already cloned so we just need to pacakge it up
+
+- name: pull dependencies for running ceph client binaries
   ignore_errors: True
-  changed_when: False
   no_log: True
+  docker: 
+    image: ivotron/cephdev
+    state: present
+
+- name: start a ceph client container
+  docker:
+    image: ivotron/cephdev
+    name: ceph-client
+    state: restarted
+    net: host
+    privileged: yes
+    detach: yes
+    tty: yes
+    env:
+      SSHD_PORT: 2223
+      AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      CEPH_NETWORK: 127.0.0.1/24
+      MON_IP: 127.0.0.1
+    volumes: 
+      - "{{ code_dir }}/ceph:/ceph"
+      - "/etc/ceph:/etc/ceph"
+      - "/var/lib/ceph:/var/lib/ceph"

@@ -1,0 +1,15 @@
+# Author: Michael Sevilla
+# Create a Zlog node
+
+- hosts: all
+  roles: [cleanup]
+
+- hosts: Builder
+  roles: [zlog-build]
+
+- hosts: Workers
+  tasks:
+    - name:     run the unit tests
+      command:  docker run --name=zlog-client --net=host -v /etc/ceph:/etc/ceph --entrypoint=/src/zlog/src/test michaelsevilla/zlogdev-build
+      register: result
+    - debug:    var=result.stdout_lines

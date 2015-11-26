@@ -40,6 +40,22 @@ Directory Structure
 - ``roles``: scripts (used by Ansible) that add services to nodes.
 - ``test``: re-run all experiments.
 
+Writing Experiments
+-------------------
+
+Each role has required variables that MUST be set.
+
+lttng role
+==========
+
+- CONTAINER: which container to start LTTnG in (e.g., ceph)
+- TRACEPOINT: which tracepoints to activate (e.g., mds:req*)
+
+ceph role
+=========
+
+- STARTUP: which startup script to use to launch daemons (e.g., standalone.sh)
+
 Troubleshooting
 ---
 Q: The container fails to pull down Ubuntu repos and can't seem to reach the internet.

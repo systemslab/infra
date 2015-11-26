@@ -1,16 +1,25 @@
 # Author: Michael Sevilla
-# Start a Ceph node
+# Start a Ceph node with Mantle
 
 - name: move some startup scripts over there
   copy: src=/infra/roles/mantle/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
-  command: chmod -R 750 {{ code_dir }}/ceph-scripts/
+  command: chmod -R 750 {{ code_dir }}/mantle-scripts/
 
-- name: start ceph container 
+- name: pull dependencies for running mantle
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/mantledev
+    state: present
+
+- name: pull dependencies for mantle and start container 
   docker:
     image: michaelsevilla/mantledev
-    name: cephdev
+    name: mantle
+    state: restarted
+    privileged: yes
     detach: yes
     tty: yes
     env:
@@ -21,11 +30,9 @@
     net: host
     volumes: 
       - "{{ code_dir }}/mantle/ceph:/ceph"
-      - "{{ code_dir }}/ceph-scripts:/ceph-scripts"
+      - "{{ code_dir }}/mantle-scripts:/mantle-scripts"
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
-    privileged: yes
-    state: restarted
-    command: /bin/bash
 
-
+- name: start ceph daemons
+  command: docker exec mantle /mantle-scripts/{{ STARTUP }}

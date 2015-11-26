@@ -1,16 +1,22 @@
 # Author: Michael Sevilla
 # Build zlog and put the binaries in /tmp/docker/{ceph, ceph-zlog, zlog}
 
+- name: pull dependencies for building zlog
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/zlogdev-build
+    state: present
+
 - name: build the zlog binaries
   docker:
     image: michaelsevilla/zlogdev-build
-    name: zlogdev-build
+    name: zlog-build
+    state: started
     net: host
     env:
        CEPH_NETWORK: 127.0.0.1/24
        MON_IP: 127.0.0.1
     volumes:
-      - /etc/ceph:/etc/ceph
-    state: started
-    #command: /bin/bash single-node-ceph.sh
+      - "/etc/ceph:/etc/ceph"
 

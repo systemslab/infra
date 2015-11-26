@@ -6,8 +6,9 @@
   register: result
   no_log: True
   ignore_errors: True
+  changed_when: False
 
-- name: stop all containers, effectively stop  all services
+- name: stop all containers, effectively stop all services
   shell: docker ps -a | grep -v "emaster\|CONTAINER" | awk '{print $1}' | xargs docker stop
   ignore_errors: True
   when: result.rc == 0

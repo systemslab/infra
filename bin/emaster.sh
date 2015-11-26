@@ -15,17 +15,7 @@ EOF
   exit 1
 }
 
-if [ -z "$1" ]; then
-  CLUSTER="localhost"
-else
-  CLUSTER="$1"
-fi
-
-echo "===> Figure out which screen to use"
-SCREEN=`echo $DISPLAY | sed s/localhost//g | sed 's/\.0//g'`
-XAUTH=`xauth list | grep $SCREEN`
-
-echo "===> Experiment master will control all hosts listed in $CLUSTER"
+echo "===> Experiment master will control all hosts listed in /infra/experiments"
 ARGS="-it --rm \
       --name=\"emaster\"\
       --net=host \
@@ -34,22 +24,29 @@ ARGS="-it --rm \
       --volume=\"/var/lib/ceph:/var/lib/ceph\" \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
       --volume=\"$(dirname `pwd`):/infra\" \
-      --workdir=\"/infra/experiments/localhost\" \
-      -e DISPLAY=$DISPLAY \
-      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      --workdir=\"/infra/experiments/\" \
       --privileged"
 
-
-if [ ! -d "../experiments/$CLUSTER" ]; then
-  echo "===> Couldn't find directory with hosts listed in ../experiments/$CLUSTER"
-  fail
+echo "===> Figure out which screen to use"
+SCREEN=`echo $DISPLAY | sed s/localhost//g | sed 's/\.0//g'`
+if [ -z "$SCREEN" ]; then
+  read -p "     Couldn't find a screen, so you can't use the graphers... do you want to continue [y/n]? " answer
+  if [ "$answer" == 'n' ]; then
+    echo "     To get a screen, use: [ssh -X user@hostname]"
+    exit 1
+  fi
+else
+  XAUTH=`xauth list | grep $SCREEN`
+  ARGS="$ARGS \
+      -e DISPLAY=$DISPLAY \
+      -v /tmp/.X11-unix:/tmp/.X11-unix"
 fi
 
 echo "===> Cleaning up old docker containers - this may require a sudo password"
 ./cleanup.sh >> /dev/null 2>&1
 
 echo "===> Installing an Ansible Docker container and dropping you into an 'experiment shell'"
-docker run $ARGS michaelsevilla/emaster ansible-playbook -k ../../roles/emaster/tasks/pushkeys.yml
+docker run $ARGS michaelsevilla/emaster ansible-playbook -k ../roles/emaster/tasks/pushkeys.yml
 
 if [ "$?" -ne 0 ]; then
   echo "===> ... wrong password? Try again."

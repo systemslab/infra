@@ -4,13 +4,13 @@
 - hosts: Workers
   roles: [cleanup]
 
-#- hosts: Builder
-#  roles: [ceph-build]
-#  vars: 
-#    - BUILD_THREADS: 64
-#    - CEPH_PKGS: --with-lttng
-#    - GIT_URL: https://github.com/michaelsevilla/ceph.git
-#    - SHA1_OR_REF: remotes/origin/wip-mantle-dev
+- hosts: Builder
+  roles: [ceph-build]
+  vars: 
+    - BUILD_THREADS: 64
+    - CEPH_PKGS: --with-lttng
+    - GIT_URL: https://github.com/michaelsevilla/ceph.git
+    - SHA1_OR_REF: remotes/origin/wip-reqlatency
 
 - hosts: Workers
   vars:  [TRACEPOINT: "mds:req*", CONTAINER: "ceph", STARTUP: "singlenode.sh"]

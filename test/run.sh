@@ -6,7 +6,7 @@ ARGS="-it --rm \
       --volume=\"/etc/ceph:/etc/ceph\" \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
       --volume=\"$(dirname `pwd`):/infra\" \
-      --workdir=\"/infra/experiments/localhost\" \
+      --workdir=\"/infra/experiments/\" \
       --privileged"
 EMASTER="michaelsevilla/emaster"
 
@@ -16,7 +16,7 @@ sudo chown -R msevilla:msevilla ../
 sudo rm -r /tmp/docker >> /dev/null 2>&1
 
 echo "Setup emaster environment..."
-docker run $ARGS $EMASTER ansible-playbook -k ../../roles/emaster/tasks/pushkeys.yml
+docker run $ARGS $EMASTER ansible-playbook -k ../roles/emaster/tasks/pushkeys.yml
 
 echo "Clone Tachyon..."
 cd /tmp/docker/src
@@ -29,7 +29,7 @@ OUTPUT=`date +%m-%d-%y_%T`
 mkdir -p out/${OUTPUT} >> /dev/null 2>&1
 
 echo "Starting tests..."
-for f in `ls ../experiments/localhost/*.yml`; do
+for f in `ls ../experiments/*.yml`; do
   EXPERIMENT=`basename $f`
   ../bin/cleanup.sh
   echo -e "\t- Testing: $EXPERIMENT"

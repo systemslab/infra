@@ -4,11 +4,20 @@ Infra: a framework for deploying systems and running experiments
 
 This is the SRL's infrastructure repository. 
 
+Install
+======
+
+On all nodes, [install Docker](https://docs.docker.com/installation). 
+
 Quickstart
 ==========
 It's as easy as 1, 2, 3.
 
-1. On all nodes, [install Docker](https://docs.docker.com/installation). 
+1. Specify the hosts and drop it in the experiment folder:
+
+   ```bash
+   cp hosts.example experiments/hosts; vim experiments/hosts
+   ```
 
 2. On this node, start an ``experiment master``:
 

@@ -4,12 +4,16 @@
 - hosts: all
   roles: [cleanup]
 
-#- hosts: Builder
-#  roles: [mantle-build]
-#  vars:  [BUILD_THREADS: 64]
+- hosts: Builder
+  roles: [ceph-build]
+  vars:
+    - BUILD_THREADS: 64
+    - SHA1_OR_REF: "master"
+    - GIT_URL: ""
+    - CEPH_PKGS: ""
 
 - hosts: Workers
-  vars:  [STARTUP: "standalone.sh"]
+  vars:  [STARTUP: "singlenode.sh"]
   roles: [ceph]
 
 - hosts: Builder
@@ -17,7 +21,6 @@
   tasks:
     - command: docker exec ceph-client ceph -s
       register: result
-      changed_when: False
       async: 10
       poll: 1
     - debug: var=result.stdout_lines

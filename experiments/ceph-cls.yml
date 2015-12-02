@@ -10,6 +10,9 @@
 
 - hosts: Builder
   roles: [ceph-cls-build]
+  tasks:
+    - command: docker exec clsdev-build /ceph-scripts/singlenode-minimal.sh
+    - command: docker exec clsdev-build busted test.lua 
 
 #- hosts: Workers
 #  vars:  [STARTUP: "singlenode-minimal.sh"]

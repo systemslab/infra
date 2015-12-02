@@ -4,12 +4,12 @@
 - hosts: all
   roles: [cleanup]
 
-- name: compile jxio src
-  hosts: Builder
-  roles: [jxio-build]
-  vars: 
-    - GIT_URL: "https://github.com/michaelsevilla/JXIO.git"
-    - SHA1_OR_REF: ""
+##- name: compile jxio src
+##  hosts: Builder
+##  roles: [jxio-build]
+##  vars: 
+##    - GIT_URL: "https://github.com/michaelsevilla/JXIO.git"
+##    - SHA1_OR_REF: ""
 
 - name: compile tachyon src
   hosts: Builder

@@ -9,10 +9,10 @@
   vars:
     - BUILD_THREADS: 64
     - CEPH_PKGS: --with-mantle
-    - GIT_URL: https://github.com/michaelsevilla/ceph.git
-    - SHA1_OR_REF: remotes/origin/wip-mantle-dev
-    #- GIT_URL: ""
-    #- SHA1_OR_REF: ""
+    #- GIT_URL: https://github.com/michaelsevilla/ceph.git
+    #- SHA1_OR_REF: remotes/origin/wip-mantle-dev
+    - GIT_URL: ""
+    - SHA1_OR_REF: ""
 
 - hosts: Workers
   vars:  [STARTUP: "standalone.sh"]

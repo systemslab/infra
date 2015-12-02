@@ -23,6 +23,7 @@
   docker:
     image: michaelsevilla/tachyondev-build
     name: tachyondev-build
+    net: host
     state: started
     env: 
         SHA1_OR_REF: "{{ SHA1_OR_REF }}"

@@ -1,0 +1,24 @@
+# Author: Michael Sevilla
+# Bring up Ceph with object interfaces on a single node
+
+- hosts: all
+  roles: [cleanup]
+
+#- hosts: Builder
+#  roles: [ceph-build]
+#  vars:  [BUILD_THREADS: 64, SHA1_OR_REF: "master", GIT_URL: "", CEPH_PKGS: ""]
+
+- hosts: Builder
+  roles: [ceph-cls-build]
+
+#- hosts: Workers
+#  vars:  [STARTUP: "singlenode-minimal.sh"]
+#  roles: [ceph-client]
+#  tasks:
+#    - command:  docker exec ceph-client ceph -s
+#      register: result
+#      async: 10
+#      poll: 1
+#    - debug:    var=result.stdout_lines
+#    #- command:  docker exec --detach ceph-client ceph-fuse /mnt/ -d
+#    #- command:  docker exec ceph-client mdtest -F -C -n 1000 -d /mnt/testdir

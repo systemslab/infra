@@ -1,0 +1,42 @@
+# Author: Michael Sevilla
+# Build Ceph with Mantle in a container
+
+- name: pull dependencies for building cls
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/clsdev-build
+    state: present
+
+- name: build ceph
+  no_log: True
+  docker:
+    image: michaelsevilla/clsdev-build
+    name: clsdev-build
+    state: restarted
+    detach: yes
+    tty: yes
+    net: host
+    privileged: yes
+    env:
+      SSHD_PORT: 2222
+      AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      CEPH_NETWORK: 127.0.0.1/24
+      MON_IP: 127.0.0.1
+    volumes: 
+      - "{{ code_dir }}/ceph:/ceph"
+      - "{{ code_dir }}/ceph-scripts:/ceph-scripts"
+      - "{{ trace_dir }}/lttng:/lttng"
+      - "/etc/ceph:/etc/ceph"
+      - "/var/lib/ceph:/var/lib/ceph"
+      - "/dev:/dev"
+
+#- name: compiling (run [docker logs clsdev-build] on Builder for progress)
+#  shell: docker wait clsdev-build
+#  register: result
+#
+#- name: fail if docker build fails
+#  fail: msg="Ceph build failed; check your environment variables above"
+#  # stdout returns strings, not an int
+#  when: result.stdout.find("0") == -1
+#

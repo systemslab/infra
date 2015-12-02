@@ -40,6 +40,14 @@ Each system has two roles, for example foo and foo-build. The foo-build role bui
 
 * We don't pull the code because some of the repositories we clone from are private and setting up the keys is a pain.
 
+Motivation
+==========
+
+- Reproducibility: exchanging code and starting the systems for another person
+- Tuning and Benchmarking: running jobs overnight and fully utilizing the cluster
+- Performance Bug Fixes: automatically test multiple code revisions
+- Isolation: system libraries do not interfere with each other
+
 Directory Structure
 -------------------
 

@@ -1,0 +1,16 @@
+# Author: Michael Sevilla
+# Bring up Ceph with object interfaces on a single node
+
+- hosts: all
+  roles: [cleanup]
+
+#- hosts: Builder
+#  roles: [ceph-build]
+#  vars:  [BUILD_THREADS: 64, SHA1_OR_REF: "master", GIT_URL: "", CEPH_PKGS: ""]
+
+- hosts: Builder
+  roles: [ceph-cls-build]
+  tasks:
+    - command: docker exec clsdev-build /build
+    - command: docker exec clsdev-build /ceph-scripts/singlenode-minimal.sh
+    - command: docker exec clsdev-build busted lua-rados/test.lua

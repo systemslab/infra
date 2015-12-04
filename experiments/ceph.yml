@@ -4,9 +4,9 @@
 - hosts: all
   roles: [cleanup]
 
-- hosts: Builder
-  roles: [ceph-build]
-  vars:  [BUILD_THREADS: 64, SHA1_OR_REF: "master", GIT_URL: "",  CEPH_PKGS: ""]
+#- hosts: Builder
+#  roles: [ceph-build]
+#  vars:  [BUILD_THREADS: 64, SHA1_OR_REF: "master", GIT_URL: "",  CEPH_PKGS: ""]
 
 - hosts: Workers
   vars:  [STARTUP: "singlenode.sh"]

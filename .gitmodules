@@ -19,3 +19,6 @@
 [submodule "images/docker-babeltrace"]
 	path = images/docker-parser
 	url = https://github.com/michaelsevilla/docker-babeltrace.git
+[submodule "images/docker-baseball"]
+	path = images/docker-baseball
+	url = https://github.com/systemslab/docker-baseball.git

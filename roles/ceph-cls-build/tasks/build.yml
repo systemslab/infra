@@ -8,7 +8,7 @@
     image: michaelsevilla/clsdev-build
     state: present
 
-- name: build ceph
+- name: build ceph with cls
   no_log: True
   docker:
     image: michaelsevilla/clsdev-build

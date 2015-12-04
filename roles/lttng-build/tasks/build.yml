@@ -1,0 +1,32 @@
+# Author: Michael Sevilla
+# Build Ceph with Mantle in a container
+
+- name: pull dependencies for building ceph
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: ivotron/cephdev-build
+    state: present
+
+- name: build ceph
+  no_log: True
+  docker:
+    image: ivotron/cephdev-build
+    name: cephdev-build
+    env:
+      BUILD_THREADS:    "{{ BUILD_THREADS }}"
+      CEPH_PKGS:        "{{ CEPH_PKGS }}"
+      GIT_URL:          "{{ GIT_URL }}"
+      SHA1_OR_REF:      "{{ SHA1_OR_REF }}"
+    volumes:
+      - '{{ code_dir }}/lttng/ceph:/ceph'
+
+- name: compiling (run [docker logs cephdev-build] on Builder for progress)
+  shell: docker wait cephdev-build
+  register: result
+
+- name: fail if docker build fails
+  fail: msg="Ceph build failed; check your environment variables above"
+  # stdout returns strings, not an int
+  when: result.stdout.find("0") == -1
+

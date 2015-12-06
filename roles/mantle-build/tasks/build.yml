@@ -14,12 +14,12 @@
     image: michaelsevilla/mantledev-build
     name: mantledev-build
     env:
-      BUILD_THREADS:    "{{ BUILD_THREADS }}"
-      CEPH_PKGS:        "{{ CEPH_PKGS }}"
-      GIT_URL:          "{{ GIT_URL }}"
-      SHA1_OR_REF:      "{{ SHA1_OR_REF }}"
+      BUILD_THREADS: "{{ threads }}"
+      CEPH_PKGS: "{{ pkgs }}"
+      GIT_URL: "{{ git_url }}"
+      SHA1_OR_REF: "{{ commit }}"
     volumes:
-      - '{{ code_dir }}/mantle/ceph:/ceph'
+      - '{{ code_dir }}/ceph:/ceph'
 
 - name: compiling (run [docker logs mantledev-build] on Builder for progress)
   shell: docker wait mantledev-build

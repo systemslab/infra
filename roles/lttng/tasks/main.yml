@@ -1,8 +1,0 @@
-# Author: Michael Sevilla
-# Start lttng on that node
-
-- command: docker exec {{ CONTAINER }} lttng-sessiond --no-kernel -d
-- command: docker exec {{ CONTAINER }} lttng create -o /lttng
-- command: docker exec {{ CONTAINER }} lttng enable-event -u --tracepoint {{ TRACEPOINT }} -c 0
-- command: docker exec {{ CONTAINER }} lttng start
-

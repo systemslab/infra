@@ -72,5 +72,4 @@ EOF
 echo "==============================================================================="
 echo "===> Here are the specs of your environment:"
 docker run $ARGS michaelsevilla/emaster cat /etc/lsb-release /etc/os-release | while read p; do echo -e "\t $p"; done
-#docker run $ARGS -e "XAUTH=$XAUTH" michaelsevilla/emaster
 docker run $ARGS -e "XAUTH=$XAUTH" michaelsevilla/emaster /bin/emaster-shell

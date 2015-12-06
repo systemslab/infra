@@ -1,25 +1,24 @@
 # Author: Michael Sevilla
-# Build Ceph with Mantle in a container
+# Build lua-rados bindings
 
-- name: pull dependencies for building cls
+- name: pull container for building lua-rados bindings
   ignore_errors: True
   no_log: True
   docker: 
-    image: michaelsevilla/clsdev-build
+    image: michaelsevilla/lua-rados-build
     state: present
 
-- name: build ceph with cls
+- name: build lua-rados bindings
   no_log: True
   docker:
-    image: michaelsevilla/clsdev-build
-    name: clsdev-build
+    image: michaelsevilla/lua-rados-build
+    name: "{{ container }}"
     state: restarted
     detach: yes
     tty: yes
     net: host
-    privileged: yes
     env:
-      SSHD_PORT: 2222
+      SSHD_PORT: "{{ sshd_port }}"
       AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       CEPH_NETWORK: 127.0.0.1/24
       MON_IP: 127.0.0.1
@@ -31,12 +30,3 @@
       - "/var/lib/ceph:/var/lib/ceph"
       - "/dev:/dev"
 
-#- name: compiling (run [docker logs clsdev-build] on Builder for progress)
-#  shell: docker wait clsdev-build
-#  register: result
-#
-#- name: fail if docker build fails
-#  fail: msg="Ceph build failed; check your environment variables above"
-#  # stdout returns strings, not an int
-#  when: result.stdout.find("0") == -1
-#

@@ -11,7 +11,7 @@
 - name: start the jxio server in a tachyon container
   docker:
     image: michaelsevilla/tachyondev
-    name: jxio-server
+    name: "{{ container }}"
     state: restarted
     privileged: yes
     detach: yes

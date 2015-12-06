@@ -1,4 +1,10 @@
-# Author: Michael Sevilla
-# Experiment master variables
-
-tmpdir: /tmp/docker/src
+container: lua-rados-build
+code_dir: "/tmp/docker/src/"
+trace_dir: "/tmp/docker/src/"
+sshd_port: "2222"
+commit:  ""
+pkgs: ""
+git_url: ""
+threads: 8
+cxxflags: ""
+cflags: ""

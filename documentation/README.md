@@ -61,3 +61,16 @@ commit    | no       | master  | SHA1 or reference (e.g., git branch) of the cod
 pkgs      | no       |         | which packages* to enable
 git_url   | no       |         | repo location for the code
 threads   | no       | 8       | number of threads to use when building
+
+mantle
+======
+
+Deploy a container that runs Mantle.
+
+options
+———
+
+startup: s
+
+subtleties: port number, recompiling or not?
+

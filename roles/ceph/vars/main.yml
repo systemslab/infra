@@ -1,5 +1,6 @@
 startup:   "none"
-container: "mantle"
+container: "ceph"
 sshd_port: "2222"
 code_dir:  "/tmp/docker/src"
+script_dir:  "/tmp/docker/src"
 trace_dir: "/tmp/docker/trace"

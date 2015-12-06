@@ -4,13 +4,17 @@
 - hosts: all
   roles: [cleanup]
 
-#- hosts: Builder
-#  roles: [ceph-build]
-#  vars:  [BUILD_THREADS: 64, SHA1_OR_REF: "master", GIT_URL: "", CEPH_PKGS: ""]
-
 - hosts: Builder
-  roles: [ceph-cls-build]
-  tasks:
-    - command: docker exec clsdev-build /build
-    - command: docker exec clsdev-build /ceph-scripts/singlenode-minimal.sh
-    - command: docker exec clsdev-build busted lua-rados/test.lua
+  roles: 
+    - role:     ceph-build
+      code_dir: "/tmp/docker/src/lua-rados"
+      commit:   "master"
+      cxxflags: "-std=c++11"
+      threads:  "64"
+
+#- hosts: Builder
+#  roles: [{role: lua-rados-build, code_dir: "/tmp/docker/src/lua-rados"}]
+  #tasks:
+    #- command: docker exec -d lua-rados-build /run.sh
+    #- command: docker exec lua-rados-build /ceph-scripts/singlenode-minimal.sh
+    #- command: docker exec lua-rados-build busted lua-rados/test.lua

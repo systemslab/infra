@@ -11,12 +11,12 @@
 - name: start jxio build container 
   docker:
     image: michaelsevilla/jxiodev-build
-    name: jxio-build
+    name: "{{ container }}"
     state: restarted
     net: host
     env:
-      SHA1_OR_REF: "{{ SHA1_OR_REF }}"
-      GIT_URL: "{{ GIT_URL }}"
+      SHA1_OR_REF: "{{ commit }}"
+      GIT_URL: "{{ git_url }}"
     volumes:
       - "{{ code_dir }}/JXIO:/JXIO"
 

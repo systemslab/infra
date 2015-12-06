@@ -4,19 +4,14 @@
 - hosts: all
   roles: [cleanup]
 
-#- hosts: Builder
-#  roles: [ceph-build]
-#  vars:  [BUILD_THREADS: 64, SHA1_OR_REF: "master", GIT_URL: "",  CEPH_PKGS: ""]
+- hosts: Builder
+  roles: [{role: ceph-build, threads: "64", commit: master}]
 
 - hosts: Workers
-  vars:  [STARTUP: "singlenode.sh"]
-  roles: [ceph]
+  roles: [{role: ceph, startup: "small.sh"}]
 
-- hosts: Builder
-  roles: [ceph-client]
+- hosts: Clients
+  roles: [{role: ceph, startup: "none", container: "client",  sshd_port: 2223}]
   tasks:
-    - command: docker exec ceph-client ceph -s
-      register: result
-      async: 10
-      poll: 1
-    - debug: var=result.stdout_lines
+    - {command: docker exec client ceph -s, async: 10, poll: 1, register: result}
+    - debug:    var=result.stdout_lines

@@ -1,0 +1,38 @@
+# Author: Michael Sevilla
+# Create a Ceph development node (with the source code) and start it on the localhost
+
+- hosts: Workers
+  roles: [cleanup]
+
+#- hosts: Builder
+#  roles:
+#    - role:     ceph-build
+#      code_dir: "/tmp/docker/src/lttng"
+#      git_url:  "https://github.com/michaelsevilla/ceph.git"
+#      commit:   "remotes/origin/wip-reqlatency"
+#      threads:  "64"
+#      pkgs:     "--with-lttng"
+
+- hosts: Workers
+  roles: [{role: ceph, startup: "small.sh", code_dir: "/tmp/docker/src/lttng", trace_dir: "/tmp/docker/trace" }]
+  tasks:
+    - command: docker exec ceph lttng-sessiond --no-kernel -d
+    - command: docker exec ceph lttng create -o /lttng
+    - command: docker exec ceph lttng enable-event -u --tracepoint "mds:req*" -c 0
+    - command: docker exec ceph lttng start
+
+- hosts: Builder
+  roles: [{role: ceph, startup: "none", container: "client", sshd_port: 2223}]
+  tasks: 
+    - command: docker exec -d client ceph-fuse /mnt/ -d
+    - command: docker exec    client mdtest -F -C -n 10000 -d /mnt/testdir
+
+- hosts: Workers
+  tasks:
+    - command: docker exec ceph lttng stop
+
+- hosts: Builder
+  roles: [{role: parser, trace_dir: "/tmp/docker/trace"}]
+  tasks: 
+    - name: graph the create request latencies over time
+      command: docker exec emaster /bin/bash -c "tailplot -x 1 --field-format=1,date,HH:mm:ss --x-format=date,HH:mm:ss -f nreqs,avglatency -s 2,3 --y2=2 /tmp/docker/trace/lttng/latencies.out"

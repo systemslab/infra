@@ -1,12 +1,8 @@
 [Builder]
 <HOSTNAME OR IP> ansible_ssh_user=<MY USERNAME>
 
-[Builder:vars]
-code_dir="/tmp/docker/src"
-
 [Workers]
 <HOSTNAME OR IP> ansible_ssh_user=<MY USERNAME>
 
-[Worker:vars]
-code_dir="/tmp/docker/src"
-
+[Clients]
+<HOSTNAME OR IP> ansible_ssh_user=<MY USERNAME>

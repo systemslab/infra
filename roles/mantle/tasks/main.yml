@@ -14,16 +14,16 @@
     image: michaelsevilla/mantledev
     state: present
 
-- name: pull dependencies for mantle and start container 
+- name: start mantle container
   docker:
     image: michaelsevilla/mantledev
-    name: mantle
+    name: "{{ container }}"
     state: restarted
     privileged: yes
     detach: yes
     tty: yes
     env:
-      SSHD_PORT: 2222
+      SSHD_PORT: "{{ sshd_port }}"
       AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       CEPH_NETWORK: 127.0.0.1/24
       MON_IP: 127.0.0.1
@@ -33,6 +33,8 @@
       - "{{ code_dir }}/mantle-scripts:/mantle-scripts"
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
+      - "/dev:/dev"
 
 - name: start ceph daemons
-  command: docker exec mantle /mantle-scripts/{{ STARTUP }}
+  command: docker exec mantle /mantle-scripts/{{ startup }}
+  when: startup != "none"

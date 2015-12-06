@@ -1,5 +1,2 @@
-# Author: Michael Sevilla
-# Tachyon variables
-
-version: origin/branch-0.7
-tmpdir: /tmp/docker/deploy
+code_dir:  "/tmp/docker/src"
+container: "jxio"

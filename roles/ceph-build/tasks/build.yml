@@ -1,7 +1,7 @@
 # Author: Michael Sevilla
 # Build Ceph in a container
 
-- name: pull dependencies for building ceph binaries
+- name: pull container for building ceph
   ignore_errors: True
   no_log: True
   docker: 
@@ -13,10 +13,12 @@
     image: ivotron/cephdev-build
     name: cephdev-build
     env:
-      BUILD_THREADS: "{{ BUILD_THREADS }}"
-      CEPH_PKGS: "{{ CEPH_PKGS }}"
-      GIT_URL: "{{ GIT_URL }}"
-      SHA1_OR_REF: "{{ SHA1_OR_REF }}"
+      BUILD_THREADS: "{{ threads }}"
+      CEPH_PKGS: "{{ pkgs }}"
+      GIT_URL: "{{ git_url }}"
+      SHA1_OR_REF: "{{ commit }}"
+      CXXFLAGS: "{{ cxxflags }}" 
+      CFLAGS: "{{ cflags }}"
     volumes:
       - '{{ code_dir }}/ceph:/ceph'
 

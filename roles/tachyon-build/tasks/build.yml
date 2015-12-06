@@ -22,21 +22,21 @@
 - name: build tachyon
   docker:
     image: michaelsevilla/tachyondev-build
-    name: tachyondev-build
+    name: "{{ container }}"
     net: host
     state: started
     env: 
-        SHA1_OR_REF: "{{ SHA1_OR_REF }}"
+        SHA1_OR_REF: "{{ commit }}"
         JAR_ARGS: -Dfile=/JXIO/bin/jxio.jar -DgroupId=org.accelio.jxio -DartifactId=Msg -Dversion=v1.3-22-g01ef2ea -Dpackaging=jar -DskipTests 
     volumes:
         - "{{ code_dir }}/tachyon:/tachyon"
         - "{{ code_dir }}/JXIO:/JXIO"
 
-- name: wait for compile (run [docker logs -f tachyondev-build] on Builder for progress)
-  shell: docker wait tachyondev-build
+- name: wait for compile (run [docker logs -f tachyon-build] on Builder for progress)
+  shell: docker wait {{ container }}
   register: result
 
 - name: fail if docker build fails
-  fail: msg="Tachyon build failed; log into the Builder and run - docker logs tachyondev-build"
+  fail: msg="Tachyon build failed; log into the Builder and run - docker logs {{ container }}..."
   # stdout returns strings, not an int
   when: result.stdout.find("0") == -1

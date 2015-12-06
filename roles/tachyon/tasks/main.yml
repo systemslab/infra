@@ -8,26 +8,27 @@
     image: michaelsevilla/tachyondev
     state: present
 
-- name: start a tachyon container
-  no_log: True
+- name: start tachyon container 
   docker:
     image: michaelsevilla/tachyondev
-    name: tachyondev
+    name: "{{ container }}"
     state: restarted
-    net: host
-    privileged: yes
     detach: yes
     tty: yes
+    net: host
+    privileged: yes
     env:
-      SSHD_PORT: 2222
+      SSHD_PORT: "{{ sshd_port }}"
       AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     volumes: 
       - "{{ code_dir }}/tachyon:/tachyon"
 
 - name: format tachyon in the container
-  command: docker exec tachyondev /tachyon/bin/tachyon format
+  command: docker exec {{ container }} /tachyon/bin/tachyon format
   changed_when: False
+  when: startup == True
 
 - name: start tachyon daemon in the container
-  command: docker exec tachyondev /tachyon/bin/tachyon-start.sh local
+  command: docker exec {{ container }} /tachyon/bin/tachyon-start.sh local
   changed_when: False
+  when: startup == True

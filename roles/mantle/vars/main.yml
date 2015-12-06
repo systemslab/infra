@@ -1,4 +1,5 @@
-# Author: Michael Sevilla
-# Tachyon variables
-
-tmpdir: /tmp/docker/deploy
+startup:   "none"
+container: "mantle"
+sshd_port: "2222"
+code_dir:  "/tmp/docker/src"
+trace_dir: "/tmp/docker/trace"

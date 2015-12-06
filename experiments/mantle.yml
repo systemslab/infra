@@ -4,23 +4,24 @@
 - hosts: all
   roles: [cleanup]
 
-#- hosts: Builder
-#  roles: [mantle-build]
-#  vars:
-#    - BUILD_THREADS: 64
-#    - CEPH_PKGS:     --with-mantle
-#    - GIT_URL:       https://github.com/michaelsevilla/ceph.git
-#    - SHA1_OR_REF:   remotes/origin/wip-mantle-dev
+- hosts: Builder
+  roles: 
+    - role:     mantle-build
+      code_dir: "/tmp/docker/src/mantle"
+      git_url:  "https://github.com/michaelsevilla/ceph.git"
+      commit:   "remotes/origin/wip-mantle-dev"
+      pkgs:     "--with-mantle"
+      threads:  "64"
 
 - hosts: Workers
-  vars:  [STARTUP: "standalone.sh"]
-  roles: [mantle, ceph-client]
+  roles: [{role: mantle, startup: "standalone.sh"}]
+  tasks: 
+    - command: docker exec mantle /mantle-scripts/greedy-spill.sh
+
+- hosts: Builder
+  roles: [{role: ceph,   startup: "none", container: client, sshd_port: 2223}]
   tasks:
-    - name:     inject greedy spill balancer
-      command:  docker exec mantle /mantle-scripts/greedy-spill.sh
-      register: result
-    - debug:    var=result.stdout_lines
-    - command:  docker exec --detach ceph-client ceph-fuse /mnt/ -d
-    - command:  docker exec ceph-client mdtest -F -C -n 10000 -d /mnt/testdir
+    - command:  docker exec -d client ceph-fuse /mnt/ -d
+    - command:  docker exec    client mdtest -F -C -n 10000 -d /mnt/testdir
       register: result
     - debug:    var=result.stdout_lines

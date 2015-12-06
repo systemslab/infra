@@ -31,5 +31,4 @@
   changed_when: False
   command: cat {{ trace_dir }}/lttng/latencies.out
   register: result
-- name: to graph, run ['tailplot -x 1 --field-format=1,date,HH:mm:ss --x-format=date,HH:mm:ss -f nreqs,avglatency -s 2,3 --y2=2 /tmp/docker/trace/lttng/latencies.out']
-  debug: var=result.stdout_lines
+- debug: var=result.stdout_lines

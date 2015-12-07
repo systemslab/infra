@@ -4,14 +4,14 @@
 - hosts: Workers
   roles: [cleanup]
 
-- hosts: Builder
-  roles:
-    - role:     ceph-build
-      code_dir: "/tmp/docker/src/lttng"
-      git_url:  "https://github.com/michaelsevilla/ceph.git"
-      commit:   "remotes/origin/wip-reqlatency"
-      threads:  "64"
-      pkgs:     "--with-lttng"
+#- hosts: Builder
+#  roles:
+#    - role:     ceph-build
+#      code_dir: "/tmp/docker/src/lttng"
+#      git_url:  "https://github.com/michaelsevilla/ceph.git"
+#      commit:   "remotes/origin/wip-reqlatency"
+#      threads:  "64"
+#      pkgs:     "--with-lttng"
 
 - hosts: Workers
   roles: [{role: ceph, startup: "small.sh", code_dir: "/tmp/docker/src/lttng", trace_dir: "/tmp/docker/trace" }]

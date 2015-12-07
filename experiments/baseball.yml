@@ -1,0 +1,19 @@
+# Author: Michael Sevilla
+
+- hosts: all
+  roles: [cleanup]
+
+- name: Start the baseball servers
+  hosts: Workers
+  roles: [baseball]
+  tasks:
+    - command: docker exec -d baseball java Proxy.ProxyServer
+    - command: docker exec -d baseball java Proxy.Proxy_Eventual_Server
+    - command: docker exec -d baseball java Proxy.MonotonicServer
+    - command: docker exec -d baseball java Proxy.StaleBoundServer
+
+- name: Run client benchmarks
+  hosts: Workers
+  tasks: 
+    - {command: docker exec baseball java Clients.Client, register: result}
+    - debug: var=result.stdout_lines

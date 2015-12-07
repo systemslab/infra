@@ -1,0 +1,19 @@
+# Author: Michael Sevilla
+# Start a baseball node
+
+- name: pull dependencies for running ceph
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/baseball
+    state: present
+
+- name: start ceph container 
+  docker:
+    image: michaelsevilla/baseball
+    name: "{{ container }}"
+    state: restarted
+    detach: yes
+    tty: yes
+    net: host
+    privileged: yes

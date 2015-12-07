@@ -4,12 +4,12 @@
 - hosts: all
   roles: [cleanup]
 
-- hosts: Builder
-  roles:
-    - role: ceph-build
-      threads: "64"
-      commit: "remotes/origin/infernalis"
-      code_dir: "/tmp/docker/src/lua-rados"
+#- hosts: Builder
+#  roles:
+#    - role: ceph-build
+#      threads: "64"
+#      commit: "remotes/origin/infernalis"
+#      code_dir: "/tmp/docker/src/lua-rados"
 
 - hosts: Workers
   roles: [{role: ceph, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]
@@ -18,6 +18,3 @@
   roles: [lua-rados]
   tasks:
     - command: docker exec lua-rados /bin/bash -c "LUA_CPATH=/lua-rados/.libs/rados.so busted lua-rados/test.lua"
-      ignore_errors: True
-      register: result
-    - debug: var=result.stdout_lines

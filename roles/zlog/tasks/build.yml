@@ -5,12 +5,12 @@
   ignore_errors: True
   no_log: True
   docker: 
-    image: michaelsevilla/zlogdev-build
+    image: michaelsevilla/zlog
     state: present
 
 - name: build the zlog binaries
   docker:
-    image: michaelsevilla/zlogdev-build
+    image: michaelsevilla/zlog
     name: zlog-build
     state: started
     net: host

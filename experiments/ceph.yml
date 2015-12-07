@@ -5,7 +5,7 @@
   roles: [cleanup]
 
 - hosts: Builder
-  roles: [{role: ceph-build, threads: "64", commit: master}]
+  roles: [{role: ceph-build, threads: "64", commit: "master"}]
 
 - hosts: Workers
   roles: [{role: ceph, startup: "small.sh"}]

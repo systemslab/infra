@@ -5,16 +5,19 @@
   roles: [cleanup]
 
 - hosts: Builder
-  roles: 
-    - role:     ceph-build
+  roles:
+    - role: ceph-build
+      threads: "64"
+      commit: "remotes/origin/infernalis"
       code_dir: "/tmp/docker/src/lua-rados"
-      commit:   "master"
-      cxxflags: "-std=c++11"
-      threads:  "64"
 
-#- hosts: Builder
-#  roles: [{role: lua-rados-build, code_dir: "/tmp/docker/src/lua-rados"}]
-  #tasks:
-    #- command: docker exec -d lua-rados-build /run.sh
-    #- command: docker exec lua-rados-build /ceph-scripts/singlenode-minimal.sh
-    #- command: docker exec lua-rados-build busted lua-rados/test.lua
+- hosts: Workers
+  roles: [{role: ceph, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]
+
+- hosts: Workers
+  roles: [lua-rados]
+  tasks:
+    - command: docker exec lua-rados /bin/bash -c "LUA_CPATH=/lua-rados/.libs/rados.so busted lua-rados/test.lua"
+      ignore_errors: True
+      register: result
+    - debug: var=result.stdout_lines

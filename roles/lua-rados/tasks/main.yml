@@ -1,5 +1,5 @@
 # Author: Michael Sevilla
-# Build lua-rados bindings
+# Start a Ceph node
 
 - name: move some startup scripts over there
   copy: src=/infra/roles/ceph/files/ dest={{ script_dir }}/
@@ -7,20 +7,22 @@
 - name: make scripts executable
   command: chmod -R 750 {{ script_dir }}/ceph-scripts/
 
-- name: pull container for building lua-rados bindings
+- name: pull dependencies for running lua-rados bindings
   ignore_errors: True
   no_log: True
   docker: 
-    image: michaelsevilla/lua-rados-build
+    image: michaelsevilla/lua-rados
     state: present
 
-- name: build lua-rados bindings
-  no_log: True
+- name: start a container with the lua-rados bindings
   docker:
-    image: michaelsevilla/lua-rados-build
+    image: michaelsevilla/lua-rados
     name: "{{ container }}"
     state: restarted
+    detach: yes
+    tty: yes
     net: host
+    privileged: yes
     env:
       SSHD_PORT: "{{ sshd_port }}"
       AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
@@ -33,12 +35,5 @@
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
       - "/dev:/dev"
+    command: /bin/bash
 
-- name: compiling; to see progress -> docker logs -f cephdev-build
-  shell: docker wait cephdev-build
-  register: result
-
-- name: fail if docker build fails
-  fail: msg="Ceph build failed; check your environment variables above"
-  # stdout returns strings, not an int
-  when: result.stdout.find("0") == -1

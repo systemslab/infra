@@ -5,7 +5,7 @@
 
 - name: Start the baseball servers
   hosts: Workers
-  roles: [baseball]
+  roles: [baseball/deploy]
   tasks:
     - command: docker exec -d baseball java Proxy.ProxyServer
     - command: docker exec -d baseball java Proxy.Proxy_Eventual_Server

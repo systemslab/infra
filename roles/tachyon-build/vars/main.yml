@@ -1,8 +1,0 @@
-# Author: Michael Sevilla
-# Experiment master variables
-
-code_dir:  "/tmp/docker/src"
-commit:    "" # if left blank, then don't checkout new branch
-container: "tachyon-build"
-git_url:   ""
-

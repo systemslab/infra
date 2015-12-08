@@ -1,4 +1,0 @@
-- hosts: Builder
-  tasks:
-    - name: Done!
-      pause: prompt="Press enter to continue..."

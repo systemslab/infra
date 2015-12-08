@@ -1,4 +1,0 @@
-# Author: Michael Sevilla
-# Install tachyon with a jxio underfs
-
-- include: build.yml

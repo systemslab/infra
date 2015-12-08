@@ -13,22 +13,22 @@ Quickstart
 ==========
 It's as easy as 1, 2, 3.
 
-1. Specify the hosts and drop it in the experiment folder:
+1. Tell me about your cluster by editing the hosts file:
 
    ```bash
-   cp hosts.example experiments/hosts; vim experiments/hosts
+   cd experiments; cp hosts.example hosts; vim experiments/hosts
    ```
 
-2. On this node, start an ``experiment master``:
+2. Start an ``experiment master``:
 
     ```bash
-     cd bin; ./emaster.sh
+     cd ../bin; ./emaster.sh
      ```
 
 3. Run an experiment:
 
     ```bash
-    ansible-playbook tachyondev-experiment.yml
+    ansible-playbook ceph.yml
     ```
 
 Description
@@ -53,25 +53,8 @@ Directory Structure
 
 - ``bin``: scripts that orchestrate the Experiment Master.
 - ``experiments``: where you go to launch experiments. 
-- ``images``: scripts for installing the systems using containers. 
 - ``roles``: scripts (used by Ansible) that add services to nodes.
 - ``test``: re-run all experiments.
-
-Writing Experiments
--------------------
-
-Each role has required variables that MUST be set.
-
-lttng role
-==========
-
-- CONTAINER: which container to start LTTnG in (e.g., ceph)
-- TRACEPOINT: which tracepoints to activate (e.g., mds:req*)
-
-ceph role
-=========
-
-- STARTUP: which startup script to use to launch daemons (e.g., standalone.sh)
 
 Troubleshooting
 ---

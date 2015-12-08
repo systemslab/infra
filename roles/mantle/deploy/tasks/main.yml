@@ -1,41 +1,40 @@
 # Author: Michael Sevilla
-# Start a Ceph node
+# Start a Ceph node with Mantle
 
 - name: move some startup scripts over there
-  copy: src=/infra/roles/ceph/files/ dest={{ script_dir }}/
+  copy: src=/infra/roles/mantle/deploy/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
-  command: chmod -R 750 {{ script_dir }}/ceph-scripts/
+  command: chmod -R 750 {{ code_dir }}/mantle-scripts/
 
-- name: pull dependencies for running ceph
+- name: pull dependencies for running mantle
   ignore_errors: True
   no_log: True
   docker: 
-    image: ivotron/cephdev
+    image: michaelsevilla/mantledev
     state: present
 
-- name: start ceph container 
+- name: start mantle container
   docker:
-    image: ivotron/cephdev
+    image: michaelsevilla/mantledev
     name: "{{ container }}"
     state: restarted
+    privileged: yes
     detach: yes
     tty: yes
-    net: host
-    privileged: yes
     env:
       SSHD_PORT: "{{ sshd_port }}"
       AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       CEPH_NETWORK: 127.0.0.1/24
       MON_IP: 127.0.0.1
+    net: host
     volumes: 
-      - "{{ code_dir }}/ceph:/ceph"
-      - "{{ script_dir }}/ceph-scripts:/ceph-scripts"
-      - "{{ trace_dir }}/lttng:/lttng"
+      - "{{ code_dir }}/mantle/ceph:/ceph"
+      - "{{ code_dir }}/mantle-scripts:/mantle-scripts"
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
       - "/dev:/dev"
 
 - name: start ceph daemons
-  command: docker exec ceph /ceph-scripts/{{ startup }}
+  command: docker exec mantle /mantle-scripts/{{ startup }}
   when: startup != "none"

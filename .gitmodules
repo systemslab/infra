@@ -1,24 +1,18 @@
 [submodule "ansible/roles/docker.ubuntu"]
 	path = ansible/roles/docker.ubuntu
 	url = https://github.com/angstwad/docker.ubuntu
-[submodule "images/docker-tachyondev"]
-	path = images/docker-tachyondev
-	url = https://github.com/michaelsevilla/docker-tachyondev.git
-[submodule "images/docker-emaster"]
-	path = images/docker-emaster
-	url = https://github.com/michaelsevilla/docker-emaster.git
-[submodule "images/docker-cephdev"]
-	path = images/docker-cephdev
-	url = https://github.com/ivotron/docker-cephdev.git
-[submodule "images/docker-jxiodev"]
-	path = images/docker-jxiodev
-	url = https://github.com/michaelsevilla/docker-jxiodev.git
-[submodule "images/docker-zlogdev"]
-	path = images/docker-zlogdev
-	url = https://github.com/michaelsevilla/docker-zlogdev.git
-[submodule "images/docker-babeltrace"]
-	path = images/docker-parser
-	url = https://github.com/michaelsevilla/docker-babeltrace.git
-[submodule "images/docker-baseball"]
-	path = images/docker-baseball
+[submodule "roles/baseball/docker-baseball"]
+	path = roles/baseball/docker-baseball
 	url = https://github.com/systemslab/docker-baseball.git
+[submodule "roles/ceph/docker-cephdev"]
+	path = roles/ceph/docker-cephdev
+	url = https://github.com/ivotron/docker-cephdev.git
+[submodule "roles/emaster/docker-emaster"]
+	path = roles/emaster/docker-emaster
+	url = https://github.com/michaelsevilla/docker-emaster.git
+[submodule "roles/ceph/docker-parser"]
+	path = roles/ceph/docker-parser
+	url = https://github.com/michaelsevilla/docker-parser.git
+[submodule "roles/zlog/docker-zlog"]
+	path = roles/zlog/docker-zlog
+	url = https://github.com/michaelsevilla/docker-zlog.git

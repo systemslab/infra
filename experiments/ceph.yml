@@ -1,17 +1,17 @@
 # Author: Michael Sevilla
 # Bring up Ceph and get its status
 
-- hosts: all
-  roles: [cleanup]
+#- hosts: all
+#  roles: [cleanup]
 
-- hosts: Builder
-  roles: [{role: ceph-build, threads: "64", commit: "master"}]
+#- hosts: Builder
+#  roles: [{role: ceph/build, threads: "64", commit: "master"}]
 
 - hosts: Workers
-  roles: [{role: ceph, startup: "small.sh"}]
+  roles: [{role: ceph/deploy, startup: "small.sh"}]
 
 - hosts: Clients
-  roles: [{role: ceph, startup: "none", container: "client",  sshd_port: 2223}]
+  roles: [{role: ceph/deploy, startup: "none", container: "client",  sshd_port: 2223}]
   tasks:
     - {command: docker exec client ceph -s, async: 10, poll: 1, register: result}
     - debug:    var=result.stdout_lines

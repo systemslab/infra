@@ -2,7 +2,7 @@
 # Start a parser node to interpret logs/metrics collected
 
 - name: move some startup scripts over there
-  copy: src=/infra/roles/parser/files/ dest={{ code_dir }}/
+  copy: src=/infra/roles/ceph/parse/lttng/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
   command: chmod -R 750 {{ code_dir }}/scripts/

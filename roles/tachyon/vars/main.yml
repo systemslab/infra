@@ -1,5 +1,0 @@
-code_dir:  "/tmp/docker/src"
-container: "tachyon"
-sshd_port: "2222"
-startup:   True
-

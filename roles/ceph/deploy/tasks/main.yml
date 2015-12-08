@@ -2,21 +2,21 @@
 # Start a Ceph node
 
 - name: move some startup scripts over there
-  copy: src=/infra/roles/ceph/files/ dest={{ script_dir }}/
+  copy: src=/infra/roles/ceph/deploy/files/ dest={{ script_dir }}/
 
 - name: make scripts executable
   command: chmod -R 750 {{ script_dir }}/ceph-scripts/
 
-- name: pull dependencies for running lua-rados bindings
+- name: pull dependencies for running ceph
   ignore_errors: True
   no_log: True
   docker: 
-    image: michaelsevilla/lua-rados
+    image: ivotron/cephdev
     state: present
 
-- name: start a container with the lua-rados bindings
+- name: start ceph container 
   docker:
-    image: michaelsevilla/lua-rados
+    image: ivotron/cephdev
     name: "{{ container }}"
     state: restarted
     detach: yes
@@ -35,5 +35,7 @@
       - "/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
       - "/dev:/dev"
-    command: /bin/bash
 
+- name: start ceph daemons
+  command: docker exec ceph /ceph-scripts/{{ startup }}
+  when: startup != "none"

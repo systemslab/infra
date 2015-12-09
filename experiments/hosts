@@ -1,9 +1,8 @@
+[Builder]
+ike-nassi-ucsc.soe.ucsc.edu ansible_ssh_user=msevilla
+
 [Workers]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
+ike-nassi-ucsc.soe.ucsc.edu ansible_ssh_user=msevilla
 
 [Clients]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
-
-[Builder]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
-
+ike-nassi-ucsc.soe.ucsc.edu ansible_ssh_user=msevilla

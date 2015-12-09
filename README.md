@@ -16,13 +16,13 @@ It's as easy as 1, 2, 3.
 1. Tell me about your cluster by editing the hosts file:
 
    ```bash
-   cd experiments; cp hosts.example hosts; vim experiments/hosts
+   cp hosts.example experiments/hosts; vim experiments/hosts
    ```
 
 2. Start an ``experiment master``:
 
     ```bash
-     cd ../bin; ./emaster.sh
+     cd bin; ./emaster.sh
      ```
 
 3. Run an experiment:

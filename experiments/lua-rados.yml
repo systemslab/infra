@@ -4,12 +4,12 @@
 - hosts: all
   roles: [cleanup]
 
-#- hosts: Builder
-#  roles:
-#    - role: ceph/build
-#      threads: "64"
-#      commit: "remotes/origin/infernalis"
-#      code_dir: "/tmp/docker/src/lua-rados"
+- hosts: Builder
+  roles:
+    - role: ceph/build
+      threads: "64"
+      commit: "remotes/origin/infernalis"
+      code_dir: "/tmp/docker/src/lua-rados"
 
 - hosts: Workers
   roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]

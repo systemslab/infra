@@ -19,5 +19,5 @@
   when: result.rc == 0
 
 - name: delete data
-  command: sudo rm -rf /var/lib/ceph
+  command: rm -rf /var/lib/ceph
 

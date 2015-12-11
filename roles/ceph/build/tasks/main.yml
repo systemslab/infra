@@ -2,4 +2,4 @@
 # The code is already cloned so we just need to pacakge it up
 
 - include: build.yml
-#- include: package.yml
+- include: package.yml

@@ -7,11 +7,11 @@
 - hosts: Builder
   roles: [{role: ceph/build, threads: "64", commit: "master"}]
 
-#- hosts: Workers
-#  roles: [{role: ceph/deploy, startup: "small.sh"}]
-#
-#- hosts: Clients
-#  roles: [{role: ceph/deploy, startup: "none", container: "client",  sshd_port: 2223}]
-#  tasks:
-#    - {command: docker exec client ceph -s, async: 10, poll: 1, register: result}
-#    - debug:    var=result.stdout_lines
+- hosts: Workers
+  roles: [{role: ceph/deploy, startup: "small.sh"}]
+
+- hosts: Clients
+  roles: [{role: ceph/deploy, startup: "none", container: "client",  sshd_port: 2223}]
+  tasks:
+    - {command: docker exec client ceph -s, async: 10, poll: 1, register: result}
+    - debug:    var=result.stdout_lines

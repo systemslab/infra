@@ -1,5 +1,5 @@
 # Author: Michael Sevilla
 # Package up the source code in preparation for network transfer
 
-- command: docker exec cephdev-build /bin/bash -c "cd /ceph; debuild -b -nc -j{{ threads }} -fakeroot -us -uc"
-
+#- command: docker exec cephdev-build /bin/bash -c "cd /ceph; debuild -b -nc -j{{ threads }} -fakeroot -us -uc"
+#

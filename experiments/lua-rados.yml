@@ -8,13 +8,18 @@
   roles:
     - role: ceph/build
       threads: "64"
-      commit: "remotes/origin/infernalis"
+      commit: "remotes/origin/cls-lua"
       code_dir: "/tmp/docker/src/lua-rados"
 
 - hosts: Workers
   roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]
+  tasks:
+    - command: docker exec ceph mkdir /usr/local/lib/rados-classes/
+    - command: docker exec ceph cp /ceph/src/.libs/libcls_hello.so /usr/local/lib/rados-classes/
 
 - hosts: Workers
   roles: [lua-rados/build]
   tasks:
     - command: docker exec lua-rados /bin/bash -c "LUA_CPATH=/lua-rados/.libs/rados.so busted lua-rados/test.lua"
+      register: result
+    - debug: var=result.stdout_lines

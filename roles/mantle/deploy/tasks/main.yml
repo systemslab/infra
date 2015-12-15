@@ -31,8 +31,8 @@
     volumes: 
       - "{{ code_dir }}/mantle/ceph:/ceph"
       - "{{ code_dir }}/mantle-scripts:/mantle-scripts"
-      - "/etc/ceph:/etc/ceph"
-      - "/var/lib/ceph:/var/lib/ceph"
+      - "/tmp/etc/ceph:/etc/ceph"
+      - "/tmp/ceph_data/$RANDOM:/var/lib/ceph"
       - "/dev:/dev"
 
 - name: start ceph daemons

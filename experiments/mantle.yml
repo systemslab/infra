@@ -13,12 +13,13 @@
       pkgs:     "--with-mantle"
       threads:  "64"
 
-- hosts: Workers
+- name:  Start Mantle and set the balancer to greedy-spill
+  hosts: Workers
   roles: [{role: mantle/deploy, startup: "standalone.sh"}]
-  tasks: 
-    - command: docker exec mantle /mantle-scripts/greedy-spill.sh
+  tasks: [command: docker exec mantle /mantle-scripts/greedy-spill.sh]
 
-- hosts: Builder
+- name:  Mount the file system and run a short benchmark
+  hosts: Builder
   roles: [{role: ceph/deploy, startup: "none", container: client, sshd_port: 2223}]
   tasks:
     - command:  docker exec -d client ceph-fuse /mnt/ -d

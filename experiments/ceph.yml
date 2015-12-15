@@ -7,10 +7,12 @@
 - hosts: Builder
   roles: [{role: ceph/build, threads: "64", commit: "master"}]
 
-- hosts: Workers
+- name: Start Ceph using the "small.sh" startup script (roles/ceph/deploy/files/ceph-scripts/small.sh)
+  hosts: Workers
   roles: [{role: ceph/deploy, startup: "small.sh"}]
 
-- hosts: Clients
+- name: Get the status of the new Ceph cluster
+  hosts: Clients
   roles: [{role: ceph/deploy, startup: "none", container: "client",  sshd_port: 2223}]
   tasks:
     - {command: docker exec client ceph -s, async: 10, poll: 1, register: result}

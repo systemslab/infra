@@ -28,6 +28,6 @@ for WHOAMI in 0 1 2; do
     $SET mds_bal_metaload "IWR"
     $SET mds_bal_mdsload "MDSs[i][\"all\"]"
     $SET mds_bal_when "if_MDSs[whoami][\"load\"]>.01_and_MDSs[whoami+1][\"load\"]<0.01_then"
-    $SET mds_bal_where "targets[t]=MDSs[whoami][\"load\"]/2"
+    $SET mds_bal_where "targets[whoami+1]=MDSs[whoami][\"load\"]/2"
     $SET mds_bal_howmuch "{\"half\"}"
 done

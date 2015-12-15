@@ -11,15 +11,47 @@
       commit: "remotes/origin/cls-lua"
       code_dir: "/tmp/docker/src/lua-rados"
 
-- hosts: Workers
+- name:  Start Ceph and setup the object interfaces
+  hosts: Workers
   roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]
   tasks:
-    - command: docker exec ceph mkdir /usr/local/lib/rados-classes/
+    - command: docker exec ceph mkdir -p /usr/local/lib/rados-classes/ /usr/local/share/ceph/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_hello.so /usr/local/lib/rados-classes/
+    - command: docker exec ceph cp /ceph/src/.libs/libcls_lua.so /usr/local/lib/rados-classes/
+    - command: docker exec ceph cp /ceph/src/cls/hello/cls_hellolua.lua /usr/local/share/ceph/rados-classes/
 
-- hosts: Workers
+- name:  Run the Lua-RADOS bindings unit tests
+  hosts: Clients
   roles: [lua-rados/build]
   tasks:
-    - command: docker exec lua-rados /bin/bash -c "LUA_CPATH=/lua-rados/.libs/rados.so busted lua-rados/test.lua"
+    - command:  docker exec lua-rados busted ceph-scripts/test.lua
       register: result
-    - debug: var=result.stdout_lines
+    - debug:    var=result.stdout_lines
+
+- name:  Break the object interfaces by moving shared libraries and restarting the OSDs
+  hosts: Workers
+  tasks: 
+    - command: docker exec ceph mv /usr/local/lib/rados-classes/libcls_lua.so /usr/local/lib/rados-classes/test.so
+    - command: docker exec ceph /bin/bash -c "ps ax | grep ceph-osd | grep -v grep | awk '{print $1}' | while read p; do kill -9 $p; done"
+    - command: docker exec ceph ceph-osd -i 0
+
+- name:  Re-run the Lua-RADOS bindings unit tests, which shouldn't work
+  hosts: Clients
+  tasks: 
+    - command:  docker exec lua-rados busted ceph-scripts/test.lua
+      register: result
+      ignore_errors: True
+    - fail:     msg="This should fail now that we moved the libcls_lua shared lib"
+      when:     result.rc != 1
+
+- name: Fix the object interfaces
+  hosts: Workers
+  tasks:
+    - command: docker exec ceph mv /usr/local/lib/rados-classes/test.so /usr/local/lib/rados-classes/libcls_lua.so 
+
+- hosts: Clients
+  tasks:
+    - command:  docker exec lua-rados busted ceph-scripts/test.lua
+      register: result
+    - debug:    var=result.stdout_lines
+

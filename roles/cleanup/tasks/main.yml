@@ -17,3 +17,8 @@
   shell: docker ps -a | grep -v "emaster\|CONTAINER" | awk '{print $1}' | xargs docker rm
   ignore_errors: True
   when: result.rc == 0
+
+- name: delete data
+  shell: rm -fr /tmp/etc/ceph/ /tmp/ceph_data/
+  ignore_errors: True
+  no_log: True

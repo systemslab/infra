@@ -32,8 +32,8 @@
       - "{{ code_dir }}/ceph:/ceph"
       - "{{ script_dir }}/ceph-scripts:/ceph-scripts"
       - "{{ trace_dir }}/lttng:/lttng"
-      - "/etc/ceph:/etc/ceph"
-      - "/var/lib/ceph:/var/lib/ceph"
+      - "/tmp/etc/ceph:/etc/ceph"
+      - "/tmp/ceph_data/$RANDOM:/var/lib/ceph"
       - "/dev:/dev"
 
 - name: start ceph daemons

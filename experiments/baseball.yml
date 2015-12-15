@@ -1,4 +1,5 @@
 # Author: Michael Sevilla
+# Benchmark the different consistencies
 
 - hosts: all
   roles: [cleanup]

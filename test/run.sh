@@ -18,13 +18,6 @@ sudo rm -r /tmp/docker >> /dev/null 2>&1
 echo "Setup emaster environment..."
 docker run $ARGS $EMASTER ansible-playbook -k ../roles/emaster/tasks/pushkeys.yml
 
-echo "Clone Tachyon..."
-cd /tmp/docker/src
-git clone https://github.com/michaelsevilla/3par-underfs.git
-mv 3par-underfs tachyon
-cd -
-
-echo "Create output directories..."
 OUTPUT=`date +%m-%d-%y_%T`
 mkdir -p out/${OUTPUT} >> /dev/null 2>&1
 

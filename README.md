@@ -48,13 +48,27 @@ Motivation
 - Performance Bug Fixes: automatically test multiple code revisions
 - Isolation: system libraries do not interfere with each other
 
-Directory Structure
--------------------
+Development
+===========
+The directory looks like this:
 
+``infra``
 - ``bin``: scripts that orchestrate the Experiment Master.
 - ``experiments``: where you go to launch experiments. 
 - ``roles``: scripts (used by Ansible) that add services to nodes.
 - ``test``: re-run all experiments.
+
+Writing Roles
+---------------
+Roles have 2 components:
+
+1. install: Docker image with the environment and packages
+
+2. deploy: Ansible scripts (``*.yml``) that bring the system up
+
+Installing Roles
+----------------
+Drop the role into the ``roles`` directory and then put an experiment yml file into ``experiments`` that uses that role.
 
 Troubleshooting
 ---

@@ -82,3 +82,10 @@ A: This is a kernel bug, according to [3]. Get out of the 3.13 kernel.
 [1] http://serverfault.com/questions/642981/docker-containers-cant-resolve-dns-on-ubuntu-14-04-desktop-host
 [2] https://github.com/ansible/ansible-modules-core/issues/1792
 [3] https://github.com/docker/docker/issues/5704
+
+
+Q: Sometimes the Ceph daemons enter standby mode because they can't grab a resource in /var/lib/ceph
+
+A: Sometimes docker gets hung up and won't handle the virtual volumes correctly. To fix this:
+
+    sudo docker restart

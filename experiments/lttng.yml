@@ -4,18 +4,18 @@
 - hosts: Workers
   roles: [cleanup]
 
-- hosts: Builder
-  roles:
-    - role:     ceph/build
-      code_dir: "/tmp/docker/src/lttng"
-      git_url:  "https://github.com/michaelsevilla/ceph.git"
-      commit:   "remotes/origin/wip-reqlatency"
-      threads:  "64"
-      pkgs:     "--with-lttng"
+#- hosts: localhost
+#  roles:
+#    - role:     ceph/build
+#      code_dir: "/tmp/docker/src/lttng"
+#      git_url:  "https://github.com/michaelsevilla/ceph.git"
+#      commit:   "remotes/origin/wip-reqlatency"
+#      threads:  "64"
+#      pkgs:     "--with-lttng"
 
 - name:  Start Ceph and begin tracing metadata requests
   hosts: Workers
-  roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lttng", trace_dir: "/tmp/docker/trace" }]
+  roles: [{role: ceph/deploy, startup: "medium.sh", code_dir: "/tmp/docker/src/lttng", trace_dir: "/tmp/docker/trace" }]
   tasks:
     - command: docker exec ceph lttng-sessiond --no-kernel -d
     - command: docker exec ceph lttng create -o /lttng
@@ -33,7 +33,7 @@
   tasks: [command: docker exec ceph lttng stop]
 
 - name: Graph the create request latencies over time
-  hosts: Builder
+  hosts: localhost
   roles: [{role: ceph/parse/lttng, trace_dir: "/tmp/docker/trace"}]
   tasks: 
-      command: docker exec emaster /bin/bash -c "tailplot -x 1 --field-format=1,date,HH:mm:ss --x-format=date,HH:mm:ss -f nreqs,avglatency -s 2,3 --y2=2 /tmp/docker/trace/lttng/latencies.out"
+      - command: docker exec emaster /bin/bash -c "tailplot -x 1 --field-format=1,date,HH:mm:ss --x-format=date,HH:mm:ss -f nreqs,avglatency -s 2,3 --y2=2 /tmp/docker/trace/lttng/latencies.out"

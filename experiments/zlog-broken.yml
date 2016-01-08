@@ -4,7 +4,7 @@
 - hosts: all
   roles: [cleanup]
 
-- hosts: Builder
+- hosts: localhost
   roles: [zlog/build]
 
 - name:  Start zlog and run the unit tests

@@ -1,19 +1,23 @@
 # Author: Michael Sevilla
 # Bring up Ceph and get its status
 
-- hosts: all
+- name: cleanup old experiments
+  hosts: all
   roles: [cleanup]
 
-- hosts: Builder
-  roles: [{role: ceph/build, threads: "64", commit: "master"}]
+#- hosts: localhost
+#  roles: [{role: ceph/build, threads: "64", commit: "master"}]
 
 - name: Start Ceph using the "small.sh" startup script (roles/ceph/deploy/files/ceph-scripts/small.sh)
   hosts: Workers
-  roles: [{role: ceph/deploy, startup: "small.sh"}]
+  roles: [{role: ceph/deploy, startup: "medium.sh"}]
 
 - name: Get the status of the new Ceph cluster
   hosts: Clients
-  roles: [{role: ceph/deploy, startup: "none", container: "client",  sshd_port: 2223}]
+  roles: [{role: ceph/deploy, startup:   "none", container: "client", sshd_port: 2223}]
   tasks:
-    - {command: docker exec client ceph -s, async: 10, poll: 1, register: result}
+    - command:  docker exec client ceph -s
+      register: result
+      until:    result.stdout.find("HEALTH_OK") != -1
+      retries:  120
     - debug:    var=result.stdout_lines

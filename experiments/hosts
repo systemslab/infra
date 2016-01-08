@@ -1,4 +1,4 @@
-[Builder]
+[localhost]
 dexter.soe.ucsc.edu ansible_ssh_user=msevilla
 
 [Workers]

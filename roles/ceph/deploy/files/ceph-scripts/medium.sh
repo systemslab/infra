@@ -39,11 +39,13 @@ auth service required = cephx
 auth client required = cephx
 osd crush chooseleaf type = 0
 osd journal size = 100
-osd pool default pg num = 8
-osd pool default pgp num = 8
 osd pool default size = 1
 public network = ${CEPH_NETWORK}
 cluster network = ${CEPH_NETWORK}
+
+[mon]
+osd pool default pg num = 256
+osd pool default pgp num = 256
 ENDHERE
 
    # Generate administrator key
@@ -131,4 +133,8 @@ fi
 
 # start MDS
 ceph-mds ${CEPH_OPTS} -i 0
+
+ceph osd pool set rbd pg_num 256
+sleep 120
+ceph osd pool set rbd pgp_num 256
 

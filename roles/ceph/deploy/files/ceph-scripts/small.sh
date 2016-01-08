@@ -44,6 +44,9 @@ osd pool default pgp num = 8
 osd pool default size = 1
 public network = ${CEPH_NETWORK}
 cluster network = ${CEPH_NETWORK}
+
+[osd]
+debug osd = 20
 ENDHERE
 
    # Generate administrator key

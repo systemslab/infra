@@ -32,7 +32,7 @@
       - "{{ code_dir }}/ceph:/ceph"
       - "{{ script_dir }}/ceph-scripts:/ceph-scripts"
       - "{{ trace_dir }}/lttng:/lttng"
-      - "/etc/ceph:/etc/ceph"
+      - "/tmp/etc/ceph:/etc/ceph"
       - "/var/lib/ceph:/var/lib/ceph"
       - "/dev:/dev"
     command: /bin/bash

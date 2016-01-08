@@ -4,20 +4,21 @@
 - hosts: all
   roles: [cleanup]
     
-#- hosts: localhost
-#  roles:
-#    - role:     ceph/build
-#      threads:  "64"
-#      commit:   "remotes/origin/cls-lua"
-#      code_dir: "/tmp/docker/src/lua-rados"
+- hosts: localhost
+  roles:
+    - role:     ceph/build
+      threads:  "64"
+      code_dir: "/tmp/docker/src/mantlev"
 
 - name:  Start Ceph and setup the object interfaces
   hosts: Workers
-  roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]
+  #roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]
+  roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/mantlev"}]
   tasks:
     - command: docker exec ceph mkdir -p /usr/local/lib/rados-classes/ /usr/local/share/ceph/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_hello.so /usr/local/lib/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_lua.so /usr/local/lib/rados-classes/
+    - command: docker exec ceph cp /ceph/src/.libs/libcls_bal.so /usr/local/lib/rados-classes/
     - command: docker exec ceph cp /ceph/src/cls/hello/cls_hellolua.lua /usr/local/share/ceph/rados-classes/
 
 - name:  Run the Lua-RADOS bindings unit tests
@@ -51,7 +52,7 @@
 
 - hosts: Clients
   tasks:
-    - command:  docker exec lua-rados busted lua-rados/test.lua
+    - command:  docker exec lua-rados busted ceph-scripts/test.lua
       register: result
     - debug:    var=result.stdout_lines
 

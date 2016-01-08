@@ -19,6 +19,6 @@
   when: result.rc == 0
 
 - name: delete data
-  shell: rm -fr /tmp/etc/ceph/ /tmp/ceph_data/
+  shell: sudo rm -fr /tmp/etc/ceph/ /tmp/ceph_data/
   ignore_errors: True
-  no_log: True
+  #no_log: True

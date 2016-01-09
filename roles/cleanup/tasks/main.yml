@@ -1,6 +1,30 @@
 # Author: Michael Sevilla
 # Cleanup containers on all nodes
 
+- name: pull dependencies for running the emaster
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/emaster
+    state: present
+
+- name: start emaster container to clean stuff up
+  docker:
+    image: michaelsevilla/emaster
+    name: "cleaner"
+    state: restarted
+    detach: yes
+    tty: yes
+    net: host
+    privileged: yes
+    volumes: 
+      - "/tmp:/tmp"
+
+- name: delete data
+  shell: docker exec cleaner rm -rf /tmp/etc/ceph/ /tmp/ceph_data/ /tmp/docker/deploy/*
+  ignore_errors: True
+  no_log: True
+
 - name: check if any other jobs are running
   shell: docker ps | grep -v emaster | grep -v CONTAINER
   register: result
@@ -18,7 +42,4 @@
   ignore_errors: True
   when: result.rc == 0
 
-- name: delete data
-  shell: sudo rm -fr /tmp/etc/ceph/ /tmp/ceph_data/
-  ignore_errors: True
-  #no_log: True
+

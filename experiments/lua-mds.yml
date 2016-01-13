@@ -1,58 +1,34 @@
 # Author: Michael Sevilla
 # Bring up Ceph with object interfaces on a single node
 
-- hosts: all
-  roles: [cleanup]
+- name: cleanup old experiments
+  hosts: all
+  tasks:
+    - command: docker stop ceph lua-rados
+      ignore_errors: True
+    - command: docker rm ceph lua-rados
+      ignore_errors: True
+    - command: sudo rm -r /tmp/ceph_data/ /tmp/etc/ceph/
+      ignore_errors: True
     
-- hosts: localhost
-  roles:
-    - role:     ceph/build
-      threads:  "64"
-      code_dir: "/tmp/docker/src/mantlev"
+#- hosts: localhost
+#  roles:
+#    - role:     ceph/build
+#      threads:  "64"
+#      code_dir: "/tmp/docker/src/mantlev"
 
 - name:  Start Ceph and setup the object interfaces
   hosts: Workers
-  #roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lua-rados"}]
   roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/mantlev"}]
   tasks:
     - command: docker exec ceph mkdir -p /usr/local/lib/rados-classes/ /usr/local/share/ceph/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_hello.so /usr/local/lib/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_lua.so /usr/local/lib/rados-classes/
-    - command: docker exec ceph cp /ceph/src/.libs/libcls_bal.so /usr/local/lib/rados-classes/
+    - command: docker exec ceph cp /ceph/src/.libs/libbal_lua.so /usr/local/lib/rados-classes/libcls_bal.so
     - command: docker exec ceph cp /ceph/src/cls/hello/cls_hellolua.lua /usr/local/share/ceph/rados-classes/
+    - command: docker exec ceph cp /ceph/src/bal/hello/bal_hellolua.lua /usr/local/share/ceph/rados-classes/cls_bal_hellolua.lua
 
-- name:  Run the Lua-RADOS bindings unit tests
-  hosts: Clients
-  roles: [lua-rados/build]
+- hosts: localhost
   tasks:
-    - command:  docker exec lua-rados busted lua-rados/test.lua
-      register: result
-    - debug:    var=result.stdout_lines
-
-- name:  Break the object interfaces by moving shared libraries and restarting the OSDs
-  hosts: Workers
-  tasks: 
-    - command: docker exec ceph mv /usr/local/lib/rados-classes/libcls_lua.so /usr/local/lib/rados-classes/test.so
-    - command: docker exec ceph /bin/bash -c "ps ax | grep ceph-osd | grep -v grep | awk '{print $1}' | while read p; do kill -9 $p; done"
-    - command: docker exec ceph ceph-osd -i 0
-
-- name:  Re-run the Lua-RADOS bindings unit tests, which shouldn't work
-  hosts: Clients
-  tasks: 
-    - command:  docker exec lua-rados busted ceph-scripts/test.lua
-      register: result
-      ignore_errors: True
-    - fail:     msg="This should fail now that we moved the libcls_lua shared lib"
-      when:     result.rc != 1
-
-- name: Fix the object interfaces
-  hosts: Workers
-  tasks:
-    - command: docker exec ceph mv /usr/local/lib/rados-classes/test.so /usr/local/lib/rados-classes/libcls_lua.so 
-
-- hosts: Clients
-  tasks:
-    - command:  docker exec lua-rados busted ceph-scripts/test.lua
-      register: result
-    - debug:    var=result.stdout_lines
-
+    - debug: msg="docker exec -it ceph /bin/bash"
+    - debug: msg="docker exec -it ceph tail -f /var/log/ceph/ceph-mds.0.log"

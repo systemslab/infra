@@ -1,7 +1,8 @@
 # Author: Michael Sevilla
 # Create a Ceph development node (with the source code) and start it on the localhost
 
-- hosts: Workers
+- name: cleanup old experiments
+  hosts: all
   roles: [cleanup]
 
 #- hosts: localhost
@@ -15,7 +16,7 @@
 
 - name:  Start Ceph and begin tracing metadata requests
   hosts: Workers
-  roles: [{role: ceph/deploy, startup: "medium.sh", code_dir: "/tmp/docker/src/lttng", trace_dir: "/tmp/docker/trace" }]
+  roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/lttng", trace_dir: "/tmp/docker/trace" }]
   tasks:
     - command: docker exec ceph lttng-sessiond --no-kernel -d
     - command: docker exec ceph lttng create -o /lttng

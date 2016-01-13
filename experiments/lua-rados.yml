@@ -1,7 +1,8 @@
 # Author: Michael Sevilla
 # Bring up Ceph with object interfaces on a single node
 
-- hosts: all
+- name: cleanup old experiments
+  hosts: all
   roles: [cleanup]
     
 #- hosts: localhost

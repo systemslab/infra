@@ -1,5 +1,19 @@
 #! /bin/bash
 
+# Start global variables
+ARGS="-it --rm \
+      --name=\"emaster\"\
+      --net=host \
+      --volume=\"/tmp/:/tmp/\" \
+      --volume=\"/etc/ceph:/etc/ceph\" \
+      --volume=\"/var/lib/ceph:/var/lib/ceph\" \
+      --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
+      --volume=\"$(dirname `pwd`):/infra\" \
+      --workdir=\"/infra/experiments/\" \
+      --privileged"
+# End global variables
+
+# Start functions
 # Ascii art: http://www.network-science.de/ascii/; font is "big"
 function fail() {
   echo "==============================================================================="
@@ -14,19 +28,9 @@ EOF
   echo "==============================================================================="
   exit 1
 }
+# End functions
 
-echo "===> Experiment master will control all hosts listed in /infra/experiments"
-ARGS="-it --rm \
-      --name=\"emaster\"\
-      --net=host \
-      --volume=\"/tmp/:/tmp/\" \
-      --volume=\"/etc/ceph:/etc/ceph\" \
-      --volume=\"/var/lib/ceph:/var/lib/ceph\" \
-      --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
-      --volume=\"$(dirname `pwd`):/infra\" \
-      --workdir=\"/infra/experiments/\" \
-      --privileged"
-
+# main
 echo "===> Figure out which screen to use"
 SCREEN=`echo $DISPLAY | sed s/localhost//g | sed 's/\.0//g'`
 if [ -z "$SCREEN" ]; then
@@ -45,8 +49,8 @@ fi
 echo "===> Cleaning up old docker containers - this may require a sudo password"
 ./cleanup.sh >> /dev/null 2>&1
 
-echo "===> Installing an Ansible Docker container and dropping you into an 'experiment shell'"
-docker run $ARGS michaelsevilla/emaster ansible-playbook -k ../roles/emaster/tasks/pushkeys.yml
+echo "===> Experiment master will control all hosts listed in /infra/experiments"
+docker run $ARGS michaelsevilla/emaster "ansible-playbook -k /infra/roles/emaster/tasks/pushkeys.yml"
 
 if [ "$?" -ne 0 ]; then
   echo "===> ... wrong password? Try again."
@@ -71,5 +75,5 @@ cat << "EOF"
 EOF
 echo "==============================================================================="
 echo "===> Here are the specs of your environment:"
-docker run $ARGS michaelsevilla/emaster cat /etc/lsb-release /etc/os-release | while read p; do echo -e "\t $p"; done
-docker run $ARGS -e "XAUTH=$XAUTH" michaelsevilla/emaster /bin/emaster-shell
+docker run $ARGS michaelsevilla/emaster "cat /etc/lsb-release /etc/os-release" | while read p; do echo -e "\t $p"; done
+docker run $ARGS michaelsevilla/emaster /bin/bash

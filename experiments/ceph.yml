@@ -10,7 +10,7 @@
 
 - name: Start Ceph using the "small.sh" startup script (roles/ceph/deploy/files/ceph-scripts/small.sh)
   hosts: Workers
-  roles: [{role: ceph/deploy, startup: "medium.sh"}]
+  roles: [{role: ceph/deploy, startup: "small.sh"}]
 
 - name: Get the status of the new Ceph cluster
   hosts: Clients

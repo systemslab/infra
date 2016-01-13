@@ -1,7 +1,8 @@
 # Author: Michael Sevilla
 # Create a Zlog node
 
-- hosts: all
+- name: cleanup old experiments
+  hosts: all
   roles: [cleanup]
 
 - hosts: localhost

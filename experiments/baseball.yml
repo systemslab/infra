@@ -1,7 +1,8 @@
 # Author: Michael Sevilla
 # Benchmark the different consistencies
 
-- hosts: all
+- name: cleanup old experiments
+  hosts: all
   roles: [cleanup]
 
 - name: Start the baseball servers

@@ -21,7 +21,7 @@
       - "/tmp:/tmp"
 
 - name: delete data
-  shell: docker exec cleaner rm -rf /tmp/etc/ceph/ /tmp/ceph_data/ /tmp/docker/deploy/*
+  shell: docker exec cleaner rm -rf /tmp/etc/ceph/ /tmp/ceph_data/
   ignore_errors: True
   no_log: True
 

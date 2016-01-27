@@ -1,0 +1,31 @@
+# Author: Michael Sevilla
+# Run the Hadoop RandomTextWriter benchmark
+
+- hosts: all
+  roles: [cleanup]
+- hosts: Workers
+  roles: [role-tachyon/deploy/worker]
+- hosts: localhost
+  roles: [role-tachyon/deploy/master]
+
+- hosts: localhost
+  tasks:
+    - name: we'll run Hadoop as root, so we need a temp directory in HDFS
+      shell: sudo -u hdfs hdfs dfs -mkdir /user/root
+      ignore_errors: True
+    - name: give everyone write access to that dir
+      shell: sudo -u hdfs hdfs dfs -chmod 777 -R /user/root
+      ignore_errors: True
+  
+- hosts: localhost
+  vars:
+    - tachyon: "tachyon://pdl360g9-11.private.net:19998"
+    - libjars: "-libjars /tmp/docker/deploy/tmp/docker/src/tachyon/clients/client/target/tachyon-client-0.8.1-SNAPSHOT-jar-with-dependencies.jar "
+    - args:    " {{ libjars }} -Dtest.randomwriter.maps_per_host=2 -Dmapreduce.task.timeout=90000000 -Dtachyon.user.file.writetype.default=THROUGH -Dtest.randomwrite.bytes_per_map=1048576"
+    - dfs:     "dfs {{ libjars }}"
+    - jar:     "jar /usr/hdp/2.3.4.0-3485/hadoop-mapreduce/hadoop-mapreduce-examples.jar"
+  tasks: 
+    - name: run Hadoop RandomTextWriter job, results are in {{ tachyon }}/rtw-out
+      command: yarn {{ jar }} randomtextwriter {{ args }} {{ tachyon }}/rtw-out
+      register: result
+    - debug: var=result.stderr.split('\n')

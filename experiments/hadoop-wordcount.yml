@@ -1,0 +1,25 @@
+# Author: Michael Sevilla
+# Run the Hadoop WordCount benchmark
+
+- hosts: all
+  roles: [cleanup]
+- hosts: Workers
+  roles: [role-tachyon/deploy/worker]
+- hosts: localhost
+  roles: [role-tachyon/deploy/master]
+
+- hosts: localhost
+  vars:
+    - tachyon: "tachyon://pdl360g9-11.private.net:19998"
+    - libjars: "--libjars /tmp/docker/deploy/tmp/docker/src/tachyon/clients/client/target/tachyon-client-0.8.1-SNAPSHOT-jar-with-dependencies.jar"
+    - dfs:     "dfs {{ libjars }}"
+    - jar:     "jar /usr/hdp/2.3.4.0-3485/hadoop-mapreduce/hadoop-mapreduce-examples.jar"
+  tasks: 
+    - name: copy a test file into Tachyon
+      command: hdfs {{ dfs }} -copyFromLocal install.log {{ tachyon }}/install.log
+    - name: check that we can read the file
+      command: hdfs {{ dfs }} -cat {{ tachyon }}/install.log
+    - name: run wordcount
+      command: yarn {{ jar }} wordcount {{ libjars }} {{ tachyon }}/nstall.log {{ tachyon }}/wc-out
+      register: result
+    - debug: var=result.stderr.split('\n')

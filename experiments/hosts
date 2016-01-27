@@ -1,8 +1,29 @@
-[localhost]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
-
 [Workers]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
+pdl360g9-11.private.net ansible_ssh_user=root
+pdl360g9-12.private.net ansible_ssh_user=root
+pdl360g9-13.private.net ansible_ssh_user=root
+pdl360g9-14.private.net ansible_ssh_user=root
+pdl360g9-15.private.net ansible_ssh_user=root
+pdl360g9-16.private.net ansible_ssh_user=root
+pdl360g9-17.private.net ansible_ssh_user=root
+pdl360g9-18.private.net ansible_ssh_user=root
+pdl360g9-19.private.net ansible_ssh_user=root
+pdl360g9-20.private.net ansible_ssh_user=root
+pdl360g9-21.private.net ansible_ssh_user=root
+pdl360g9-22.private.net ansible_ssh_user=root
+pdl360g9-23.private.net ansible_ssh_user=root
+pdl360g9-24.private.net ansible_ssh_user=root
+pdl360g9-25.private.net ansible_ssh_user=root
+pdl360g9-26.private.net ansible_ssh_user=root
+pdl360g9-27.private.net ansible_ssh_user=root
+pdl360g9-28.private.net ansible_ssh_user=root
+pdl360g9-29.private.net ansible_ssh_user=root
+pdl360g9-30.private.net ansible_ssh_user=root
+pdl360g9-31.private.net ansible_ssh_user=root
+pdl360g9-32.private.net ansible_ssh_user=root
+
+[localhost]
+pdl360g9-11.private.net ansible_ssh_user=root
 
 [Clients]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
+pdl360g9-32.private.net ansible_ssh_user=root

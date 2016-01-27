@@ -20,6 +20,7 @@ ARGS="-it --rm \
       --name=\"emaster\"\
       --net=host \
       --volume=\"/tmp/:/tmp/\" \
+      --volume=\"/usr/hdp:/usr/hdp\" \
       --volume=\"/etc/ceph:/etc/ceph\" \
       --volume=\"/var/lib/ceph:/var/lib/ceph\" \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \

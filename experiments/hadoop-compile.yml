@@ -1,0 +1,41 @@
+# Author: Michael Sevilla
+# Compile Hadoop on the localhost
+
+- hosts: all
+  roles: [cleanup]
+  tasks:
+    - shell: docker stop hadoop-build
+      ignore_errors: True
+    - shell: docker rm hadoop-build
+      ignore_errors: True
+
+- hosts: localhost
+  roles: [role-tachyon/build-hadoop]
+
+- name: move the new HDFS executables to all the nodes
+  hosts: all
+  ignore_errors: True
+  vars: 
+    - newjar_dir: "/usr/hdp/2.3.4.0-3485/hadoop/src/hadoop-hdfs-project/hadoop-hdfs/target"
+    - remote_dir: "/usr/hdp/2.3.4.0-3485/hadoop-hdfs"
+  tasks:
+    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar"
+            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar"
+    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-sources.jar"
+            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-sources.jar"
+    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-tests.jar"
+            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-tests.jar"
+    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-test-sources.jar"
+            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-test-sources.jar"
+
+- name: move the new Hadoop executables to all the nodes
+  hosts: all
+  ignore_errors: True
+  vars: 
+    - newjar_dir: "/usr/hdp/2.3.4.0-3485/hadoop/src/hadoop-common-project/hadoop-common/target"
+    - remote_dir: "/usr/hdp/2.3.4.0-3485/hadoop"
+  tasks: 
+    - copy: src="{{ newjar_dir }}/hadoop-common-2.7.1.2.3.4.0-3485.jar"
+            dest="{{ remote_dir }}/hadoop-common-2.7.1.2.3.4.0-3485.jar"
+    - copy: src="{{ newjar_dir }}/hadoop-common-2.7.1.2.3.4.0-3485-sources.jar"
+            dest="{{ remote_dir }}/hadoop-common-2.7.1.2.3.4.0-3485-sources.jar"

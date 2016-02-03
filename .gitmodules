@@ -16,3 +16,12 @@
 [submodule "roles/zlog/docker-zlog/zlog"]
 	path = roles/zlog/docker-zlog/zlog
 	url = https://github.com/noahdesu/zlog.git
+[submodule "roles/hadoop/docker-hadoopdev"]
+	path = roles/hadoop/docker-hadoopdev
+	url = https://github.com/michaelsevilla/docker-hadoopdev.git
+[submodule "roles/hadoop/docker-hadoopdev-build"]
+	path = roles/hadoop/docker-hadoopdev-build
+	url = https://github.com/michaelsevilla/docker-hadoopdev-build.git
+[submodule "roles/hadoop/docker-hadoop"]
+	path = roles/hadoop/docker-hadoop
+	url = https://github.com/michaelsevilla/docker-hadoop.git

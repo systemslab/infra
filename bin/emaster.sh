@@ -5,6 +5,7 @@ ARGS="-it --rm \
       --name=\"emaster\"\
       --net=host \
       --volume=\"/tmp/:/tmp/\" \
+      --volume=\"/usr/hdp/:/usr/hdp/\" \
       --volume=\"/etc/ceph:/etc/ceph\" \
       --volume=\"/var/lib/ceph:/var/lib/ceph\" \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
@@ -50,7 +51,7 @@ echo "===> Cleaning up old docker containers - this may require a sudo password"
 ./cleanup.sh >> /dev/null 2>&1
 
 echo "===> Experiment master will control all hosts listed in /infra/experiments"
-docker run $ARGS michaelsevilla/emaster "ansible-playbook -k /infra/roles/emaster/tasks/pushkeys.yml"
+docker run $ARGS michaelsevilla/emaster ansible-playbook -k /infra/roles/emaster/tasks/pushkeys.yml
 
 if [ "$?" -ne 0 ]; then
   echo "===> ... wrong password? Try again."
@@ -75,5 +76,5 @@ cat << "EOF"
 EOF
 echo "==============================================================================="
 echo "===> Here are the specs of your environment:"
-docker run $ARGS michaelsevilla/emaster "cat /etc/lsb-release /etc/os-release" | while read p; do echo -e "\t $p"; done
-docker run $ARGS michaelsevilla/emaster /bin/bash
+docker run $ARGS michaelsevilla/emaster cat /etc/lsb-release /etc/os-release | while read p; do echo -e "\t $p"; done
+docker run $ARGS -e "XAUTH=$XAUTH" michaelsevilla/emaster /bin/emaster-shell

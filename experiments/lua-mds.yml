@@ -1,16 +1,19 @@
 # Author: Michael Sevilla
 # Bring up Ceph with object interfaces on a single node
 
-- name: cleanup old experiments
-  hosts: all
-  tasks:
-    - command: docker stop ceph lua-rados
+- hosts: all
+  #roles: [cleanup]
+  tasks: 
+    - shell: sudo rm -r /tmp/etc/ /tmp/ceph_data/ /usr/local/share/ceph/rados-classes/
       ignore_errors: True
-    - command: docker rm ceph lua-rados
+      no_log: True
+    - shell: docker stop ceph cleaner lua-rados
       ignore_errors: True
-    - command: sudo rm -r /tmp/ceph_data/ /tmp/etc/ceph/
+      no_log: True
+    - shell: docker rm ceph cleaner lua-rados
       ignore_errors: True
-    
+      no_log: True
+
 #- hosts: localhost
 #  roles:
 #    - role:     ceph/build
@@ -24,11 +27,16 @@
     - command: docker exec ceph mkdir -p /usr/local/lib/rados-classes/ /usr/local/share/ceph/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_hello.so /usr/local/lib/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_lua.so /usr/local/lib/rados-classes/
-    - command: docker exec ceph cp /ceph/src/.libs/libbal_lua.so /usr/local/lib/rados-classes/libcls_bal.so
+    - command: docker exec ceph cp /ceph/src/.libs/libcls_bal_lua.so /usr/local/lib/rados-classes/
     - command: docker exec ceph cp /ceph/src/cls/hello/cls_hellolua.lua /usr/local/share/ceph/rados-classes/
-    - command: docker exec ceph cp /ceph/src/bal/hello/bal_hellolua.lua /usr/local/share/ceph/rados-classes/cls_bal_hellolua.lua
+    - command: docker exec ceph ln -s /ceph/src/bal/hello/cls_bal_hellolua.lua /usr/local/share/ceph/rados-classes/cls_bal_hellolua.lua
+    - command: docker exec ceph ln -s /ceph/src/bal/helpers/libmantle.lua /usr/local/share/ceph/rados-classes/libmantle.lua
+    - command: docker exec ceph ln -s /ceph/src/bal/greedyspill/cls_bal_greedyspill.lua /usr/local/share/ceph/rados-classes/cls_bal_greedyspill.lua
 
-- hosts: localhost
+- name:  Run the Lua-RADOS bindings unit tests
+  hosts: Clients
+  roles: [lua-rados/build]
   tasks:
-    - debug: msg="docker exec -it ceph /bin/bash"
-    - debug: msg="docker exec -it ceph tail -f /var/log/ceph/ceph-mds.0.log"
+    - command:  docker exec lua-rados busted lua-rados/test.lua
+      register: result
+    - debug:    var=result.stdout_lines

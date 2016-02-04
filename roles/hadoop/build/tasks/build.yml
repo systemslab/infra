@@ -1,0 +1,46 @@
+# Author: Michael Sevilla
+# Build Tachyon in a container
+
+- name: check to see if user already has the Hadoop src
+  command: ls -alh {{ code_dir }}
+  register: result
+  no_log: True
+  ignore_errors: True
+  changed_when: False
+
+- name: fail if code does not exist
+  fail: msg="Please put the Hadoop source code in {{ code_dir }}."
+  when: result.rc != 0
+
+- name: move some startup scripts over there
+  copy: src=/infra/roles/hadoop/build/files/ dest={{ script_dir }}/files
+
+- name: make scripts executable
+  command: chmod -R 750 {{ script_dir }}/files/
+
+- name: pull dependencies for building hadoop
+  ignore_errors: True
+  no_log: True
+  docker: 
+    name:  "{{ container }}"
+    image: michaelsevilla/hadoopdev-build
+    state: started
+    volumes:
+      - "{{ code_dir }}/hadoop:/hadoop"
+      - "{{ code_dir }}/m2:/root/.m2"
+
+- name: wait for compile (run [docker logs -f {{ container }}] on Builder for progress)
+  shell: docker wait {{ container }}
+  register: result
+
+- name: fail if docker build fails
+  fail: msg="Hadoop build failed; log into the Builder and run - docker logs {{ container }}..."
+  # stdout returns strings, not an int
+  when: result.stdout.find("0") == -1
+
+
+
+# This is an ugly hack because I didn't want to build a new Hadoop image... so I commandeer
+# the "entrypoint" command that isn't in this version of Ansible
+#- name: build hadoop  (run [docker logs -f hadoop-build] on Builder for progress)
+#  shell: docker run --name hadoop-build -v {{ code_dir }}:/src -v {{ script_dir }}/files/:/files -v /root/.m2:/root/.m2 --entrypoint="/files/build-hadoop.sh" michaelsevilla/hadoopdev-build

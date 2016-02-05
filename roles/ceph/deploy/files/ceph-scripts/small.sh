@@ -42,12 +42,18 @@ osd journal size = 100
 osd pool default pg num = 8
 osd pool default pgp num = 8
 osd pool default size = 1
-public network = ${CEPH_NETWORK}
-cluster network = ${CEPH_NETWORK}
 
 [osd]
+osd_lua_class_enable = true
+debug objclass = 20
 debug osd = 20
 ENDHERE
+#public network = ${CEPH_NETWORK}
+#cluster network = ${CEPH_NETWORK}
+#
+#[mds]
+#debug mds = 1
+#ENDHERE
 
    # Generate administrator key
    ceph-authtool /etc/ceph/${CLUSTER}.client.admin.keyring --create-keyring --gen-key -n client.admin --set-uid=0 --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow'

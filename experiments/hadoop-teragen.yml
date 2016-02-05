@@ -1,0 +1,21 @@
+# Author: Michael Sevilla
+# Run the Hadoop TeraGen benchmark
+
+- hosts: localhost
+  vars:
+    - tachyon: "tachyon://pdl360g9-11.private.net:19998"
+    - libjars: "-libjars /tmp/docker/deploy/tmp/docker/src/tachyon/clients/client/target/tachyon-client-0.8.1-SNAPSHOT-jar-with-dependencies.jar "
+    - args:    " {{ libjars }} -Dmapreduce.task.timeout=90000000 -Dtachyon.user.file.writetype.default=THROUGH"
+    - dfs:     "dfs {{ libjars }}"
+    - jar:     "jar /usr/hdp/2.3.4.0-3485/hadoop-mapreduce/hadoop-mapreduce-examples.jar"
+  tasks: 
+    - name:     run Hadoop TeraGen job, results are in {{ tachyon }}/teragen
+      command:  yarn {{ jar }} teragen {{ args }} 100 {{ tachyon }}/teragen-output
+      register: result
+    - debug:    var=result.stderr.split('\n')
+
+    - name:     show the file in Tachyon using the Tachyon client
+      command:  docker exec tachyon /tachyon/bin/tachyon tfs ls /
+      register: result
+    - debug:    var=result.stdout_lines
+

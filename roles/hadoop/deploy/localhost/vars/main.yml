@@ -1,0 +1,6 @@
+code_dir:  "/tmp/docker/src"
+deploy_dir:  "/tmp/docker/deploy"
+container: "hadoop"
+sshd_port: "2222"
+startup:   True
+

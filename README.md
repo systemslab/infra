@@ -103,3 +103,10 @@ Q: Sometimes the Ceph daemons enter standby mode because they can't grab a resou
 A: Sometimes docker gets hung up and won't handle the virtual volumes correctly. To fix this:
 
     sudo docker restart
+
+Q: The docker container (during the build process) can't reach the internet
+
+A: Docker doesn't do well behind proxies -- you need to tell it who to ping:
+
+     echo "DOCKER_OPTS=\"--dns 15.214.0.20\"" >> /etc/default/docker
+     sudo service docker restart

@@ -16,6 +16,15 @@
 - name:  Start Ceph and setup the object interfaces
   hosts: Workers
   roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/home/msevilla/code/mantlev"}]
+#- hosts: localhost
+#  roles:
+#    - role:     ceph/build
+#      threads:  "64"
+#      code_dir: "/tmp/docker/src/mantlev"
+
+- name:  Start Ceph and setup the object interfaces
+  hosts: Workers
+  roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/tmp/docker/src/mantlev"}]
   tasks:
     - command: docker exec ceph mkdir -p /usr/local/lib/rados-classes/ /usr/local/share/ceph/rados-classes/
     - command: docker exec ceph cp /ceph/src/.libs/libcls_hello.so /usr/local/lib/rados-classes/

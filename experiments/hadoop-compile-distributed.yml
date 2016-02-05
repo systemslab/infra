@@ -1,0 +1,54 @@
+# Author: Michael Sevilla
+# Compile Hadoop on the localhost
+- hosts: localhost
+  roles: [cleanup]
+  tasks:
+    - shell: docker stop hadoop-build hadoop tachyon-build tachyon
+      ignore_errors: True
+    - shell: docker rm hadoop-build hadoop tachyon-build tachyon
+      ignore_errors: True
+    - name: delete code on that node so new src will be pushed there
+      shell: docker exec cleaner rm -rf /tmp/docker/deploy/tmp
+
+- name:  recompile whatever is in /tmp/docker/src/tachyon
+  hosts: localhost
+  roles:
+    #- role-jxio/build
+    #- role-tachyon/build
+    #- hadoop/build
+    - hadoop/deploy/localhost
+  tasks: 
+    - command: docker exec {{ container }} /tachyon/bin/tachyon format
+    - command: docker exec {{ container }} /tachyon/bin/tachyon-start.sh all NoMount
+    - command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.1-jar-with-dependencies.jar -copyFromLocal /tachyon/bin/tachyon tachyon://localhost:19998/testfile.txt
+    - command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.1-jar-with-dependencies.jar -ls tachyon://localhost:19998
+      register: result
+    - debug: var=result.stdout_lines
+
+#- name: move the new HDFS executables to all the nodes
+#  hosts: all
+#  ignore_errors: True
+#  vars: 
+#    - newjar_dir: "/usr/hdp/2.3.4.0-3485/hadoop/src/hadoop-hdfs-project/hadoop-hdfs/target"
+#    - remote_dir: "/usr/hdp/2.3.4.0-3485/hadoop-hdfs"
+#  tasks:
+#    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar"
+#            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar"
+#    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-sources.jar"
+#            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-sources.jar"
+#    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-tests.jar"
+#            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-tests.jar"
+#    - copy: src="{{ newjar_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-test-sources.jar"
+#            dest="{{ remote_dir }}/hadoop-hdfs-2.7.1.2.3.4.0-3485-test-sources.jar"
+#
+#- name: move the new Hadoop executables to all the nodes
+#  hosts: all
+#  ignore_errors: True
+#  vars: 
+#    - newjar_dir: "/usr/hdp/2.3.4.0-3485/hadoop/src/hadoop-common-project/hadoop-common/target"
+#    - remote_dir: "/usr/hdp/2.3.4.0-3485/hadoop"
+#  tasks: 
+#    - copy: src="{{ newjar_dir }}/hadoop-common-2.7.1.2.3.4.0-3485.jar"
+#            dest="{{ remote_dir }}/hadoop-common-2.7.1.2.3.4.0-3485.jar"
+#    - copy: src="{{ newjar_dir }}/hadoop-common-2.7.1.2.3.4.0-3485-sources.jar"
+#            dest="{{ remote_dir }}/hadoop-common-2.7.1.2.3.4.0-3485-sources.jar"

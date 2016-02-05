@@ -1,0 +1,31 @@
+# Author: Michael Sevilla
+# Create a Hadoop standalone node
+
+- name: pull dependencies for running Hadoop
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: sequenceiq/hadoop-docker:2.7.1
+    state: present
+
+- name: start Hadoop container 
+  docker:
+    image: sequenceiq/hadoop-docker:2.7.1
+    name: "{{ container }}"
+    state: restarted
+    detach: yes
+    tty: yes
+    command: /bin/bash
+    volumes: 
+      - "{{ code_dir }}/hadoop/:/hadoop"
+      - "{{ code_dir }}/tachyon/:/tachyon"
+
+- name: put our new jars there
+  command: docker exec {{ container }} cp /hadoop/src/hadoop-hdfs-project/hadoop-hdfs/target/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/hdfs/hadoop-hdfs-2.7.1.jar
+- command: docker exec {{ container }} cp /hadoop/src/hadoop-common-project/hadoop-common/target/hadoop-common-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/common/hadoop-common-2.7.1.jar
+
+- name: enable tachyon file system
+  command: docker exec {{ container }} sed -i "s/<\/configuration>/<property><name>fs.tachyon-ft.impl<\/name> <value>tachyon.hadoop.TFSFT<\/value> <\/property>  <property>  <name>fs.tachyon.impl<\/name> <value>tachyon.hadoop.TFS<\/value> <\/property> <\/configuration>/g" /usr/local/hadoop/etc/hadoop/core-site.xml.template
+
+- name: start Hadoop
+  command: docker exec {{ container }} /etc/bootstrap.sh

@@ -21,27 +21,18 @@
       - "/tmp:/tmp"
 
 - name: delete data
-  shell: docker exec cleaner rm -rf /tmp/etc/ceph/ /tmp/ceph_data/
+  shell: docker exec cleaner rm -rf /tmp/etc/ /tmp/ceph_data/ /usr/local/share/ceph/rados-classes/
   ignore_errors: True
   no_log: True
 
-- name: check if any other jobs are running
-  shell: docker ps | grep -v emaster | grep -v CONTAINER
-  register: result
-  no_log: True
-  ignore_errors: True
-  changed_when: False
-
-- name: stop all containers, effectively stop all services
-  shell: docker ps -a | grep -v "emaster\|CONTAINER" | awk '{print $1}' | xargs docker stop
+- name: stop containers (and their services) --> {{ containers }}
+  shell: docker stop {{ item }}
   ignore_errors: True
   no_log: True
-  when: result.rc == 0
+  with_items: "{{ containers }}"
 
-- name: remove all containers, effectively killing all services
-  shell: docker ps -a | grep -v "emaster\|CONTAINER" | awk '{print $1}' | xargs docker rm
+- name: remove containers --> {{ containers }}
+  shell: docker rm {{ item }}
   ignore_errors: True
   no_log: True
-  when: result.rc == 0
-
-
+  with_items: "{{ containers }}"

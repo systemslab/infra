@@ -1,13 +1,15 @@
 # Author: Michael Sevilla
-# Bring up Ceph with object and balancer interfaces on a single node
+# Bring up Ceph with object interfaces on a single node
 
-- name: Cleanup my workspace
-  hosts: all
-  roles:
-    - role: cleanup
-      containers: "ceph lua-rados"
+- hosts: all
+  ignore_errors: True
+  no_log: True
+  tasks: 
+    - shell: sudo rm -r /tmp/etc/ /tmp/ceph_data/ /usr/local/share/ceph/rados-classes/
+    - shell: docker stop ceph cleaner lua-rados
+    - shell: docker rm ceph cleaner lua-rados
 
-- name:  Start Ceph and setup the object and balancer interfaces
+- name:  Start Ceph and setup the object interfaces
   hosts: Workers
   roles: [{role: ceph/deploy, startup: "small.sh", code_dir: "/home/msevilla/code/mantlev"}]
   tasks:
@@ -28,15 +30,18 @@
     - command: docker exec ceph-build /ceph/src/ceph_test_cls_lua
       ignore_errors: True
       no_log: True
+
     - command: docker exec ceph-build /ceph/src/rados
       ignore_errors: True
       no_log: True
 
-    - name:     Run the Lua object interface unit tests
-      command:  docker exec ceph /ceph/src/ceph_test_cls_lua
+    - command: docker exec ceph rados put -p cephfs_metadata greedyspill.lua /ceph/src/mds/mantle/bal/greedyspill/greedyspill.lua 
+    - command: docker exec ceph rados put -p cephfs_metadata hellolua.lua /ceph/src/mds/mantle/bal/hello/hellolua.lua
+
+    - command:  docker exec ceph /ceph/src/ceph_test_cls_lua
       register: result
     - debug:    var=result.stdout_lines
-    - name:     Run the Lua object interface integration tests
-      command:  docker exec lua-rados busted ceph-scripts/test.lua
+    - command:  docker exec lua-rados busted ceph-scripts/test.lua
       register: result
     - debug:    var=result.stdout_lines
+

@@ -20,12 +20,26 @@
       - "{{ code_dir }}/hadoop/:/hadoop"
       - "{{ code_dir }}/tachyon/:/tachyon"
 
-- name: put our new jars there
-  command: docker exec {{ container }} cp /hadoop/src/hadoop-hdfs-project/hadoop-hdfs/target/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/hdfs/hadoop-hdfs-2.7.1.jar
-- command: docker exec {{ container }} cp /hadoop/src/hadoop-common-project/hadoop-common/target/hadoop-common-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/common/hadoop-common-2.7.1.jar
+- name: install the recently compiled Hadoop version
+  command: docker exec {{ container }} rm -r /usr/local/hadoop
+  ignore_errors: True
+- command: docker exec {{ container }} ln -sf /hadoop/src/hadoop-dist/target/hadoop-2.7.1 /usr/local/hadoop
 
+- name: setup the configuration files
+  command: docker exec {{ container }} rm -r /usr/local/hadoop/etc/hadoop
+- command: docker exec {{ container }} cp -r /usr/local/hadoop-2.7.1/etc/hadoop /usr/local/hadoop/etc/hadoop
+
+#- name: delete old logs
+#  command: docker exec {{ container }} rm -r /usr/local/hadoop/logs/
+#  ignore_errors: True
+#- command: docker exec {{ container }} mkdir /usr/local/hadoop/logs/
+
+#- name: put our new jars there
+#  command: docker exec {{ container }} cp /hadoop/src/hadoop-hdfs-project/hadoop-hdfs/target/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/hdfs/hadoop-hdfs-2.7.1.jar
+#- command: docker exec {{ container }} cp /hadoop/src/hadoop-common-project/hadoop-common/target/hadoop-common-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/common/hadoop-common-2.7.1.jar
+#
 - name: enable tachyon file system
   command: docker exec {{ container }} sed -i "s/<\/configuration>/<property><name>fs.tachyon-ft.impl<\/name> <value>tachyon.hadoop.TFSFT<\/value> <\/property>  <property>  <name>fs.tachyon.impl<\/name> <value>tachyon.hadoop.TFS<\/value> <\/property> <\/configuration>/g" /usr/local/hadoop/etc/hadoop/core-site.xml.template
 
 - name: start Hadoop
-  command: docker exec {{ container }} /etc/bootstrap.sh
+  command: docker exec -t {{ container }} /etc/bootstrap.sh

@@ -32,7 +32,6 @@
       - "{{ code_dir }}/ceph:/ceph"
       - "{{ script_dir }}/ceph-scripts:/ceph-scripts"
       - "{{ trace_dir }}/lttng:/lttng"
-      - "/usr/local/share/ceph/rados-classes/:/usr/local/share/ceph/rados-classes/"
       - "/tmp/etc/ceph:/etc/ceph"
       - "/tmp/ceph_data/$RANDOM:/var/lib/ceph"
       - "/dev:/dev"

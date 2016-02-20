@@ -1,0 +1,26 @@
+# Author: Michael Sevilla
+# Compile Hadoop on the localhost
+
+- hosts: localhost
+  #roles: [cleanup]
+  tasks: 
+    - command: docker stop hadoop-build hadoop
+      ignore_errors: True
+    - command: docker rm hadoop-build hadoop
+      ignore_errors: True
+
+- name:  recompile whatever is in /tmp/docker/src
+  hosts: localhost
+  roles:
+    #- role-jxio/build
+    #- role-tachyon/build
+    - hadoop/build
+    - hadoop/deploy/localhost
+  tasks: 
+    - command: docker exec {{ container }} /tachyon/bin/tachyon bootstrap-conf localhost
+    - command: docker exec {{ container }} /tachyon/bin/tachyon format
+    - command: docker exec {{ container }} /tachyon/bin/tachyon-start.sh all NoMount
+    - command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.2-jar-with-dependencies.jar -copyFromLocal /tachyon/bin/tachyon tachyon://localhost:19998/testfile.txt
+    - command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.2-jar-with-dependencies.jar -ls tachyon://localhost:19998
+      register: result
+    - debug: var=result.stdout_lines

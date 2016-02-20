@@ -1,19 +1,18 @@
 ============================================
-Infra: a framework for deploying systems and running experiments
+Infra: a framework for running experiments
 ============================================
 
-This is the SRL's infrastructure repository. 
+This is the SRL's infrastructure repository for reproducibly running experiments.
 
 Install
 ======
 
-On all nodes, [install Docker](https://docs.docker.com/installation). 
+On all nodes, [install Docker](https://docs.docker.com/engine/installation/).
 
 Quickstart
 ==========
-It's as easy as 1, 2, 3.
 
-1. Tell me about your cluster by editing the hosts file:
+1. Tell me about your cluster:
 
    ```bash
    cp hosts.example experiments/hosts; vim experiments/hosts
@@ -22,7 +21,7 @@ It's as easy as 1, 2, 3.
 2. Start an ``experiment master``:
 
     ```bash
-     cd bin; ./emaster.sh
+     bin/emaster.sh
      ```
 
 3. Run an experiment:

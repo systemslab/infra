@@ -1,6 +1,18 @@
 #! /bin/bash
 
 # Start global variables
+if [ $(basename `pwd`) == "bin" ]; then 
+  echo "===> You are in bin."
+  INFRA="$(dirname `pwd`)"
+elif [ $(basename `pwd`) == "infra" ]; then
+  echo "===> You are in infra."
+  INFRA="`pwd`"
+else
+  echo "===> Not sure which directory you are in. Please cd to infra or infra/bin"
+  exit 0
+fi
+echo "===> Attaching full path: $INFRA"
+
 ARGS="-it --rm \
       --name=\"emaster\"\
       --net=host \
@@ -9,7 +21,7 @@ ARGS="-it --rm \
       --volume=\"/etc/ceph:/etc/ceph\" \
       --volume=\"/var/lib/ceph:/var/lib/ceph\" \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
-      --volume=\"$(dirname `pwd`):/infra\" \
+      --volume=\"$INFRA:/infra\" \
       --workdir=\"/infra/experiments/\" \
       --privileged"
 # End global variables

@@ -46,8 +46,8 @@ osd pool default size = 1
 [osd]
 osd_lua_class_enable = true
 debug objclass = 20
-debug osd = 20
 ENDHERE
+#debug osd = 20
 #public network = ${CEPH_NETWORK}
 #cluster network = ${CEPH_NETWORK}
 #

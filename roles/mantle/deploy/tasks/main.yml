@@ -5,18 +5,18 @@
   copy: src=/infra/roles/mantle/deploy/files/ dest={{ code_dir }}/
 
 - name: make scripts executable
-  command: chmod -R 750 {{ code_dir }}/mantle-scripts/
+  file: path="{{ code_dir }}/mantle-scripts/" mode=0750
 
 - name: pull dependencies for running mantle
   ignore_errors: True
   no_log: True
   docker: 
-    image: michaelsevilla/mantledev
+    image: michaelsevilla/mantledev:master
     state: present
 
 - name: start mantle container
   docker:
-    image: michaelsevilla/mantledev
+    image: michaelsevilla/mantledev:master
     name: "{{ container }}"
     state: restarted
     privileged: yes
@@ -35,6 +35,12 @@
       - "/tmp/ceph_data/$RANDOM:/var/lib/ceph"
       - "/dev:/dev"
 
+- name:  give the container a second to come up
+  pause: seconds=5
+
+- name: check if the container came up properly
+  fail: msg="The Mantle container is not running, check with [docker logs {{ container }}]."
+  when: startup == "none"
+
 - name: start ceph daemons
   command: docker exec mantle /mantle-scripts/{{ startup }}
-  when: startup != "none"

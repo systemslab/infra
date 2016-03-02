@@ -5,13 +5,12 @@
   ignore_errors: True
   no_log: True
   docker: 
-    image: michaelsevilla/mantledev-build
+    image: michaelsevilla/mantledev-build:master
     state: present
 
 - name: build ceph
-  no_log: True
   docker:
-    image: michaelsevilla/mantledev-build
+    image: michaelsevilla/mantledev-build:master
     name: mantledev-build
     env:
       BUILD_THREADS: "{{ threads }}"

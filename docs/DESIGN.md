@@ -8,9 +8,10 @@ The directory structure looks like this:
 
 ``infra``
 - ``bin``: scripts that orchestrate the Experiment Master.
+- ``docs``: documentation.
+- ``modules``: extra Ansible modules.
 - ``roles``: scripts for installing (Docker) and deploying (Ansible) services.
 - ``test``: re-run all experiments.
-- ``docs``: documentation.
 
 Adding experiments
 ==================

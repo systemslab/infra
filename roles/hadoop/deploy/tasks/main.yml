@@ -1,0 +1,54 @@
+# Author: Michael Sevilla
+# Create a Hadoop standalone node
+
+- name: if code is already over there, don't touch it
+  stat: path={{ deploy_dir }}/{{ code_dir }}/hadoop
+  register: p
+
+- name: put code over there if it wasn't already there
+  unarchive: src={{ code_dir }}/hadoop.tar.gz dest={{ deploy_dir }}
+  when: p.stat.isdir is not defined or not p.stat.isdir
+
+- name: pull dependencies for running Hadoop
+  ignore_errors: True
+  no_log: True
+  docker: 
+    image: michaelsevilla/hadoopdev
+    state: present
+
+- name: start Hadoop container 
+  docker:
+    image: michaelsevilla/hadoopdev
+    name: "{{ container }}"
+    state: restarted
+    detach: yes
+    net: host
+    tty: yes
+    command: /bin/bash
+    volumes: 
+      - "{{ deploy_dir }}/{{ code_dir }}/hadoop/:/hadoop"
+      - "{{ deploy_dir }}/{{ code_dir }}/tachyon/:/tachyon"
+
+- name: install the recently compiled Hadoop version
+  command: docker exec {{ container }} rm -r /usr/local/hadoop
+  ignore_errors: True
+- command: docker exec {{ container }} ln -sf /hadoop/src/hadoop-dist/target/hadoop-2.7.1.2.3.4.0-3485 /usr/local/hadoop
+
+- name: setup the configuration files
+  command: docker exec {{ container }} rm -r /usr/local/hadoop/etc/hadoop
+  ignore_errors: True
+- command: docker exec {{ container }} cp -r /usr/local/hadoop-2.7.1/etc/hadoop /usr/local/hadoop/etc/hadoop
+- command: docker exec {{ container }} cp -r /usr/local/hadoop-2.7.1/etc/hadoop/core-site.xml /usr/local/hadoop/etc/hadoop/core-site.xml.template
+
+- name: delete old logs
+  command: docker exec {{ container }} rm -r /usr/local/hadoop/logs/
+  ignore_errors: True
+- command: docker exec {{ container }} mkdir /usr/local/hadoop/logs/
+
+- name: tell Hadoop who will be participating in this job
+  file: dest={{ conf_dir }}/slaves state=absent
+- file: dest={{ conf_dir }}/slaves state=touch
+- lineinfile:
+    dest: "{{ conf_dir }}/slaves"
+    line: "{{ item }}"
+  with_items: "{{groups['Workers']}}"

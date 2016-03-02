@@ -23,7 +23,7 @@
   no_log: True
   docker: 
     name:  "{{ container }}"
-    image: michaelsevilla/hadoopdev-build
+    image: michaelsevilla/hadoopdev:build
     state: started
     volumes:
       - "{{ code_dir }}/hadoop:/hadoop"
@@ -38,7 +38,14 @@
   # stdout returns strings, not an int
   when: result.stdout.find("0") == -1
 
+- name: delete previous tar
+  command: docker exec emaster sudo rm -r {{ code_dir }}/hadoop.tar.gz
+  ignore_errors: True
+  no_log: True
 
+# Ansible doesn't offer an 'archive' module because they want use to version control + recompiling
+- name: archive the code into a tar
+  command: tar czvf {{ code_dir }}/hadoop.tar.gz {{ code_dir }}/hadoop
 
 # This is an ugly hack because I didn't want to build a new Hadoop image... so I commandeer
 # the "entrypoint" command that isn't in this version of Ansible

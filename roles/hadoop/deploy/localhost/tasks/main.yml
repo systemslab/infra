@@ -1,45 +1,89 @@
 # Author: Michael Sevilla
 # Create a Hadoop standalone node
 
+- name: if code is already over there, don't touch it
+  stat: path={{ deploy_dir }}/{{ code_dir }}/hadoop
+  register: p
+
+- name: put code over there if it wasn't already there
+  unarchive: src={{ code_dir }}/hadoop.tar.gz dest={{ deploy_dir }}
+  when: p.stat.isdir is not defined or not p.stat.isdir
+
 - name: pull dependencies for running Hadoop
   ignore_errors: True
   no_log: True
   docker: 
-    image: sequenceiq/hadoop-docker:2.7.1
+    image: michaelsevilla/hadoopdev
     state: present
 
 - name: start Hadoop container 
   docker:
-    image: sequenceiq/hadoop-docker:2.7.1
+    image: michaelsevilla/hadoopdev
     name: "{{ container }}"
     state: restarted
     detach: yes
+    net: host
     tty: yes
     command: /bin/bash
     volumes: 
-      - "{{ code_dir }}/hadoop/:/hadoop"
-      - "{{ code_dir }}/tachyon/:/tachyon"
+      - "{{ deploy_dir }}/{{ code_dir }}/hadoop/:/hadoop"
+      - "{{ deploy_dir }}/{{ code_dir }}/tachyon/:/tachyon"
 
 - name: install the recently compiled Hadoop version
   command: docker exec {{ container }} rm -r /usr/local/hadoop
   ignore_errors: True
-- command: docker exec {{ container }} ln -sf /hadoop/src/hadoop-dist/target/hadoop-2.7.1 /usr/local/hadoop
+- command: docker exec {{ container }} ln -sf /hadoop/src/hadoop-dist/target/hadoop-2.7.1.2.3.4.0-3485 /usr/local/hadoop
 
 - name: setup the configuration files
   command: docker exec {{ container }} rm -r /usr/local/hadoop/etc/hadoop
+  ignore_errors: True
 - command: docker exec {{ container }} cp -r /usr/local/hadoop-2.7.1/etc/hadoop /usr/local/hadoop/etc/hadoop
 
-#- name: delete old logs
-#  command: docker exec {{ container }} rm -r /usr/local/hadoop/logs/
-#  ignore_errors: True
-#- command: docker exec {{ container }} mkdir /usr/local/hadoop/logs/
+- name: delete old logs
+  command: docker exec {{ container }} rm -r /usr/local/hadoop/logs/
+  ignore_errors: True
+- command: docker exec {{ container }} mkdir /usr/local/hadoop/logs/
 
 #- name: put our new jars there
 #  command: docker exec {{ container }} cp /hadoop/src/hadoop-hdfs-project/hadoop-hdfs/target/hadoop-hdfs-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/hdfs/hadoop-hdfs-2.7.1.jar
 #- command: docker exec {{ container }} cp /hadoop/src/hadoop-common-project/hadoop-common/target/hadoop-common-2.7.1.2.3.4.0-3485.jar /usr/local/hadoop-2.7.1/share/hadoop/common/hadoop-common-2.7.1.jar
-#
+
 - name: enable tachyon file system
-  command: docker exec {{ container }} sed -i "s/<\/configuration>/<property><name>fs.tachyon-ft.impl<\/name> <value>tachyon.hadoop.TFSFT<\/value> <\/property>  <property>  <name>fs.tachyon.impl<\/name> <value>tachyon.hadoop.TFS<\/value> <\/property> <\/configuration>/g" /usr/local/hadoop/etc/hadoop/core-site.xml.template
+  command: >
+           docker exec {{ container }} 
+           sed -i "s/<\/configuration>/\
+                         <property>\
+                           <name>fs.tachyon-ft.impl<\/name>\
+                           <value>tachyon.hadoop.TFSFT<\/value>\
+                         <\/property>\
+                         <property>\
+                           <name>fs.tachyon.impl<\/name>\
+                           <value>tachyon.hadoop.TFS<\/value>\
+                         <\/property>\
+                     <\/configuration>\
+                  /g" /usr/local/hadoop/etc/hadoop/core-site.xml.template
+
+- name: set the namenode address
+  command: >
+           docker exec {{ container }} 
+           sed -i "s/<\/configuration>/\
+                         <property>\
+                           <name>dfs.namenode.http-address<\/name>\
+                           <value>15.214.7.130:8008<\/value>\
+                         <\/property>\
+                     <\/configuration>\
+                  /g" /usr/local/hadoop/etc/hadoop/hdfs-site.xml
+
+- name: point the client at the new namenode
+  command: >
+           docker exec {{ container }} 
+           sed -i "s/<\/configuration>/\
+                         <property>\
+                           <name>fs.default.name<\/name>\
+                           <value>hdfs:\/\/pdl360g9-20.private.net:9000<\/value>\
+                         <\/property>\
+                     <\/configuration>\
+                  /g" /usr/local/hadoop/etc/hadoop/core-site.xml.template
 
 - name: start Hadoop
   command: docker exec -t {{ container }} /etc/bootstrap.sh

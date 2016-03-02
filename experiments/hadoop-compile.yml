@@ -1,20 +1,35 @@
 # Author: Michael Sevilla
 # Compile Hadoop on the localhost
 
-- hosts: localhost
-  roles: [cleanup]
+- hosts: all
+  roles: 
+    - role: cleanup
+      containers: "hadoop tachyon"
+  tasks:
+    - name: delete code on that node so new src will be pushed there
+      shell: docker exec -it cleaner rm -rf /tmp/docker/deploy/tmp/hadoop
 
-- name:  recompile whatever is in /tmp/docker/src/tachyon
-  hosts: localhost
+#- name:  recompile whatever is in /tmp/docker/src/tachyon
+#  hosts: localhost
+#  roles:
+#    #- role-jxio/build
+#    #- role-tachyon/build
+#    - hadoop/build
+
+- name:  deploy hadoop 
+  hosts: Workers
   roles:
-    - role-jxio/build
-    - role-tachyon/build
-    - hadoop/build
     - hadoop/deploy/localhost
   tasks: 
+    - command: docker exec {{ container }} rm -r /tachyon/underFSStorage
+      no_log: True
+      ignore_errors: True
+    - command: docker exec {{ container }} mkdir /tachyon/underFSStorage
     - command: docker exec {{ container }} /tachyon/bin/tachyon format
-    - command: docker exec {{ container }} /tachyon/bin/tachyon-start.sh all NoMount
-    - command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.1-jar-with-dependencies.jar -copyFromLocal /tachyon/bin/tachyon tachyon://localhost:19998/testfile.txt
-    - command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.1-jar-with-dependencies.jar -ls tachyon://localhost:19998
-      register: result
-    - debug: var=result.stdout_lines
+    - command: docker exec {{ container }} /tachyon/bin/tachyon-start.sh master
+    - command: docker exec {{ container }} /tachyon/bin/tachyon-start.sh worker NoMount
+    #- command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.2-jar-with-dependencies.jar -copyFromLocal /tachyon/bin/tachyon tachyon://localhost:19998/testfile.txt
+    #- command: docker exec {{ container }} /tachyon/bin/tachyon tfs copyFromLocal /tachyon/bin/tachyon /testfile.txt
+    #- command: docker exec {{ container }} /usr/local/hadoop/bin/hdfs dfs --libjars /tachyon/clients/client/target/tachyon-client-0.8.2-jar-with-dependencies.jar -ls tachyon://localhost:19998
+    #  register: result
+    #- debug: var=result.stdout_lines

@@ -1,0 +1,7 @@
+dist: trusty
+
+services: docker
+
+script:
+  - docker pull michaelsevilla/emaster
+  - docker run michaelsevilla/emaster ls

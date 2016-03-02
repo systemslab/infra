@@ -19,6 +19,3 @@
 [submodule "roles/hadoop/docker-hadoop"]
 	path = roles/hadoop/docker-hadoop
 	url = https://github.com/michaelsevilla/docker-hadoop.git
-[submodule "docs/popper"]
-	path = docs/popper
-	url = https://github.com/ivotron/popper.git

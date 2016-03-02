@@ -1,8 +1,0 @@
-[Workers]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
-
-[localhost]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla
-
-[Clients]
-dexter.soe.ucsc.edu ansible_ssh_user=msevilla

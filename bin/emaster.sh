@@ -13,7 +13,7 @@ else
 fi
 echo "===> Attaching full path: $INFRA"
 
-ARGS="-it --rm \
+ARGS="-t \
       --name=\"emaster\"\
       --net=host \
       --volume=\"/tmp/:/tmp/\" \
@@ -22,7 +22,7 @@ ARGS="-it --rm \
       --volume=\"/var/lib/ceph:/var/lib/ceph\" \
       --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
       --volume=\"$INFRA:/infra\" \
-      --workdir=\"/infra/experiments/\" \
+      --workdir=\"/infra/roles\" \
       --privileged"
 # End global variables
 
@@ -60,10 +60,18 @@ else
 fi
 
 echo "===> Cleaning up old docker containers - this may require a sudo password"
-./cleanup.sh >> /dev/null 2>&1
+if [ -e ./cleanup.sh ]; then
+  ./cleanup.sh >> /dev/null 2>&1
+elif [ -e ./bin/cleanup.sh ]; then
+  ./bin/cleanup.sh >> /dev/null 2>&1
+else
+  echo "===> ... couldn't find a cleanup script. Try again."
+  fail
+fi
+  
 
-echo "===> Experiment master will control all hosts listed in /infra/experiments"
-docker run $ARGS michaelsevilla/emaster ansible-playbook -k /infra/roles/emaster/tasks/pushkeys.yml
+echo "===> Experiment master will control all hosts listed in /infra/hosts"
+docker run $ARGS -i --rm michaelsevilla/emaster ansible-playbook -k /infra/roles/emaster/tasks/pushkeys.yml
 
 if [ "$?" -ne 0 ]; then
   echo "===> ... wrong password? Try again."
@@ -71,22 +79,9 @@ if [ "$?" -ne 0 ]; then
 fi
 
 echo "==============================================================================="
-echo "===> You are now in an experiment master shell!"
-cat << "EOF"
- ______                           _                          _   
-|  ____|                         (_)                        | |  
-| |__   __  __ _ __    ___  _ __  _  _ __ ___    ___  _ __  | |_ 
-|  __|  \ \/ /| '_ \  / _ \| '__|| || '_ ` _ \  / _ \| '_ \ | __|
-| |____  >  < | |_) ||  __/| |   | || | | | | ||  __/| | | || |_ 
-|______|/_/\_\| .__/  \___||_|   |_||_| |_| |_| \___||_| |_| \__|
- _    _       |_|                                                
-|  \/  |             _              
-| \  / |  __ _  ___ | |_  ___  _ __ 
-| |\/| | / _` |/ __|| __|/ _ \| '__|
-| |  | || (_| |\__ \| |_|  __/| |   
-|_|  |_| \__,_||___/ \__|\___||_|   
-EOF
-echo "==============================================================================="
 echo "===> Here are the specs of your environment:"
-docker run $ARGS michaelsevilla/emaster cat /etc/lsb-release /etc/os-release | while read p; do echo -e "\t $p"; done
-docker run $ARGS -e "XAUTH=$XAUTH" michaelsevilla/emaster /bin/emaster-shell
+docker run $ARGS -i --rm michaelsevilla/emaster cat /etc/lsb-release /etc/os-release | while read p; do echo -e "\t $p"; done
+docker run $ARGS -d -e "XAUTH=$XAUTH" michaelsevilla/emaster /bin/emaster-shell
+
+echo "===> Your emaster container has been started in the background"
+echo "===> To go into it, use: docker exec -it emaster /bin/bash"

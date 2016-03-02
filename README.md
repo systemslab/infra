@@ -15,7 +15,8 @@ Quickstart
 1. Tell me about your cluster:
 
    ```bash
-   cp experiments/hosts.example experiments/hosts; vim experiments/hosts
+   cp hosts.template hosts
+   vim hosts
    ```
 
 2. Start an ``experiment master``:
@@ -27,7 +28,7 @@ Quickstart
 3. Run an experiment:
 
     ```bash
-    ansible-playbook ceph.yml
+    ansible-playbook ceph/experiments/ceph.yml
     ```
 
 Description

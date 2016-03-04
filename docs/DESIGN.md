@@ -8,9 +8,10 @@ The directory structure looks like this:
 
 ``infra``
 - ``bin``: scripts that orchestrate the Experiment Master.
+- ``docs``: documentation.
+- ``modules``: extra Ansible modules.
 - ``roles``: scripts for installing (Docker) and deploying (Ansible) services.
 - ``test``: re-run all experiments.
-- ``docs``: documentation.
 
 Adding experiments
 ==================
@@ -26,7 +27,7 @@ A role is code that installs/deploys a system. To see an example, see the [Ceph 
 
 2. experiments directory: contains Ansible scripts for running experiments.
 
-2. all other directories: contain Ansible scripts (``*.yml``) that either deploy or build the system.
+3. all other directories: contain Ansible scripts (``*.yml``) that either deploy or build the system.
 
 Installing Roles
 ----------------

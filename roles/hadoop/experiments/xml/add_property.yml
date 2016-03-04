@@ -1,0 +1,28 @@
+- name: change the configuration value if it exists
+  xml:
+    file: "{{ file }}"
+    pretty_print: True
+    xpath: "/configuration/property/name[.='{{ name }}']/../value"
+    value: "{{ value }}"
+  ignore_errors: True
+  no_log: True
+  register: result
+
+- name: add property if we didn't find the value in the previous step
+  xml:
+    file: "{{ file }}"
+    pretty_print: True
+    xpath: /configuration
+    add_children:
+      - property: ""
+  when: result.failed is defined 
+
+- name: add fill in new property
+  xml:
+    file: "{{ file }}"
+    pretty_print: True
+    xpath: /configuration/property[last()]
+    add_children:
+      - name: "{{ name }}"
+      - value: "{{ value }}"
+  when: result.failed is defined

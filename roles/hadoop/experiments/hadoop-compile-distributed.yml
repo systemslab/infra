@@ -1,5 +1,6 @@
 # Author: Michael Sevilla
 # Compile Hadoop on the localhost
+
 - hosts: localhost
   roles: [cleanup]
   tasks:

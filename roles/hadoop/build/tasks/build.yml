@@ -23,7 +23,7 @@
   no_log: True
   docker: 
     name:  "{{ container }}"
-    image: michaelsevilla/hadoopdev:build
+    image: michaelsevilla/hadoopdev-build
     state: started
     volumes:
       - "{{ code_dir }}/hadoop:/hadoop"

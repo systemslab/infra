@@ -1,7 +1,5 @@
 # Author: Michael Sevilla
-# Experiment master variables
-
-#code_dir:  "/usr/hdp/2.3.4.0-3485/hadoop/src/"
-code_dir:  "/tmp/docker/src"
-container: "hadoop-build"
-script_dir:  "/tmp/docker/src"
+container:          "hadoop-build"
+code_dir:           "/tmp/docker/src"
+script_dir:         "/tmp/docker/src"
+docker_api_version: "1.21"

@@ -9,12 +9,12 @@
   set_fact: 
     file: "{{ conf_dir }}/hdfs-site.xml"
     name: "dfs.namenode.http-address"
-    value: "15.214.7.130:8008"}
+    value: "15.214.7.130:8008"
 - include:  xml/add_property.yml
 
 - set_fact:
     name: "dfs.datanode.address"
-    value: "0.0.0.0:50011"}
+    value: "0.0.0.0:50011"
 - include:  xml/add_property.yml
 
 - set_fact: 

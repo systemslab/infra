@@ -1,0 +1,3 @@
+image: michaelsevilla/emaster
+docker_api_version: 1.21
+sshd_port: 2223

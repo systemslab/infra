@@ -1,0 +1,30 @@
+# Author: Michael Sevilla
+# Deploy Hadoop on the localhost 
+
+- hosts: all
+  roles:
+    - role: emaster/cleanup
+      containers: hadoop hadoop-build
+      #delete: /tmp/docker/src/hadoop
+
+- hosts: all
+  roles: [hadoop/deploy]
+  #tasks: [include: configure_nonambari.yml]
+
+- name:  start with startup script
+  hosts: Master
+  tasks:
+    - command: docker exec hadoop /etc/bootstrap.sh
+    - command: docker exec hadoop /usr/local/hadoop/bin/hadoop dfsadmin -safemode leave
+
+- name:  start some benchmark
+  hosts: Clients
+  tasks:
+    - include_vars: /infra/roles/hadoop/deploy/vars/main.yml
+    - command:  docker exec hadoop /usr/local/hadoop/bin/hdfs dfs -copyFromLocal /usr/local/hadoop/README.txt in
+    - command:  >
+                docker exec hadoop /usr/local/hadoop/bin/hadoop 
+                jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-{{ version }}.jar
+                wordcount in out
+      register: result
+    - debug:    var=result.stderr.split('\n')

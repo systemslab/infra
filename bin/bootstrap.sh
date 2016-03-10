@@ -1,3 +1,7 @@
+#! /bin/bash
+
+set -e
+set -x
 
 echo "Setup repos..."
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -7,7 +11,7 @@ sudo apt-get update
 apt-cache policy docker-engine
 
 echo "Install packages..."
-sudo apt-get install -y \
+DEBIAN_FRONTEND=noninteractive sudo apt-get install -y \
     vim \
     python-setuptools \
     docker-engine \

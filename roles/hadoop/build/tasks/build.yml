@@ -1,28 +1,42 @@
 # Author: Michael Sevilla
-# Build Tachyon in a container
+# Build Hadoop in a container
 
 - name: check to see if user already has the Hadoop src
-  command: ls -alh {{ code_dir }}
+  command: ls -alh {{ code_dir }}/hadoop/src
   register: result
-  no_log: True
   ignore_errors: True
   changed_when: False
 
-- name: fail if code does not exist
-  fail: msg="Please put the Hadoop source code in {{ code_dir }}."
+- name: download the code from apache mirrors
   when: result.rc != 0
+  get_url: 
+    url=http://apache.arvixe.com/hadoop/common/hadoop-2.7.1/hadoop-2.7.1-src.tar.gz 
+    dest={{ code_dir }}/hadoop-2.7.1-src.tar.gz
+
+- name: untar the code
+  when: result.rc != 0
+  unarchive:
+    src={{ code_dir }}/hadoop-2.7.1-src.tar.gz
+    dest={{ code_dir }}/
+
+- name: create a nested directory, similar to how ambari sets up its directories
+  when: result.rc != 0
+  file: path={{ code_dir }}/hadoop state=directory
+
+- name: rename the directory so ansible picks it up
+  when: result.rc != 0
+  command: mv {{ code_dir }}/hadoop-2.7.1-src {{ code_dir }}/hadoop/src
 
 - name: move some startup scripts over there
   copy: src=/infra/roles/hadoop/build/files/ dest={{ script_dir }}/files
 
 - name: make scripts executable
-  command: chmod -R 750 {{ script_dir }}/files/
+  file: path="{{ script_dir }}/files/" mode=0750
 
 - name: pull dependencies for building hadoop
-  ignore_errors: True
-  no_log: True
   docker: 
     name:  "{{ container }}"
+    docker_api_version: "{{ docker_api_version }}"
     image: michaelsevilla/hadoopdev-build
     state: started
     volumes:
@@ -39,15 +53,10 @@
   when: result.stdout.find("0") == -1
 
 - name: delete previous tar
-  command: docker exec emaster sudo rm -r {{ code_dir }}/hadoop.tar.gz
+  file: path="{{ code_dir }}/hadoop.tar.gz" state=absent
+
+# Ansible doesn't offer an 'archive' module because they want us to version control + recompiling
+- name: archive the code into a tar
+  command: tar czf {{ code_dir }}/hadoop.tar.gz {{ code_dir }}/hadoop
   ignore_errors: True
   no_log: True
-
-# Ansible doesn't offer an 'archive' module because they want use to version control + recompiling
-- name: archive the code into a tar
-  command: tar czvf {{ code_dir }}/hadoop.tar.gz {{ code_dir }}/hadoop
-
-# This is an ugly hack because I didn't want to build a new Hadoop image... so I commandeer
-# the "entrypoint" command that isn't in this version of Ansible
-#- name: build hadoop  (run [docker logs -f hadoop-build] on Builder for progress)
-#  shell: docker run --name hadoop-build -v {{ code_dir }}:/src -v {{ script_dir }}/files/:/files -v /root/.m2:/root/.m2 --entrypoint="/files/build-hadoop.sh" michaelsevilla/hadoopdev-build

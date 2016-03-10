@@ -1,8 +1,8 @@
-[Builder]
-<HOSTNAME OR IP> ansible_ssh_user=<MY USERNAME>
+[Master]
+localhost ansible_ssh_user=<USERNAME>
 
 [Workers]
-<HOSTNAME OR IP> ansible_ssh_user=<MY USERNAME>
+localhost ansible_ssh_user=<USERNAME>
 
 [Clients]
-<HOSTNAME OR IP> ansible_ssh_user=<MY USERNAME>
+localhost ansible_ssh_user=<USERNAME>

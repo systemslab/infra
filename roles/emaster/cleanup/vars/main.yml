@@ -1,0 +1,6 @@
+test:       none
+containers: none
+image:      michaelsevilla/emaster
+sshd_port:  2223
+docker_api_version: "1.21"
+

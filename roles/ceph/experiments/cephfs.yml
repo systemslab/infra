@@ -1,0 +1,29 @@
+# Author: Michael Sevilla
+# Bring up CephFS 
+
+- name: cleanup old experiments
+  hosts: all
+  roles: [{role: cleanup, containers: "ceph client"}]
+
+- name: Start Ceph using the "small.sh" startup script (roles/ceph/deploy/files/ceph-scripts/small.sh)
+  hosts: Workers
+  roles: [{role: ceph/deploy, startup: "small.sh"}]
+
+- name: Get the status of the new Ceph cluster
+  hosts: Clients
+  roles: [{role: ceph/deploy, startup: "none", container: "client", sshd_port: 2223}]
+  tasks:
+    - name:     wait for Ceph to come up
+      command:  docker exec client ceph -s
+      register: result
+      until:    result.stdout.find("HEALTH_OK") != -1
+      retries:  120
+    - debug:    var=result.stdout_lines
+
+    - name:     mount the file system
+      command:  docker exec -d client ceph-fuse /mnt/ -d
+
+    - name:     start the mdtest benchmark
+      command:  docker exec client mdtest -F -C -n 1000 -d /mnt/testdir
+      register: result
+    - debug:    var=result.stdout_lines

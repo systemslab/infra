@@ -1,7 +1,18 @@
 dist: trusty
 
-services: docker
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y vim python-setuptools python-pip
+  - sudo easy_install pip 
+  - sudo pip install docker-py 
+
+service:
+  - docker
+
+env:
+  - JOB="compile.yml" DIR="hadoop/experiments"
 
 script:
-  - docker pull michaelsevilla/emaster
-  - docker run michaelsevilla/emaster ls
+  - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+  - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  - travis_wait 50 ci/test.sh

@@ -14,11 +14,13 @@
   no_log: True
   docker: 
     image: michaelsevilla/hadoopdev
+    docker_api_version: "{{ docker_api_version }}"
     state: present
 
 - name: start Hadoop container 
   docker:
     image: michaelsevilla/hadoopdev
+    docker_api_version: "{{ docker_api_version }}"
     name: "{{ container }}"
     state: restarted
     detach: yes
@@ -32,7 +34,7 @@
 - name: install the recently compiled Hadoop version
   command: docker exec {{ container }} rm -r /usr/local/hadoop
   ignore_errors: True
-- command: docker exec {{ container }} ln -sf /hadoop/src/hadoop-dist/target/hadoop-2.7.1.2.3.4.0-3485 /usr/local/hadoop
+- shell: docker exec {{ container }} ln -sf /hadoop/src/hadoop-dist/target/hadoop-{{ version }} /usr/local/hadoop
 
 - name: setup the configuration files
   command: docker exec {{ container }} rm -r /usr/local/hadoop/etc/hadoop
@@ -46,7 +48,8 @@
 - command: docker exec {{ container }} mkdir /usr/local/hadoop/logs/
 
 - name: tell Hadoop who will be participating in this job
-  file: dest={{ conf_dir }}/slaves state=absent
+  command: docker exec eslave chmod 777 -R {{ conf_dir }}
+- file: dest={{ conf_dir }}/slaves state=absent
 - file: dest={{ conf_dir }}/slaves state=touch
 - lineinfile:
     dest: "{{ conf_dir }}/slaves"

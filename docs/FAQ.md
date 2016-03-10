@@ -52,6 +52,16 @@ Docker doesn't do well behind proxies -- you need to tell it who to ping:
      sudo service docker restart
     ```
 
+Q: When Ansible pulls an image, I get: fatal: [localhost]: FAILED! => {"failed": true, "msg": "module (docker) is missing interpreter line"}
+-----------------------------------------------------------------------------
+
+Directory location matters -- make sure to be in the experiment working directory before executing:
+
+```bash
+cd roles/hadoop/experiments
+ansible-playbook compile.yml
+```
+
 References
 ==========
 [1] http://serverfault.com/questions/642981/docker-containers-cant-resolve-dns-on-ubuntu-14-04-desktop-host

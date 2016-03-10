@@ -1,32 +1,13 @@
 #! /bin/bash
+# Author: Michael Sevilla
+# Start the experiment master as a container running in the background
+docker stop emaster eslave; docker rm emaster eslave
+set -e
 
-# Start global variables
-if [ $(basename `pwd`) == "bin" ]; then 
-  echo "===> You are in bin."
-  INFRA="$(dirname `pwd`)"
-elif [ $(basename `pwd`) == "infra" ]; then
-  echo "===> You are in infra."
-  INFRA="`pwd`"
-else
-  echo "===> Not sure which directory you are in. Please cd to infra or infra/bin"
-  exit 0
-fi
-echo "===> Attaching full path: $INFRA"
+# Change this if you have an older docker image
+IMAGE="michaelsevilla/emaster"
 
-ARGS="-t \
-      --name=\"emaster\"\
-      --net=host \
-      --volume=\"/tmp/:/tmp/\" \
-      --volume=\"/usr/hdp/:/usr/hdp/\" \
-      --volume=\"/etc/ceph:/etc/ceph\" \
-      --volume=\"/var/lib/ceph:/var/lib/ceph\" \
-      --volume=\"/var/run/docker.sock:/var/run/docker.sock\" \
-      --volume=\"$INFRA:/infra\" \
-      --workdir=\"/infra/roles\" \
-      --privileged"
-# End global variables
-
-# Start functions
+# Start Functions
 # Ascii art: http://www.network-science.de/ascii/; font is "big"
 function fail() {
   echo "==============================================================================="
@@ -38,12 +19,35 @@ cat << "EOF"
 | |  | (_| || || ||  __/| (_| |
 |_|   \__,_||_||_| \___| \__,_|
 EOF
+  echo -e "\n===> $1"
   echo "==============================================================================="
   exit 1
 }
-# End functions
 
-# main
+
+# Start Main
+echo "===> Check some variables"
+if [ $(basename `pwd`) == "bin" ]; then 
+  echo "===> You are in bin."
+  INFRA="$(dirname `pwd`)"
+elif [ $(basename `pwd`) == "infra" ]; then
+  echo "===> You are in infra."
+  INFRA="`pwd`"
+else
+  fail "Not sure which directory you are in. Please cd to infra or infra/bin"
+fi
+echo "===> Attaching full path: $INFRA"
+if [ ! -e "$INFRA/hosts" ]; then
+  fail "Couldn't find a hosts file, please read the README.md"
+fi
+
+source $INFRA/bin/env.sh
+
+RUNNING=`docker ps -a`
+if [[ $RUNNING == *"emaster"* ]]; then
+  fail "An emaster or eslave is already running. Either kill it or use it."
+fi
+
 echo "===> Figure out which screen to use"
 SCREEN=`echo $DISPLAY | sed s/localhost//g | sed 's/\.0//g'`
 if [ -z "$SCREEN" ]; then
@@ -56,32 +60,23 @@ else
   XAUTH=`xauth list | grep $SCREEN`
   ARGS="$ARGS \
       -e DISPLAY=$DISPLAY \
-      -v /tmp/.X11-unix:/tmp/.X11-unix"
+      -v /tmp/.X11-unix:/tmp/.X11-unix \
+      -e XAUTH=$XAUTH"
 fi
-
-echo "===> Cleaning up old docker containers - this may require a sudo password"
-if [ -e ./cleanup.sh ]; then
-  ./cleanup.sh >> /dev/null 2>&1
-elif [ -e ./bin/cleanup.sh ]; then
-  ./bin/cleanup.sh >> /dev/null 2>&1
-else
-  echo "===> ... couldn't find a cleanup script. Try again."
-  fail
-fi
-  
 
 echo "===> Experiment master will control all hosts listed in /infra/hosts"
-docker run $ARGS -i --rm michaelsevilla/emaster ansible-playbook -k /infra/roles/emaster/tasks/pushkeys.yml
+docker run $ARGS -d --entrypoint=/bin/bash $IMAGE 
+docker exec -it emaster cp /infra/hosts /tmp/hosts
+docker exec -it emaster /bin/bash -c "cd /infra/roles/emaster; ansible-playbook -k start.yml"
+docker exec emaster sed -i 's/ansible_ssh_user=[^=]*$/ansible_ssh_user=root\ /g' /tmp/hosts
 
 if [ "$?" -ne 0 ]; then
-  echo "===> ... wrong password? Try again."
-  fail
+  fail "... wrong password? Try again."
 fi
 
 echo "==============================================================================="
 echo "===> Here are the specs of your environment:"
-docker run $ARGS -i --rm michaelsevilla/emaster cat /etc/lsb-release /etc/os-release | while read p; do echo -e "\t $p"; done
-docker run $ARGS -d -e "XAUTH=$XAUTH" michaelsevilla/emaster /bin/emaster-shell
-
-echo "===> Your emaster container has been started in the background"
-echo "===> To go into it, use: docker exec -it emaster /bin/bash"
+docker exec emaster cat /etc/lsb-release /etc/os-release | while read p; do echo -e "\t $p"; done
+docker exec emaster /bin/bash -c "echo \"export PS1=[EXPERIMENT_MASTER]\  \">> /root/.bashrc"
+docker exec emaster /bin/bash -c "echo \"PORT 2223\" >> /etc/ssh/ssh_config"
+docker exec -it emaster /bin/bash

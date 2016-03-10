@@ -3,10 +3,12 @@
 
 - name: cleanup old experiments
   hosts: all
-  roles: [cleanup]
+  roles:
+    - role: cleanup
+      containers: "ceph client"
 
 #- hosts: localhost
-#  roles: [{role: ceph/build, threads: "64", commit: "master"}]
+#  roles: [{role: ceph/build, threads: "64", commit: "remotes/origin/infernalis"}]
 
 - name: Start Ceph using the "small.sh" startup script (roles/ceph/deploy/files/ceph-scripts/small.sh)
   hosts: Workers

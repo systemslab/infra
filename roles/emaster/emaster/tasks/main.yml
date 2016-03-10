@@ -1,0 +1,41 @@
+# Author: Michael Sevilla
+# Push the keys
+
+- name: stop any slaves
+  shell: docker stop eslave
+  ignore_errors: True
+  no_log: True
+
+- name: remove any slaves
+  shell: docker rm eslave
+  ignore_errors: True
+  no_log: True
+
+- name: pull dependencies for running the eslave
+  docker: 
+    image: "{{ image }}"
+    docker_api_version: "{{ docker_api_version }}"
+    name: "eslave"
+    state: restarted
+    detach: yes
+    tty: yes
+    net: host
+    privileged: yes
+    env:
+      SSHD_PORT: "{{ sshd_port }}"
+      AUTHORIZED_KEYS: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    volumes: 
+      - "/tmp:/tmp"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+- name: enable passwordless login
+  authorized_key: user={{ ansible_ssh_user }}  key={{ lookup('file', '~/.ssh/id_rsa.pub') }}
+
+- name: make directory for docker volumes
+  file: path=/tmp/docker/ state=directory mode=0777
+
+- name: make directory for components' src code
+  file: path=/tmp/docker/src state=directory mode=0777
+
+- name: make directory for components' deploy code
+  file: path=/tmp/docker/deploy state=directory mode=0777

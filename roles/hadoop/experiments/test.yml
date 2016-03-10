@@ -1,0 +1,10 @@
+- host: localhost
+  tasks:
+    - command: cp /tmp/hdfs-site.xml.template /tmp/test.xml
+    - set_fact:
+        file: "/tmp/test.xml"
+        name: "myname0"
+        value: "mikesvalue0"
+    - include:  xml/add_property.yml
+  
+  

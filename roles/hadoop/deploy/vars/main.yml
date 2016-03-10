@@ -1,7 +1,12 @@
-code_dir:  "/tmp/docker/src"
-deploy_dir: "/tmp/docker/deploy"
-conf_dir:  "{{ deploy_dir }}{{ code_dir }}/hadoop/src/hadoop-dist/target/hadoop-2.7.1.2.3.4.0-3485/etc/hadoop/"
-container: "hadoop"
-sshd_port: "2222"
-startup:   True
+# Author: Michael Sevilla
+container:          "hadoop"
+code_dir:           "/tmp/docker/src"
+deploy_dir:         "/tmp/docker/deploy"
+conf_dir:           "{{ deploy_dir }}{{ code_dir }}/hadoop/src/hadoop-dist/target/hadoop-{{ version }}/etc/hadoop/"
+version:            "2.7.1"
+sshd_port:          "2222"
+startup:            True
+image:              "michaelsevilla/hadoopdev-build"
+docker_api_version: "1.21"
+
 

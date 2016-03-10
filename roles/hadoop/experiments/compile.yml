@@ -1,34 +1,10 @@
 # Author: Michael Sevilla
-# Compile Hadoop on the localhost and push code to all workers
+# Compile Hadoop on the localhost
 
 - hosts: all
-  roles: 
-    - role: cleanup
-      containers: "hadoop"
-    - name: delete code on that node so new src will be pushed there
-      shell: docker exec -it cleaner rm -rf /tmp/docker/deploy/tmp/docker/src/hadoop
+  roles:
+    - role: emaster/cleanup
+      containers: hadoop hadoop-build
 
-- name:  compile Hadoop
-  hosts: localhost
+- hosts: localhost
   roles: [hadoop/build]
-
-- name: configure Hadoop on all nodes
-  hosts: all
-  roles: [hadoop/deploy]
-  tasks:
-    - name:    configure with ports unique to Ambari defaults
-      include: configure_nonambari.yml
-
-- name: start the Hadoop daemons and run a job
-  hosts: Master
-  tasks:
-    - command: docker exec hadoop /etc/bootstrap.sh
-    - command: docker exec hadoop /usr/local/hadoop/bin/hdfs dfsadmin -safemode leave
-    - command: docker exec hadoop /usr/local/hadoop/bin/hdfs dfs -copyFromLocal /usr/local/hadoop/README.txt in
-    - command: >
-               docker exec hadoop /usr/local/hadoop/bin/hadoop jar \
-               /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.2.3.4.0-3485.jar \
-               wordcount in out
-      register: result
-    - debug: var=result.stderr.split('\n')
-

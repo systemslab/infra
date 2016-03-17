@@ -1,18 +1,41 @@
+---
 dist: trusty
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y vim python-setuptools python-pip
-  - sudo easy_install pip 
-  - sudo pip install docker-py 
+  - sudo pip install docker-py ansible
 
 service:
   - docker
 
 env:
-  - JOB="compile.yml" DIR="hadoop/experiments"
+  - JOB="experiments/ceph-experiments/radosbench"
 
 script:
-  - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
-  - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-  - travis_wait 50 ci/test.sh
+  # all experiments must have an experiment.yml file
+  - cd $JOB
+
+  # setup the hosts configuration file
+  - cp hosts.template hosts
+  - sed -i "s/<USERNAME>/$USER/g" hosts
+
+  # TEST: Experiment Syntax
+  - ansible-playbook experiment.yml --syntax-check
+  - ansible-playbook cleanup.yml --syntax-check
+
+  # TEST: Experiment Deploy
+  - ansible-playbook --become --connection=local experiment.yml
+
+  # TEST: Experiment Deploy Idempotence
+  - docker rm --force `docker ps -qa`
+  - ansible-playbook --become --connection=local cleanup.yml
+  - ansible-playbook --become --connection=local experiment.yml
+
+  # TEST: Experiment Cleanup Idempotence
+  - docker rm --force `docker ps -qa`
+  - ansible-playbook --become --connection=local cleanup.yml
+  - >
+    ansible-playbook --become --connection=local cleanup.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)

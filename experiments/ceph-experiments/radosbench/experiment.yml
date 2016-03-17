@@ -1,0 +1,10 @@
+---
+- include: lib/setup.yml
+- include: lib/site.yml
+
+- hosts: localhost
+  tasks: 
+    - pause: minutes=1
+    - command: docker exec {{ ansible_hostname }} ceph -s
+      register: result
+    - debug: var=result.stdout_lines

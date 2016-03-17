@@ -1,0 +1,16 @@
+---
+
+- hosts: all
+  roles:
+    - role: cleanup
+      delete:
+        - /gassyfs/mount
+      mkdir: 
+        - /gassyfs/mount
+      containers: 
+        - "{{ ansible_hostname }}"
+        - "{{ ansible_hostname }}-osd-ceph_osd_docker_devices"
+  # This needs to be be removed!
+  gather_facts: False
+
+

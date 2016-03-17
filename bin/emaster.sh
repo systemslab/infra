@@ -5,7 +5,8 @@ docker stop emaster eslave; docker rm emaster eslave
 set -e
 
 # Change this if you have an older docker image
-IMAGE="michaelsevilla/emaster"
+IMAGE="michaelsevilla/emaster:1.7.1"
+DOCKER="1.19"
 
 # Start Functions
 # Ascii art: http://www.network-science.de/ascii/; font is "big"
@@ -41,6 +42,7 @@ if [ ! -e "$INFRA/hosts" ]; then
   fail "Couldn't find a hosts file, please read the README.md"
 fi
 
+EXTRA_ARGS="--extra-vars \"image=michaelsevilla/emaster:1.7.1 docker_api_version=1.19 infra=$INFRA\""
 source $INFRA/bin/env.sh
 
 RUNNING=`docker ps -a`
@@ -58,16 +60,16 @@ if [ -z "$SCREEN" ]; then
   fi
 else
   XAUTH=`xauth list | grep $SCREEN`
-  ARGS="$ARGS \
-      -e DISPLAY=$DISPLAY \
-      -v /tmp/.X11-unix:/tmp/.X11-unix \
-      -e XAUTH=$XAUTH"
+  #ARGS="$ARGS \
+  #    -e DISPLAY=$DISPLAY \
+  #    -v /tmp/.X11-unix:/tmp/.X11-unix \
+  #    -e XAUTH=$XAUTH"
 fi
 
 echo "===> Experiment master will control all hosts listed in /infra/hosts"
 docker run $ARGS -d --entrypoint=/bin/bash $IMAGE 
 docker exec -it emaster cp /infra/hosts /tmp/hosts
-docker exec -it emaster /bin/bash -c "cd /infra/roles/emaster; ansible-playbook -k start.yml"
+docker exec -it emaster /bin/bash -c "cd /infra/roles/emaster; ansible-playbook -k $EXTRA_ARGS start.yml"
 docker exec emaster sed -i 's/ansible_ssh_user=[^=]*$/ansible_ssh_user=root\ /g' /tmp/hosts
 
 if [ "$?" -ne 0 ]; then

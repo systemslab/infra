@@ -1,0 +1,11 @@
+---
+# Defines deployment design and assigns role to server groups
+
+- include: cleanup.yml
+
+- hosts: workers
+  become: True
+  roles:
+  - gassyfs/deploy
+  # This needs to be be removed!
+  gather_facts: False

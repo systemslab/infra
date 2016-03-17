@@ -2,14 +2,14 @@
 Frequently Asked Questions
 ===
 
-These aren't really "frequently asked"... it's just a list of stuff that has given us a major headache.
+These are not really "frequently asked"... it is just a list of stuff that has given us a major headache.
 
 Questions and Answers
 =====================
 
 Here is a list of problems (and their solutions).
 
-Q: The container fails to pull down Ubuntu repos and can't seem to reach the internet
+Q: The container fails to pull down Ubuntu repos and cannot seem to reach the internet
 --------------------------------------------------------------------------------------
 
 This connectivity issue [1] is fixed with:
@@ -62,11 +62,34 @@ cd roles/hadoop/experiments
 ansible-playbook compile.yml
 ```
 
+Q: Ansible cannot gather facts, failing on "/bin/lsblk -ln --output UUID /dev/sda1"
+-----------------------------------------------------------------------------------
+
+Containers running VMs will hang if there are multiple accesses to the block device. This is a known issue that should be solved in Ansible 2.1, where we can specify which facts to gather. For now, run without the emaster/eslave if you are in a VM.
+
+Q: Docker kills ssh:
+--------------------
+
+Apparently, we cannot run Docker inside a container -- the following kills all services (Docker, ssh, etc.)
+
+```bash
+docker stop c0 c1; docker rm d0 c1
+```
+
+
 References
 ==========
 [1] http://serverfault.com/questions/642981/docker-containers-cant-resolve-dns-on-ubuntu-14-04-desktop-host
 [2] https://github.com/ansible/ansible-modules-core/issues/1792
 [3] https://github.com/docker/docker/issues/5704
 
+
+Advantages of Hathisar
+- incompatible docker, docker-py, CentoOS versions
+- no need to install ansible on the host
+- deleting files can use the ANsible modules instead of:
+  ```bash
+  docker exec ceph-mon rm -r /var/lib/ceph/osd
+  ```
 EOF
 

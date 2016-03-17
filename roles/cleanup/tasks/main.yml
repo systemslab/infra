@@ -1,0 +1,16 @@
+---
+# Author: Michael Sevilla
+# Cleanup containers on all nodes
+
+- name: remove containers {{ images }}
+  docker:
+    image: "{{ item }}"
+    state: absent
+  with_items: "{{ images }}"
+  when: images is defined
+
+- name: delete user defined files
+  file: path={{ item }} state=absent
+  with_items: delete
+  when: delete is defined
+

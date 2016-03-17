@@ -1,4 +1,3 @@
-experiments/localhost/hosts
-test/out
 hosts
 *.retry
+fetch

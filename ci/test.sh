@@ -1,27 +1,37 @@
 #!/bin/bash
+
+# this mimics the Travis build script
+
 set -e
+
+if [ -z $JOB ]; then
+  echo "ERROR: JOB is not specified"
+  echo "USAGE: JOB=\"experiments/ceph-experiments/radosbench\" ci/test.sh"
+  exit 1
+fi
+
 set -x
 
-if [ $(basename `pwd`) != "infra" ]; then fail "Please cd to infra"; fi
+# all experiments must have an experiment.yml file
+cd $JOB
 
-# configure infra to use Travis-ci's Docker version
-IMAGE="michaelsevilla/emaster:1.7.1"
-INFRA="`pwd`"
-TRAVIS_ARGS="--extra-vars \"image=michaelsevilla/emaster:1.7.1 docker_api_version=1.20\""
-
-# configure the hosts file
+# setup the hosts configuration file
 cp hosts.template hosts
-sed -i "s/<USERNAME>/${USER}/g" hosts
-cat hosts
+sed -i "s/<USERNAME>/$USER/g" hosts
 
-# mimic bin/emaster.sh
-source $INFRA/bin/env.sh
-docker run $ARGS -d --entrypoint=/bin/bash $IMAGE 
-docker exec emaster cp /infra/hosts /tmp/hosts
-docker exec emaster /bin/bash -c "touch ~/.ssh/config; chmod 600 ~/.ssh/config; chown root ~/.ssh/config"
-docker exec emaster /bin/bash -c "cd /infra/roles/emaster; ansible-playbook $TRAVIS_ARGS start.yml"
-docker exec emaster sed -i 's/ansible_ssh_user=[^=]*$/ansible_ssh_user=root\ /g' /tmp/hosts
-docker exec emaster /bin/bash -c "echo \"PORT 2223\" >> /etc/ssh/ssh_config"
+# TEST: Experiment Syntax
+ansible-playbook experiment.yml --syntax-check
+ansible-playbook cleanup.yml --syntax-check
 
-# run the job
-docker exec emaster /bin/bash -c "cd $DIR; ansible-playbook $TRAVIS_ARGS $JOB"
+# TEST: Experiment Deploy
+ansible-playbook --become --connection=local experiment.yml
+
+# TEST: Experiment Deploy Idempotence
+docker rm --force `docker ps -qa`
+ansible-playbook --become --connection=local cleanup.yml
+ansible-playbook --become --connection=local experiment.yml
+
+# TEST: Experiment Cleanup Idempotence
+docker rm --force `docker ps -qa`
+ansible-playbook --become --connection=local cleanup.yml
+ansible-playbook --become --connection=local cleanup.yml | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)

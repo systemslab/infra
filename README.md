@@ -9,29 +9,29 @@ This is the SRL's infrastructure repository for reproducibly running experiments
 Install
 ======
 
-On all nodes, [install Docker](https://docs.docker.com/engine/installation/).
+On all nodes, [install Docker](https://docs.docker.com/engine/installation/). On the head node, [install Ansible](http://docs.ansible.com/ansible/intro_installation.html).
 
 Quickstart
 ==========
 
-1. Tell me about your cluster:
+1. Pick an experiment:
+
+   ```bash
+   cd experiments/ceph-experiments/radosbench
+   ```
+
+2. Tell me about your cluster:
 
    ```bash
    cp hosts.template hosts
    vim hosts
    ```
 
-2. Start an ``experiment master``:
+3. Run the job:
 
     ```bash
-     bin/emaster.sh
+     ansible-playbook experiment.yml
      ```
-
-3. Run an experiment:
-
-    ```bash
-    ansible-playbook ceph/experiments/ceph.yml
-    ```
 
 Description
 ===========

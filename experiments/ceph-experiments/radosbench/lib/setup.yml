@@ -1,0 +1,5 @@
+---
+- hosts: osds
+  become: True
+  tasks:
+  - file: path=/var/lib/ceph/osd state=directory

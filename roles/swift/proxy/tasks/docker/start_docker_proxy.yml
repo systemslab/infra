@@ -1,0 +1,17 @@
+---
+- name: run the swift proxy docker image
+  docker:
+    image: "{{ swift_docker_username }}/{{ swift_docker_imagename }}"
+    name: "{{ ansible_hostname }}-port{{ item }}-proxy"
+    net: "host"
+    state: "running"
+    env: "IP={{ hostvars[inventory_hostname]['ansible_' + swift_proxy_docker_interface]['ipv4']['address'] }},PORT={{ item }},SWIFT_DAEMON=PROXY,{{ swift_proxy_extra_envs }}"
+    volumes: "/tmp/etc/swift/proxy{{ item }}/etc/swift:/etc/swift"
+    detach: true
+    tty: true
+  with_items: swift_proxy_docker_ports
+
+- pause: minutes=1
+- name: move configuration file to avoid re-starting this daemon
+  command: docker exec {{ ansible_hostname }}-port{{ item }}-proxy mv /etc/swift/proxy-server.conf /root/proxy-server.conf
+  with_items: swift_proxy_docker_ports

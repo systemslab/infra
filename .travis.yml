@@ -10,14 +10,12 @@ service:
 
 env:
   - JOB="experiments/ceph-experiments/radosbench"
+  - JOB="experiments/swift-experiments/largeobjects"
 
 script:
-  # all experiments must have an experiment.yml file
-  - cd $JOB
-
   # setup the hosts configuration file
+  - cd $JOB
   - cp hosts.template hosts
-  - sed -i "s/<USERNAME>/$USER/g" hosts
 
   # TEST: Experiment Syntax
   - ansible-playbook experiment.yml --syntax-check

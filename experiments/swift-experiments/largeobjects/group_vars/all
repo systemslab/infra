@@ -1,0 +1,28 @@
+---
+# Variables here are applicable to all host groups NOT roles
+
+fetch_directory: fetch/
+
+##########
+# DOCKER #
+##########
+install_docker: True
+
+swift_docker_username: michaelsevilla
+swift_docker_imagename: swiftdev
+
+swift_proxy_docker_interface: lo
+swift_proxy_docker_ports: [8080]
+swift_proxy_extra_envs: "SWIFT_NAME={{ ansible_hostname }}" # comma separated variables
+
+swift_object_docker_interface: lo
+swift_object_docker_ports: [6010, 6020, 6030, 6040]
+swift_object_extra_envs: "SWIFT_NAME={{ ansible_hostname }}" # comma separated variables
+
+swift_account_docker_interface: lo
+swift_account_docker_ports: [6012, 6022, 6032, 6042]
+swift_account_extra_envs: "SWIFT_NAME={{ ansible_hostname }}" # comma separated variables
+
+swift_container_docker_interface: lo
+swift_container_docker_ports: [6011, 6021, 6031, 6041]
+swift_container_extra_envs: "SWIFT_NAME={{ ansible_hostname }}" # comma separated variables

@@ -1,0 +1,11 @@
+[proxy-servers]
+localhost
+
+[object-servers]
+localhost
+
+[container-servers]
+localhost
+
+[account-servers]
+localhost

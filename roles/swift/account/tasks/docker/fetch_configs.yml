@@ -1,0 +1,16 @@
+---
+- name: make a directory for this container's config files
+  file: path=/tmp/etc/swift/account{{ item }}/etc/swift state=directory
+  with_items: swift_account_docker_ports
+
+- name: fetch swift config/keys; fails if ansible server is missing config/keys
+  copy:
+    src: "{{ fetch_directory }}/docker_swift_files/{{ item.0 }}"
+    dest: "/tmp/etc/swift/account{{ item.1 }}{{ item.0 }}"
+    owner: root
+    group: root
+    mode: 0644
+  changed_when: false
+  with_nested:
+    - swift_configs
+    - swift_account_docker_ports

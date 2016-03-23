@@ -1,5 +1,5 @@
 [mons]
-localhost ansible_ssh_user=<USERNAME> 
+localhost
 
 [osds]
-localhost ansible_ssh_user=<USERNAME> 
+localhost

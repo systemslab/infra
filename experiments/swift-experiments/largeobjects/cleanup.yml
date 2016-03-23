@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  become: True
+  roles:
+    - role: cleanup
+      delete:
+        - /etc/swift
+        - /tmp/etc/swift
+      images:
+        - michaelsevilla/swiftdev

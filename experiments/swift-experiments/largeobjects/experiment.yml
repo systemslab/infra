@@ -1,0 +1,20 @@
+---
+- include: lib/setup.yml
+- include: lib/site.yml
+
+- name: run some experiments
+  hosts: proxy-servers
+  tasks:
+    - include_vars: group_vars/client
+
+    - command: "{{ swift_client }} list"
+      register: result
+    - debug: var=result.stdout_lines
+
+    - command: "{{ swift_client }} post testcontainer"
+      register: result
+    - debug: var=result.stdout_lines
+
+    - command: "{{ swift_client }} list"
+      register: result
+    - debug: var=result.stdout_lines

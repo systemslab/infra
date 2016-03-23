@@ -1,0 +1,18 @@
+---
+- name: run the swift object daemon
+  docker:
+    image: "{{ swift_docker_username }}/{{ swift_docker_imagename }}"
+    name: "{{ ansible_hostname }}-port{{ item }}-object"
+    net: "host"
+    state: "running"
+    env: "IP={{ hostvars[inventory_hostname]['ansible_' + swift_object_docker_interface]['ipv4']['address'] }},PORT={{ item }},SWIFT_DAEMON=OBJECT,{{ swift_object_extra_envs }}"
+    volumes: "/tmp/etc/swift/object{{ item }}/etc/swift:/etc/swift"
+    detach: true
+    tty: true
+    privileged: true
+  with_items: swift_object_docker_ports
+
+- pause: minutes=1
+- name: move configuration file to avoid re-starting this daemon
+  command: docker exec {{ ansible_hostname }}-port{{ item }}-object mv /etc/swift/object-server.conf /root/object-server.conf
+  with_items: swift_object_docker_ports

@@ -6,7 +6,7 @@ set -e
 
 if [ -z $JOB ]; then
   echo "ERROR: JOB is not specified"
-  echo "USAGE: JOB=\"experiments/ceph-experiments/radosbench\" ci/test.sh"
+  echo "  JOB=\"experiments/ceph-experiments/radosbench\" ci/test.sh"
   exit 1
 fi
 
@@ -17,7 +17,6 @@ cd $JOB
 
 # setup the hosts configuration file
 cp hosts.template hosts
-sed -i "s/<USERNAME>/$USER/g" hosts
 
 # TEST: Experiment Syntax
 ansible-playbook experiment.yml --syntax-check

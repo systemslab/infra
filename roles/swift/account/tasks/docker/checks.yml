@@ -1,0 +1,34 @@
+---
+- name: set config and keys paths
+  set_fact:
+    swift_configs:
+      - /etc/swift/account-server.template
+      - /etc/swift/container-server.template
+      - /etc/swift/object-expirer.conf
+      - /etc/swift/proxy-server.template
+      - /etc/swift/container-reconciler.conf
+      - /etc/swift/container-sync-realms.conf
+      - /etc/swift/object-server.template
+      - /etc/swift/swift.conf
+      - /etc/swift/remakerings
+      - /etc/swift/object.ring.gz
+      - /etc/swift/object-1.ring.gz
+      - /etc/swift/object-2.ring.gz
+      - /etc/swift/account.ring.gz
+      - /etc/swift/container.ring.gz
+
+- name: stat for swift config and keys
+  stat:
+    path: "{{ item }}"
+  with_items: swift_configs
+  changed_when: false
+  failed_when: false
+  register: statleftover
+
+- name: fail if we find do not find the conf templates or rings
+  fail:
+    msg: "cannot find the server templates; does your site.yml have swift/common?"
+  with_together:
+    - swift_configs
+    - statleftover.results
+  when: item.1.stat.exists == false

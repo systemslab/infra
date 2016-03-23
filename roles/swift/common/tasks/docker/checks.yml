@@ -1,0 +1,42 @@
+---
+- name: set config and keys paths
+  set_fact:
+    swift_configs:
+      - /etc/swift/swift.conf
+      - /etc/swift/proxy-server.template
+      - /etc/swift/object-server.template
+      - /etc/swift/object-expirer.conf
+      - /etc/swift/account-server.template
+      - /etc/swift/container-server.template
+      - /etc/swift/container-reconciler.conf
+      - /etc/swift/container-sync-realms.conf
+
+- name: stat for swift config and keys
+  stat:
+    path: "{{ item }}"
+  with_items: swift_configs
+  changed_when: false
+  failed_when: false
+  register: statleftover
+
+- name: fail if we find existing cluster files
+  fail:
+    msg: "looks like no cluster is running but swift files are present, please remove them"
+  with_together:
+    - swift_configs
+    - statleftover.results
+  when: item.1.stat.exists == true
+
+- name: create configuration directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/swift
+
+- name: copy the ring script to the remote node
+  shell: dirname {{ playbook_dir }}
+  register: result
+- copy: src="{{ result.stdout }}/group_vars/remakerings" dest=/etc/swift/remakerings
+
+

@@ -28,3 +28,6 @@
 [submodule "roles/gassyfs"]
 	path = roles/gassyfs
 	url = https://github.com/michaelsevilla/gassyfs.git
+[submodule "roles/swift/docker-swift"]
+	path = roles/swift/docker-swift
+	url = https://github.com/michaelsevilla/docker-swift.git

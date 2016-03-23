@@ -1,0 +1,8 @@
+---
+# Variables here help us call the Swift client
+
+auth:  "http://{{ hostvars[inventory_hostname]['ansible_' + swift_proxy_docker_interface]['ipv4']['address'] }}:8080/auth/v1.0"
+user:  "test:tester"
+psswd: "testing"
+exec:  "docker exec {{ ansible_hostname }}-port8080-proxy"
+swift_client: "{{ exec }} swift -A {{ auth }} -U {{ user }} -K {{ psswd }} "

@@ -1,0 +1,24 @@
+---
+# Defines deployment design and assigns role to server groups
+
+- hosts: proxy-servers
+  become: True
+  roles:
+  - swift/common
+  - swift/proxy
+  serial: 1 # MUST be '1' WHEN DEPLOYING MONITORS ON DOCKER CONTAINERS
+
+- hosts: object-servers
+  become: True
+  roles:
+  - swift/object
+
+- hosts: account-servers
+  become: True
+  roles:
+  - swift/account
+
+- hosts: container-servers
+  become: True
+  roles:
+  - swift/container

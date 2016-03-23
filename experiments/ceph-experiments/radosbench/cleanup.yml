@@ -7,15 +7,5 @@
       delete:
         - /etc/ceph
         - /var/lib/ceph
-        #- /etc/ceph/ceph.client.admin.keyring
-        #- /etc/ceph/ceph.conf
-        #- /etc/ceph/monmap
-        #- /etc/ceph/ceph.mon.keyring
-        #- /var/lib/ceph/bootstrap-osd/ceph.keyring
-        #- /var/lib/ceph/bootstrap-rgw/ceph.keyring
-        #- /var/lib/ceph/bootstrap-mds/ceph.keyring
-        #- /var/lib/ceph/mon
-        #- /var/lib/ceph/mds
-        #- /var/lib/ceph/osd
       #images:
       #  - ceph/daemon

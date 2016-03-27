@@ -1,19 +1,19 @@
 #!/bin/bash
-
-# this mimics the Travis build script
-
-set -e
+# This mimics the Travis build script
 
 if [ -z $JOB ]; then
-  echo "ERROR: JOB is not specified"
-  echo "  JOB=\"experiments/ceph-experiments/radosbench\" ci/test.sh"
+  echo "ERROR: JOB is not specified; pick one from experiments directory"
+  echo "  JOB=\"ceph-experiments\" ci/test.sh"
   exit 1
 fi
 
+# emulate a clean Travis environment
+docker rm --force `docker ps -qa`
+set -e
 set -x
 
 # all experiments must have an experiment.yml file
-cd $JOB
+cd experiments/$JOB/template
 
 # setup the hosts configuration file
 cp hosts.template hosts

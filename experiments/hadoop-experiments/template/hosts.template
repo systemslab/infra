@@ -1,0 +1,11 @@
+[namenode]
+localhost
+
+[datanode]
+localhost
+
+[resourcemanager]
+localhost
+
+[nodemanager]
+localhost

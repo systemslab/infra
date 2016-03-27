@@ -1,0 +1,5 @@
+---
+# Variables here help us call the Swift client
+
+hadoop:   "docker exec {{ ansible_hostname }}-namenode /usr/local/hadoop/bin/hadoop"
+examples: "/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar"

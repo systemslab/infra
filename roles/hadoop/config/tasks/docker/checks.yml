@@ -1,0 +1,7 @@
+---
+- name: create configuration directory
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/hadoop

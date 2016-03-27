@@ -1,0 +1,27 @@
+---
+# Defines deployment design and assigns role to server groups
+
+- hosts: namenode
+  become: True
+  roles:
+  - hadoop/config
+  - hadoop/namenode
+
+- hosts: datanode
+  become: True
+  roles:
+  - hadoop/datanode
+
+- hosts: resourcemanager
+  become: True
+  roles:
+  - hadoop/resourcemanager
+
+- hosts: nodemanager
+  become: True
+  roles:
+  - hadoop/nodemanager
+
+- hosts: localhost
+  tasks:
+  - pause: minutes=1

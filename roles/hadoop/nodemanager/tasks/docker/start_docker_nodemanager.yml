@@ -2,10 +2,10 @@
 - name: run the hadoop nodemanager docker image
   docker:
     image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "{{ ansible_hostname }}-nodemanager"
+    name: "{{ container_name_nodemanager }}"
     net: "host"
     state: "running"
-    env: "HADOOP_DAEMON=NODEMANAGER,{{ hadoop_nodemanager_extra_envs }}"
-    volumes: "/etc/hadoop:/etc/hadoop,{{ deploy_dir }}/{{ code_dir }}/hadoop:/hadoop"
+    env: "HADOOP_DAEMON=NODEMANAGER"
+    volumes: "/etc/hadoop:/etc/hadoop"
     detach: true
     tty: true

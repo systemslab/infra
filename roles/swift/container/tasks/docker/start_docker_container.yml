@@ -11,8 +11,3 @@
     tty: true
     privileged: true
   with_items: swift_container_docker_ports
-
-- pause: minutes=1
-- name: move configuration file to avoid re-starting this daemon
-  command: docker exec {{ ansible_hostname }}-port{{ item }}-container mv /etc/swift/container-server.conf /root/container-server.conf
-  with_items: swift_container_docker_ports

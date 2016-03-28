@@ -8,13 +8,12 @@
     - include_vars: group_vars/client
 
     - command: "{{ swift_client }} list"
-      register: result
-    - debug: var=result.stdout_lines
-
     - command: "{{ swift_client }} post testcontainer"
+    - command: "{{ swift_client }} list"
       register: result
     - debug: var=result.stdout_lines
 
-    - command: "{{ swift_client }} list"
+    - command: "{{ swift_client }} upload testcontainer entrypoint.sh"
+    - command: "{{ swift_client }} list testcontainer"
       register: result
     - debug: var=result.stdout_lines

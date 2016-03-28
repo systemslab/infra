@@ -9,13 +9,13 @@ service:
   - docker
 
 env:
-  - JOB="ceph-experiments"
-  - JOB="swift-experiments"
-  - JOB="hadoop-experiments"
+  - JOB="experiments/ceph"
+  - JOB="experiments/swift"
+  - JOB="experiments/hadoop"
 
 script:
   # setup the hosts configuration file
-  - cd experiments/$JOB/template
+  - cd $JOB/template
   - cp hosts.template hosts
 
   # TEST: Experiment Syntax

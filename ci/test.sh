@@ -3,7 +3,7 @@
 
 if [ -z $JOB ]; then
   echo "ERROR: JOB is not specified; pick one from experiments directory"
-  echo "  JOB=\"ceph-experiments\" ci/test.sh"
+  echo "  JOB=\"ceph\" ci/test.sh"
   exit 1
 fi
 
@@ -13,7 +13,7 @@ set -e
 set -x
 
 # all experiments must have an experiment.yml file
-cd experiments/$JOB/template
+cd $JOB/template
 
 # setup the hosts configuration file
 cp hosts.template hosts

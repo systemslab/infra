@@ -5,5 +5,6 @@
     - role: cleanup
       delete:
         - /etc/hadoop
+        - /tmp/fetch
       #images:
       #  - michaelsevilla/hadoopdev

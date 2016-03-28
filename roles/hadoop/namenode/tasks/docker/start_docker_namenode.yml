@@ -2,10 +2,10 @@
 - name: run the hadoop namenode docker image
   docker:
     image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "{{ ansible_hostname }}-namenode"
+    name: "{{ container_name_namenode }}"
     net: "host"
     state: "running"
-    env: "HADOOP_DAEMON=NAMENODE,{{ hadoop_namenode_extra_envs }}"
-    volumes: "/etc/hadoop:/etc/hadoop,{{ deploy_dir }}/{{ code_dir }}/hadoop:/hadoop"
+    env: "HADOOP_DAEMON=NAMENODE"
+    volumes: "/etc/hadoop:/etc/hadoop"
     detach: true
     tty: true

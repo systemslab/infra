@@ -1,0 +1,17 @@
+---
+- name: figure out which configs we need to copy
+  local_action: "command ls {{ fetch_directory }}/docker_hadoop_files/"
+  register: confs
+
+- name: create a directory locally for the configs
+  file: path="/etc/hadoop" state=directory
+
+- name: try to fetch the configs
+  copy:
+    src: "{{ fetch_directory }}/docker_hadoop_files/{{ item }}"
+    dest: "/etc/hadoop/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  changed_when: false
+  with_items: confs.stdout_lines

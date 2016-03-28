@@ -2,20 +2,19 @@
 # Deploy Hadoop on the localhost 
 
 - include: lib/site.yml
+- include: lib/check.yml
 
 - hosts: namenode
   tasks:
     - include_vars: group_vars/client
 
+    - name: activate hdfs (since we reformatted)
+      command: "{{ hadoop }} dfsadmin -safemode leave"
+
     - name: upload a small file
-      command: "{{ hadoop }} dfs -copyFromLocal entrypoint.sh input"
+      command: "{{ hadoop }} dfs -copyFromLocal entrypoint.sh in"
 
     - name: run hadoop's wordcount job
-      command: "{{ hadoop }} jar {{ examples }} wordcount input output"
+      command: "{{ hadoop }} jar {{ examples }} wordcount in out"
       register: result
     - debug: var=result.stderr.split('\n')
-
-    - name: view the results
-      command: "{{ hadoop }} dfs -ls output"
-      register: result
-    - debug: var=result.stdout_lines

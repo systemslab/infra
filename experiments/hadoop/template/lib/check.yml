@@ -1,0 +1,26 @@
+---
+# Checks to see if all nodes came up
+
+- hosts: namenode
+  gather_facts: False
+  tasks:
+  - shell: docker ps | grep {{ container_name_namenode }}
+    changed_when: False
+
+- hosts: datanode
+  gather_facts: False
+  tasks:
+  - shell: docker ps | grep {{ container_name_datanode }}
+    changed_when: False
+
+- hosts: resourcemanager
+  gather_facts: False
+  tasks:
+  - shell: docker ps | grep {{ container_name_resourcemanager }}
+    changed_when: False
+
+- hosts: nodemanager 
+  gather_facts: False
+  tasks:
+  - shell: docker ps | grep {{ container_name_nodemanager }}
+    changed_when: False

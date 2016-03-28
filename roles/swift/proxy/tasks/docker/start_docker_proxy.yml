@@ -9,9 +9,5 @@
     volumes: "/tmp/etc/swift/proxy{{ item }}/etc/swift:/etc/swift"
     detach: true
     tty: true
-  with_items: swift_proxy_docker_ports
-
-- pause: minutes=1
-- name: move configuration file to avoid re-starting this daemon
-  command: docker exec {{ ansible_hostname }}-port{{ item }}-proxy mv /etc/swift/proxy-server.conf /root/proxy-server.conf
+    privileged: true
   with_items: swift_proxy_docker_ports

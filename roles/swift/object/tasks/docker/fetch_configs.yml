@@ -1,4 +1,22 @@
 ---
+- name: set config and keys paths
+  set_fact:
+    swift_configs:
+      - /etc/swift/account-server.template
+      - /etc/swift/container-server.template
+      - /etc/swift/object-expirer.conf
+      - /etc/swift/proxy-server.template
+      - /etc/swift/container-reconciler.conf
+      - /etc/swift/container-sync-realms.conf
+      - /etc/swift/object-server.template
+      - /etc/swift/swift.conf
+      - /etc/swift/remakerings
+      - /etc/swift/object.ring.gz
+      - /etc/swift/object-1.ring.gz
+      - /etc/swift/object-2.ring.gz
+      - /etc/swift/account.ring.gz
+      - /etc/swift/container.ring.gz
+
 - name: make a directory for this container's config files
   file: path=/tmp/etc/swift/object{{ item }}/etc/swift state=directory
   with_items: swift_object_docker_ports

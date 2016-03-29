@@ -4,7 +4,8 @@
   roles:
     - role: cleanup
       delete:
-        - /etc/hadoop
         - /tmp/fetch
-      images:
-        - michaelsevilla/hadoopdev
+        - /tmp/ssh
+        - /tmp/gassyfs
+      #images:
+      #  - michaelsevilla/gassyfs

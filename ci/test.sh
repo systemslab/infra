@@ -3,7 +3,7 @@
 
 if [ -z $JOB ]; then
   echo "ERROR: JOB is not specified; pick one from experiments directory"
-  echo "  JOB=\"ceph\" ci/test.sh"
+  echo "  JOB=\"experiments/ceph\" ci/test.sh"
   exit 1
 fi
 

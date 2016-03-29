@@ -1,0 +1,17 @@
+---
+# Checks to see if all nodes came up
+
+- hosts: master
+  gather_facts: False
+  tasks:
+  - shell: docker ps | grep {{ container_name_master }}
+    changed_when: False
+  - shell: docker exec {{ container_name_master }} mount | grep gassyfs
+    changed_when: False
+
+- hosts: worker
+  gather_facts: False
+  tasks:
+  - shell: docker ps | grep {{ container_name_worker }}
+    changed_when: False
+

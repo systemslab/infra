@@ -19,9 +19,6 @@
 [submodule "roles/hadoop/docker-hadoop"]
 	path = roles/hadoop/docker-hadoop
 	url = https://github.com/michaelsevilla/docker-hadoop.git
-[submodule "modules/ansible-xml"]
-	path = modules/ansible-xml
-	url = https://github.com/cmprescott/ansible-xml.git
 [submodule "roles/ceph/ceph-ansible"]
 	path = roles/ceph/ceph-ansible
 	url = https://github.com/ceph/ceph-ansible.git

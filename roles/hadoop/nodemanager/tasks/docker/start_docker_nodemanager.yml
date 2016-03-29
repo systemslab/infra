@@ -8,4 +8,3 @@
     env: "HADOOP_DAEMON=NODEMANAGER"
     volumes: "/etc/hadoop:/etc/hadoop"
     detach: true
-    tty: true

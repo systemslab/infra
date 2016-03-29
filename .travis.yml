@@ -12,8 +12,13 @@ env:
   - JOB="experiments/ceph"
   - JOB="experiments/swift"
   - JOB="experiments/hadoop"
+  - JOB="experiments/gassyfs"
 
 script:
+  # setup passwordless ssh
+  - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+  - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
   # setup the hosts configuration file
   - cd $JOB/template
   - cp hosts.template hosts

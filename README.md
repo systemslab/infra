@@ -9,34 +9,35 @@ This is the SRL's infrastructure repository for reproducibly running experiments
 Install
 ======
 
-On all nodes, [install Docker](https://docs.docker.com/engine/installation/). On the head node, [install Ansible](http://docs.ansible.com/ansible/intro_installation.html).
+Setup passwordless ssh and sudo on all nodes. On the head node [install Docker](https://docs.docker.com/engine/installation/).
 
 Quickstart
 ==========
 
-1. Pick an experiment:
+1. Start an experiment master and pick an experiment:
 
    ```bash
-   cd experiments/ceph-experiments/radosbench
+   $ bin/emaster.sh
+   [EXPERIMENT_MASTER] cd ceph/template
    ```
 
 2. Tell me about your cluster:
 
    ```bash
-   cp hosts.template hosts
-   vim hosts
+   [EXPERIMENT_MASTER] cp hosts.template hosts
+   [EXPERIMENT_MASTER] vim hosts
    ```
 
 3. Run the job:
 
     ```bash
-     ansible-playbook experiment.yml
+    [EXPERIMENT_MASTER] ansible-playbook experiment.yml
      ```
 
 Description
 ===========
 
-The experiment master orchestrates installation/deployment and runs experiments using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed and sets up passwordless login. To push the keys the script asks for a password.
+The experiment master orchestrates installation/deployment and runs experiments using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed. 
 
 Each system has two roles, for example foo and foo-build. The foo-build role builds code that is already sitting in a directory*. The foo role pushes the code to the remote node and launches, unarchives it, and attaches a container to the code base. Then it starts the container and starts the daemons for the service in the container.
 

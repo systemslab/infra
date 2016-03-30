@@ -7,9 +7,6 @@
 [submodule "roles/ceph/docker-cephdev"]
 	path = roles/ceph/docker-cephdev
 	url = https://github.com/ivotron/docker-cephdev.git
-[submodule "roles/emaster/docker-emaster"]
-	path = roles/emaster/docker-emaster
-	url = https://github.com/michaelsevilla/docker-emaster.git
 [submodule "roles/ceph/docker-parser"]
 	path = roles/ceph/docker-parser
 	url = https://github.com/michaelsevilla/docker-parser.git

@@ -9,18 +9,17 @@ service:
   - docker
 
 env:
-  - JOB="experiments/ceph"
-  - JOB="experiments/swift"
-  - JOB="experiments/hadoop"
-  - JOB="experiments/gassyfs"
+  - JOB="ceph/template"
+  - JOB="swift/template"
+  - JOB="hadoop/template"
+  - JOB="gassyfs/template"
+  - JOB="gassyfs/hot-storage15"
 
 script:
-  # setup passwordless ssh
+  # setup: passwordless ssh, hosts configuration, change to dir
   - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
   - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-
-  # setup the hosts configuration file
-  - cd $JOB/template
+  - cd experiments/$JOB
   - cp hosts.template hosts
 
   # TEST: Experiment Syntax
@@ -28,18 +27,18 @@ script:
   - ansible-playbook cleanup.yml --syntax-check
 
   # TEST: Experiment Deploy
-  - ansible-playbook --become --connection=local experiment.yml
+  - ansible-playbook --connection=local experiment.yml
+  - docker rm --force `docker ps -qa`
+  - ansible-playbook cleanup.yml
 
   # TEST: Experiment Deploy Idempotence
+  - ansible-playbook --connection=local experiment.yml
   - docker rm --force `docker ps -qa`
-  - ansible-playbook --become --connection=local cleanup.yml
-  - ansible-playbook --become --connection=local experiment.yml
+  - ansible-playbook cleanup.yml
 
   # TEST: Experiment Cleanup Idempotence
-  - docker rm --force `docker ps -qa`
-  - ansible-playbook --become --connection=local cleanup.yml
   - >
-    ansible-playbook --become --connection=local cleanup.yml
+    ansible-playbook cleanup.yml
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)

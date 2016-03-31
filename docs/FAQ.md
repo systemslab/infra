@@ -70,12 +70,16 @@ Containers running VMs will hang if there are multiple accesses to the block dev
 Q: Docker kills ssh:
 --------------------
 
-Apparently, we cannot run Docker inside a container -- the following kills all services (Docker, ssh, etc.)
+We cannot run Docker inside a container -- the following kills all services (Docker, ssh, etc.)
 
 ```bash
 docker stop c0 c1; docker rm d0 c1
 ```
 
+Q: It appears SSH hangs
+-----------------------
+
+This could be because: (1) it is waiting for a password, (2) you have strict host key checking on, or (3) Travis has slow SSH logins. This can be resolved with `--become`, `host_key_checking=False`, and `connection=local`/`connection=ssh`, respectively.
 
 References
 ==========

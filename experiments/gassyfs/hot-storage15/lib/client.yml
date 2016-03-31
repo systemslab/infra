@@ -1,0 +1,4 @@
+---
+- name: force ssh connection localhost experiments (e.g., Travis-ci)
+  set_fact: ansible_connection=ssh
+  when: ansible_connection == "local"

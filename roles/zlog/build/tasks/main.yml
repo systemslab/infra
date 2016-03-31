@@ -1,4 +1,0 @@
-# Author: Michael Sevilla
-# Build zlog 
-
-- include: build.yml

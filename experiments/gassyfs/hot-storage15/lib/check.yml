@@ -8,8 +8,10 @@
     shell: docker ps | grep {{ container_name_master }}
     changed_when: False
   - name: check if the master has gassyfs mounted
-    shell: docker exec {{ container_name_master }} mount | grep gassyfs
+    shell: docker exec {{ container_name_master }} mount | grep gassy
     changed_when: False
+    register: result
+  - debug: var=result.stdout_lines
 
 - hosts: worker
   gather_facts: False

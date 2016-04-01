@@ -22,3 +22,6 @@
 [submodule "roles/swift/docker-swift"]
 	path = roles/swift/docker-swift
 	url = https://github.com/michaelsevilla/docker-swift.git
+[submodule "experiments/sc16"]
+	path = experiments/sc16
+	url = https://github.com/michaelsevilla/sc16.git

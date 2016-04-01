@@ -2,12 +2,12 @@
 # Author: Michael Sevilla
 # Subject GassyFS to a sort
 
-- include: lib/site.yml
-- include: lib/check.yml
+- include: site/site.yml
+- include: site/check.yml
 
 - hosts: client
   tasks:
-    - include: lib/client.yml
+    - include: site/client.yml
 
     - name: get a 40MB input file
       get_url: 

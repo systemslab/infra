@@ -1,6 +1,6 @@
 ---
-- include: lib/setup.yml
-- include: lib/site.yml
+- include: site/setup.yml
+- include: site/site.yml
 
 - hosts: localhost
   tasks: 

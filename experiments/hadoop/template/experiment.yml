@@ -1,8 +1,8 @@
 # Author: Michael Sevilla
 # Deploy Hadoop on the localhost 
 
-- include: lib/site.yml
-- include: lib/check.yml
+- include: site/site.yml
+- include: site/check.yml
 
 - hosts: namenode
   tasks:

@@ -1,19 +1,19 @@
 ---
-- include: lib/setup.yml
-- include: lib/site.yml
+- include: site/setup.yml
+- include: site/site.yml
 
-#- name: run some experiments
-#  hosts: proxy-servers
-#  tasks:
-#    - include_vars: group_vars/client
-#
-#    - command: "{{ swift_client }} list"
-#    - command: "{{ swift_client }} post testcontainer"
-#    - command: "{{ swift_client }} list"
-#      register: result
-#    - debug: var=result.stdout_lines
-#
-#    - command: "{{ swift_client }} upload testcontainer entrypoint.sh"
-#    - command: "{{ swift_client }} list testcontainer"
-#      register: result
-#    - debug: var=result.stdout_lines
+- name: run some experiments
+  hosts: proxy-servers
+  tasks:
+    - include_vars: group_vars/client
+
+    - command: "{{ swift_client }} list"
+    - command: "{{ swift_client }} post testcontainer"
+    - command: "{{ swift_client }} list"
+      register: result
+    - debug: var=result.stdout_lines
+
+    - command: "{{ swift_client }} upload testcontainer entrypoint.sh"
+    - command: "{{ swift_client }} list testcontainer"
+      register: result
+    - debug: var=result.stdout_lines

@@ -1,4 +1,3 @@
-============================================
 Infra: a framework for running experiments
 ============================================
 
@@ -7,12 +6,15 @@ Infra: a framework for running experiments
 This is the SRL's infrastructure repository for reproducibly running experiments.
 
 Install
-======
+-------
 
-Setup passwordless ssh and sudo on all nodes. On the head node [install Docker](https://docs.docker.com/engine/installation/).
+On all nodes:
+
+1. Setup passwordless SSH and sudo
+2. Install [Docker](https://docs.docker.com/engine/installation/)
 
 Quickstart
-==========
+----------
 
 1. Start an experiment master and pick an experiment:
 
@@ -35,24 +37,43 @@ Quickstart
      ```
 
 Description
-===========
+-----------
 
-The experiment master orchestrates installation/deployment and runs experiments using Ansible. Nodes install packages using Docker images. When launching the experiment master, a Docker images with Ansible is pulled/installed. 
+This repository has the infrastructure (code, scripts, etc.) for running experiments and graphing results. It deploys, measures, and tears down different systems. Experiments are standalone; they require no extra software or setup. The systems we support are in the [roles](roles) directory and the experiments we run are in the [experiments](experiments) directory. 
 
-Each system has two roles, for example foo and foo-build. The foo-build role builds code that is already sitting in a directory*. The foo role pushes the code to the remote node and launches, unarchives it, and attaches a container to the code base. Then it starts the container and starts the daemons for the service in the container.
+The experiment master runs experiments using Ansible. Nodes install packages using Docker images. Each system has two roles, for example `foo` and `foo-build`.
 
-* We don't pull the code because some of the repositories we clone from are private and setting up the keys is a pain.
+- `foo-build` builds code that is already sitting in a directory. We do not pull the code because some of the repositories we clone from are private and setting up the keys is a pain.
+- `foo` pushes the code to the remote node and launchess it. It does this by attaching containers to the code and launching daemons.
+
 
 Motivation
-==========
+----------
 
 - Reproducibility: exchanging code and starting the systems for another person
 - Tuning and Benchmarking: running jobs overnight and fully utilizing the cluster
 - Performance Bug Fixes: automatically test multiple code revisions
 - Isolation: system libraries do not interfere with each other
 
+Repository Structure
+--------------------
+
+- ``bin``: install and experiment master scripts.
+
+- ``ci``: continuous integration test scripts.
+
+- ``docs``: documentation.
+
+- ``docker``: files for building the experiment master Docker image.
+
+- ``experiments``: configuration files for running benchmarks.
+
+- ``roles``: Ansible code for installing/deploying systems using Docker.
+
+
+
 Additional Resources
-====================
+--------------------
 
 See the [docs](docs) directory for additional developer resources.
 

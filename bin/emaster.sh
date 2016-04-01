@@ -6,7 +6,7 @@ docker rm -f emaster >> /dev/null 2>&1
 set -e
 
 # initial docker arguments
-ARGS="--name=emaster --net=host --rm -it --workdir=/infra/experiments"
+ARGS="--name=emaster --net=host --rm -it --workdir=/infra/experiments -v ${HOME}/.ssh:/root/.ssh"
 
 # figure out which directory we're in
 if [ $(basename `pwd`) == "bin" ]; then 

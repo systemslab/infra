@@ -18,6 +18,7 @@ authkey: "{{ lookup('file', '{{ ssh_dir }}/id_rsa.pub') }}"
 
 master_sshd_port: 2222
 worker_sshd_port: 2223
+ssh_servers: "localhost localhost"
 
 container_name_master: "gassyfs-master"
 container_name_worker: "gassyfs-worker"

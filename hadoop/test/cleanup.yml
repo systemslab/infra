@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: True
+  roles:
+    - role: cleanup
+      delete:
+        - /etc/hadoop
+        - /tmp/fetch
+      #images:
+      # - michaelsevilla/hadoopdev

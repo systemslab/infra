@@ -4,24 +4,15 @@
 [submodule "roles/baseball/docker-baseball"]
 	path = roles/baseball/docker-baseball
 	url = https://github.com/systemslab/docker-baseball.git
-[submodule "roles/ceph/docker-cephdev"]
-	path = roles/ceph/docker-cephdev
-	url = https://github.com/ivotron/docker-cephdev.git
-[submodule "roles/ceph/docker-parser"]
-	path = roles/ceph/docker-parser
-	url = https://github.com/michaelsevilla/docker-parser.git
-[submodule "roles/hadoop/docker-hadoop"]
-	path = roles/hadoop/docker-hadoop
-	url = https://github.com/michaelsevilla/docker-hadoop.git
-[submodule "roles/ceph/ceph-ansible"]
-	path = roles/ceph/ceph-ansible
-	url = https://github.com/ceph/ceph-ansible.git
-[submodule "roles/gassyfs"]
-	path = roles/gassyfs
-	url = https://github.com/michaelsevilla/gassyfs.git
-[submodule "roles/swift/docker-swift"]
-	path = roles/swift/docker-swift
-	url = https://github.com/michaelsevilla/docker-swift.git
 [submodule "experiments/sc16"]
 	path = experiments/sc16
 	url = https://github.com/michaelsevilla/sc16.git
+[submodule "swift/dockerfiles"]
+	path = swift/dockerfiles
+	url = https://github.com/michaelsevilla/docker-swift.git
+[submodule "hadoop/dockerfiles"]
+	path = hadoop/dockerfiles
+	url = https://github.com/michaelsevilla/docker-hadoop.git
+[submodule "ceph/ceph-ansible"]
+	path = ceph/ceph-ansible
+	url = https://github.com/ceph/ceph-ansible.git

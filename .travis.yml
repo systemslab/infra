@@ -9,17 +9,16 @@ service:
   - docker
 
 env:
-  - JOB="ceph/template"
-  - JOB="swift/template"
-  - JOB="hadoop/template"
-  - JOB="gassyfs/template"
-  - JOB="gassyfs/hot-storage15"
+  - JOB="ceph"
+  - JOB="hadoop"
+  - JOB="gassyfs"
+  - JOB="swift"
 
 script:
   # setup: passwordless ssh, hosts configuration, change to dir
   - ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
   - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-  - cd experiments/$JOB
+  - cd $JOB/test
   - cp hosts.template hosts
 
   # TEST: Experiment Syntax

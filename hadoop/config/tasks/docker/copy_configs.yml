@@ -1,0 +1,25 @@
+---
+- name: get the current directory
+  shell: dirname {{ playbook_dir }}
+  register: dir
+
+- name: figure out which configs the user has defined
+  connection: local
+  command: ls {{ dir.stdout }}/group_vars/conf
+  register: confs
+  ignore_errors: True
+
+- name: copy the user-defined configs to the remote note
+  copy: src={{ dir.stdout }}/group_vars/conf/{{ item }} dest=/etc/hadoop/{{ item }}
+  with_items: confs.stdout_lines
+
+- name: set config and keys paths
+  command: ls /etc/hadoop
+  register: ls
+
+- name: push hadoop files to the ansible server
+  fetch:
+    src: "/etc/hadoop/{{ item }}"
+    dest: "{{ fetch_directory }}/docker_hadoop_files/{{ item }}"
+    flat: yes
+  with_items: ls.stdout_lines

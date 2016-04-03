@@ -1,8 +1,0 @@
-commit:  ""
-pkgs: ""
-git_url: ""
-threads: 8
-cxxflags: ""
-cflags: ""
-code_dir:  "/tmp/docker/src"
-trace_dir: "/tmp/docker/trace"

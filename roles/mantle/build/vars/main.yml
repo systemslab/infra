@@ -1,7 +1,0 @@
-startup:   "none"
-git_url:   ""
-pkgs:      ""
-container: "mantle"
-sshd_port: "2222"
-code_dir:  "/tmp/docker/src"
-trace_dir: "/tmp/docker/trace"

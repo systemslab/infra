@@ -1,9 +1,9 @@
-Infra: a framework for running experiments
+srl-roles: code for deploying experiments
 ============================================
 
-[![Build Status](https://travis-ci.org/systemslab/infra.svg?branch=master)](https://travis-ci.org/systemslab/infra)
+[![Build Status](https://travis-ci.org/systemslab/srl-roles.svg?branch=master)](https://travis-ci.org/systemslab/srl-roles)
 
-This is the SRL's infrastructure repository for reproducibly running experiments.
+These are all the systems that the SRL uses in our experiments.
 
 Install
 -------
@@ -16,18 +16,17 @@ On all nodes:
 Quickstart
 ----------
 
-1. Start an experiment master and pick an experiment:
+1. Start an experiment master:
 
    ```bash
-   $ bin/emaster.sh
-   [EXPERIMENT_MASTER] cd ceph/template
+   ./emaster.sh
    ```
 
-2. Tell me about your cluster:
+2. Pick an experiment and configure it:
 
    ```bash
+   [EXPERIMENT_MASTER] cd roles/ceph/test
    [EXPERIMENT_MASTER] cp hosts.template hosts
-   [EXPERIMENT_MASTER] vim hosts
    ```
 
 3. Run the job:
@@ -39,12 +38,7 @@ Quickstart
 Description
 -----------
 
-This repository has the infrastructure (code, scripts, etc.) for running experiments and graphing results. It deploys, measures, and tears down different systems. Experiments are standalone; they require no extra software or setup. The systems we support are in the [roles](roles) directory and the experiments we run are in the [experiments](experiments) directory. 
-
-The experiment master runs experiments using Ansible. Nodes install packages using Docker images. Each system has two roles, for example `foo` and `foo-build`.
-
-- `foo-build` builds code that is already sitting in a directory. We do not pull the code because some of the repositories we clone from are private and setting up the keys is a pain.
-- `foo` pushes the code to the remote node and launchess it. It does this by attaching containers to the code and launching daemons.
+This repository has the infrastructure (code, scripts, etc.) for running experiments and graphing results. It deploys, measures, and tears down different systems. Experiments are standalone; they require no extra software or setup. 
 
 
 Motivation
@@ -55,26 +49,9 @@ Motivation
 - Performance Bug Fixes: automatically test multiple code revisions
 - Isolation: system libraries do not interfere with each other
 
-Repository Structure
---------------------
-
-- ``bin``: install and experiment master scripts.
-
-- ``ci``: continuous integration test scripts.
-
-- ``docs``: documentation.
-
-- ``docker``: files for building the experiment master Docker image.
-
-- ``experiments``: configuration files for running benchmarks.
-
-- ``roles``: Ansible code for installing/deploying systems using Docker.
-
-
-
 Additional Resources
 --------------------
 
-See the [docs](docs) directory for additional developer resources.
+See the [docs](docs) directory for information on setting up experiments and for additional developer resources.
 
 EOF

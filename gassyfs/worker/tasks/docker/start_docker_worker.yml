@@ -5,6 +5,17 @@
     name: "{{ container_name_worker }}"
     net: "host"
     state: "running"
-    env: "DAEMON=WORKER,SRC_DIR={{ src_directory }},SSHD_PORT={{ worker_sshd_port }},AUTHORIZED_KEYS=\"{{ authkey }}\""
-    volumes: "{{ src_directory }}:{{ src_directory }},/dev/shm:/dev/shm,/run/shm:/run/shm"
+    env: 
+      DAEMON: "WORKER"
+      SRC_DIR: "{{ src_directory }}"
+      SSHD_PORT: "{{ worker_sshd_port }}"
+      AUTHORIZED_KEYS: "{{ authkey }}"
+      INFINIBAND: "{{ infiniband }}"
+      GASNET_COMPILE_ARGS: "{{ gasnet_compile_args }}"
+      NO_UNIX_SOCKETS: 1 
+    volumes:
+      - "{{ src_directory }}/worker:{{ src_directory }}"
+      - "/dev/shm:/dev/shm"
+      - "/run/shm:/run/shm"
+      - "/tmp:/home"
     privileged: True

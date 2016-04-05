@@ -5,6 +5,19 @@
     name: "{{ container_name_master }}"
     net: "host"
     state: "running"
-    env: "DAEMON=MASTER,SSH_SERVERS=\"{{ ssh_servers }}\",SRC_DIR={{ src_directory }},SSH_PORT={{ worker_sshd_port }},SSHD_PORT={{ master_sshd_port }},AUTHORIZED_KEYS=\"{{ authkey }}\""
-    volumes: "{{ src_directory }}/master:{{ src_directory }},{{ ssh_tmpdir }}:/root/.ssh,/dev/shm:/dev/shm,/run/shm:/run/shm"
+    env: 
+      DAEMON: "MASTER"
+      SSH_SERVERS: "{{ ssh_servers }}"
+      SRC_DIR: "{{ src_directory }}"
+      SSH_PORT: "{{ worker_sshd_port }}"
+      SSHD_PORT: "{{ master_sshd_port }}"
+      AUTHORIZED_KEYS: "{{ authkey }}"
+      MOUNT_ARGS: "{{ mount_args }}"
+      INFINIBAND: "{{ infiniband }}"
+      GASNET_COMPILE_ARGS: "{{ gasnet_compile_args }}"
+    volumes:
+      - "{{ src_directory }}/master:{{ src_directory }}"
+      - "{{ ssh_tmpdir }}:/root/.ssh"
+      - "/dev/shm:/dev/shm"
+      - "/run/shm:/run/shm"
     privileged: True

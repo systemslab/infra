@@ -13,6 +13,8 @@
       INFINIBAND: "{{ infiniband }}"
       GASNET_COMPILE_ARGS: "{{ gasnet_compile_args }}"
       NO_UNIX_SOCKETS: 1 
+      GIT_URL: "{{ git_url }}"
+      GIT_COMMIT: "{{ git_commit }}"
     volumes:
       - "{{ src_directory }}/worker:{{ src_directory }}"
       - "/dev/shm:/dev/shm"

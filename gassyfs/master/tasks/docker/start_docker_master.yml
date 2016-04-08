@@ -15,6 +15,8 @@
       MOUNT_ARGS: "{{ mount_args }}"
       INFINIBAND: "{{ infiniband }}"
       GASNET_COMPILE_ARGS: "{{ gasnet_compile_args }}"
+      GIT_URL: "{{ git_url }}"
+      GIT_COMMIT: "{{ git_commit }}"
     volumes:
       - "{{ src_directory }}/master:{{ src_directory }}"
       - "{{ ssh_tmpdir }}:/root/.ssh"

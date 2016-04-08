@@ -20,17 +20,17 @@ cp hosts.template hosts
 
 # TEST: Experiment Syntax
 ansible-playbook experiment.yml --syntax-check
-ansible-playbook cleanup.yml --syntax-check
+ansible-playbook site/cleanup.yml --syntax-check
 
 # TEST: Experiment Deploy
-ansible-playbook --become --connection=local experiment.yml
+ansible-playbook --connection=local experiment.yml
 
 # TEST: Experiment Deploy Idempotence
 docker rm --force `docker ps -qa`
-ansible-playbook --become --connection=local cleanup.yml
-ansible-playbook --become --connection=local experiment.yml
+ansible-playbook --connection=local site/cleanup.yml
+ansible-playbook --connection=local experiment.yml
 
 # TEST: Experiment Cleanup Idempotence
 docker rm --force `docker ps -qa`
-ansible-playbook --become --connection=local cleanup.yml
-ansible-playbook --become --connection=local cleanup.yml | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)
+ansible-playbook --connection=local site/cleanup.yml
+ansible-playbook --connection=local site/cleanup.yml | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)

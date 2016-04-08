@@ -23,21 +23,21 @@ script:
 
   # TEST: Experiment Syntax
   - ansible-playbook experiment.yml --syntax-check
-  - ansible-playbook cleanup.yml --syntax-check
+  - ansible-playbook site/cleanup.yml --syntax-check
 
   # TEST: Experiment Deploy
   - ansible-playbook --connection=local experiment.yml
   - docker rm --force `docker ps -qa`
-  - ansible-playbook cleanup.yml
+  - ansible-playbook site/cleanup.yml
 
   # TEST: Experiment Deploy Idempotence
   - ansible-playbook --connection=local experiment.yml
   - docker rm --force `docker ps -qa`
-  - ansible-playbook cleanup.yml
+  - ansible-playbook site/cleanup.yml
 
   # TEST: Experiment Cleanup Idempotence
   - >
-    ansible-playbook cleanup.yml
+    ansible-playbook site/cleanup.yml
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)

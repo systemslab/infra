@@ -1,9 +1,7 @@
-# Author: Michael Sevilla
+---
 # Deploy GassyFS on the localhost
 
 - include: site/site.yml
-- include: site/check.yml
-
 - hosts: master
   tasks:
     - shell: docker exec {{ container_name_master }} /bin/bash -c "echo hi >> /mount/blah"

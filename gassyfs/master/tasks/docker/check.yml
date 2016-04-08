@@ -1,6 +1,6 @@
 ---
 - name: wait for gassyfs to start up
-  pause: minutes=1
+  pause: seconds=30
 
 - name: check if the master container is up
   shell: docker ps | grep {{ container_name_master }}

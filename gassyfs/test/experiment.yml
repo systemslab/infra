@@ -4,5 +4,12 @@
 - include: site/site.yml
 - hosts: client
   tasks:
+    - name: wait for gassyfs to mount
+      shell: mount | grep mount
+      register: result
+      retries: 200
+      until: result.rc == 0
+      no_log: True
+
     - shell: "echo hi >> /mount/blah"
     - shell: "cat /mount/blah"

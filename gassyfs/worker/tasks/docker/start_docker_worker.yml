@@ -12,6 +12,7 @@
       AUTHORIZED_KEYS: "{{ authkey }}"
       INFINIBAND: "{{ infiniband }}"
       GASNET_COMPILE_ARGS: "{{ gasnet_compile_args }}"
+      GASNET_MASTERIP: "{{ ansible_host }}"
       NO_UNIX_SOCKETS: 1 
       GIT_URL: "{{ git_url }}"
       GIT_COMMIT: "{{ git_commit }}"
@@ -19,5 +20,5 @@
       - "{{ src_directory }}/worker:{{ src_directory }}"
       - "/dev/shm:/dev/shm"
       - "/run/shm:/run/shm"
-      - "/tmp:/home"
+      - "{{ home_directory }}:/home"
     privileged: True

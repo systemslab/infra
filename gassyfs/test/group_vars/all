@@ -26,6 +26,7 @@ worker_sshd_port: 2223
 ###########
 fetch_directory: /tmp/fetch/
 src_directory: /tmp/gassyfs
+home_directory: /tmp/home
 ssh_tmpdir: "/tmp/ssh"
 ssh_dir: "~/.ssh"
 authkey: "{{ lookup('file', '{{ ssh_dir }}/id_rsa.pub') }}"

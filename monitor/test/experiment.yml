@@ -1,0 +1,4 @@
+---
+# Deploy monitors on all nodes and graphite on the head node
+
+- include: "site/site.yml"

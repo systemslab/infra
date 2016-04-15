@@ -1,0 +1,5 @@
+---
+graphite_docker_username: "michaelsevilla"
+graphite_docker_imagename: "graphite"
+apache_port: "8081"
+webui_port: "8080"

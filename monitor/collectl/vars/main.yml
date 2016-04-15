@@ -1,0 +1,7 @@
+---
+collectl_docker_username: "michaelsevilla"
+collectl_docker_imagename: "collectl"
+
+# monitor cpu/disk (CcDd) subsystems (s), 1 second intervals (i)
+# - send results to a graphite server
+args: "-sCcDd -i 1"

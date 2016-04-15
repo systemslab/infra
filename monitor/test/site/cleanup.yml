@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: True
+  roles:
+    - role: cleanup
+      #images:
+      #  - michaelsevilla/graphite
+      #  - michaelsevilla/collectl

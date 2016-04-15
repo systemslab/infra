@@ -19,3 +19,6 @@
 [submodule "gassyfs/dockerfiles"]
 	path = gassyfs/dockerfiles
 	url = https://github.com/michaelsevilla/gassyfs.git
+[submodule "ceph/dockerfiles"]
+	path = ceph/dockerfiles
+	url = https://github.com/michaelsevilla/docker-cephdev.git

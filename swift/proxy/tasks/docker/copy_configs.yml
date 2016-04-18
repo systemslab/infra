@@ -1,4 +1,15 @@
 ---
+- name: figure out which configs the user has defined
+  connection: local
+  command: ls {{ dir.stdout }}/group_vars/swift_conf
+  register: confs
+  ignore_errors: True
+
+- name: copy the user-defined configs to the remote note
+  copy: src={{ dir.stdout }}/group_vars/swift_conf/{{ item }} dest=/etc/swift/{{ item }}
+  with_items: confs.stdout_lines
+  when: confs is defined
+
 - name: set config and keys paths
   set_fact:
     swift_configs:

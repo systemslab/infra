@@ -1,0 +1,17 @@
+---
+# Variables for the Swift account server
+
+##########
+# DOCKER #
+##########
+install_docker: "False"                 # Install docker/docker-py on host
+swift_docker_username: "michaelsevilla" # Docker username
+swift_docker_imagename: "swiftdev"      # Docker image name
+fetch_directory: "/tmp/fetch"           # Where to get configs from
+
+##########
+# SERVER #
+##########
+swift_account_docker_interface: eth0      # Ethernet device to use
+swift_account_docker_ports: [6012]        # Multiple ports starts account servers
+swift_account_extra_envs: "SWIFT_NAME={{ ansible_hostname }}" # comma separated variables

@@ -1,12 +1,9 @@
 ---
-- include: site/setup.yml
 - include: site/site.yml
 
 - name: run some experiments
-  hosts: proxy-servers
+  hosts: client
   tasks:
-    - include_vars: group_vars/client
-
     - command: "{{ swift_client }} list"
     - command: "{{ swift_client }} post testcontainer"
     - command: "{{ swift_client }} list"

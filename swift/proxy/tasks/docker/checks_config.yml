@@ -34,9 +34,8 @@
   with_items:
     - /etc/swift
 
-- name: copy the ring script to the remote node
+- name: get the current directory
   shell: dirname {{ playbook_dir }}
-  register: result
-- copy: src="{{ result.stdout }}/group_vars/remakerings" dest=/etc/swift/remakerings
-
+  register: dir
+- copy: src="{{ dir.stdout }}/group_vars/swift_conf/remakerings" dest=/etc/swift/remakerings
 

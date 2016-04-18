@@ -1,0 +1,17 @@
+---
+# Variables for the Swift proxy
+
+##########
+# DOCKER #
+##########
+install_docker: "False"                 # Install docker/docker-py on host
+swift_docker_username: "michaelsevilla" # Docker username
+swift_docker_imagename: "swiftdev"      # Docker image name
+fetch_directory: "/tmp/fetch"           # Where to get configs from
+
+##########
+# SERVER #
+##########
+swift_proxy_docker_interface: eth0      # Ethernet device to use
+swift_proxy_docker_ports: [8080]        # Multiple ports starts multiple proxies on the same node
+swift_proxy_extra_envs: "SWIFT_NAME={{ ansible_hostname }}" # comma separated variables

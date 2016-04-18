@@ -9,9 +9,8 @@
   failed_when: false
   register: statleftover
 
-- name: fail if we find do not find the server templates
-  fail:
-    msg: "cannot find the server templates; does your site.yml have swift/common?"
+- name: fail if we do not find the server templates
+  fail: msg="cannot find the server templates; does your site.yml have swift/common?"
   with_together:
     - swift_configs
     - statleftover.results

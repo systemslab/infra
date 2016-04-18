@@ -9,11 +9,11 @@ service:
   - docker
 
 env:
-  - JOB="ceph"
-  - JOB="hadoop"
-  - JOB="gassyfs"
+  #- JOB="ceph"
+  #- JOB="hadoop"
+  #- JOB="gassyfs"
   - JOB="swift"
-  - JOB="monitor"
+  #- JOB="monitor"
 
 script:
   # setup: passwordless ssh, hosts configuration, change to dir

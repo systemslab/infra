@@ -1,11 +1,14 @@
-[proxy-servers]
+[swift-proxy]
 localhost
 
-[object-servers]
+[swift-object]
 localhost
 
-[container-servers]
+[swift-container]
 localhost
 
-[account-servers]
+[swift-account]
+localhost
+
+[client]
 localhost

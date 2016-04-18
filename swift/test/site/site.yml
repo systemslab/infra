@@ -1,24 +1,23 @@
 ---
 # Defines deployment design and assigns role to server groups
 
-- hosts: proxy-servers
+- hosts: swift-proxy
   become: True
   roles:
-  - swift/common
   - swift/proxy
   serial: 1
 
-- hosts: object-servers
+- hosts: swift-object
   become: True
   roles:
   - swift/object
 
-- hosts: account-servers
+- hosts: swift-account
   become: True
   roles:
   - swift/account
 
-- hosts: container-servers
+- hosts: swift-container
   become: True
   roles:
   - swift/container

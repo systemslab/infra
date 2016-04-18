@@ -1,9 +1,8 @@
 ---
-- include: site/setup.yml
 - include: site/site.yml
 
 - name: run some experiments
-  hosts: proxy-servers
+  hosts: swift-proxy
   tasks:
     - include_vars: group_vars/client
 

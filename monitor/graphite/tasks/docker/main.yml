@@ -4,11 +4,12 @@
 - include: selinux.yml
   when: ansible_os_family == 'RedHat'
 
-- name: start collectl
+- name: start graphite
   docker:
-    image: "{{ collectl_docker_username }}/{{ collectl_docker_imagename }}"
-    name: "collectl"
+    image: "{{ graphite_docker_username }}/{{ graphite_docker_imagename }}"
+    name: "graphite"
     net: "host"
     state: "running"
-    env: 
-      ARGS: "{{ args }} --export graphite,{{ groups.graphite[0] }}"
+    env:
+      APACHE_PORT: "8081"
+      WEBUI_PORT: "8080"

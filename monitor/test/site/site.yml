@@ -1,12 +1,12 @@
 # Author: Michael Sevilla
 # Deploy the monitoring framework
 
-# This must be deployed first! We need to tell the 
-# workers who to connect to
 - hosts: graphite
+  become: True
   roles:
     - monitor/graphite
 
 - hosts: workers
+  become: True
   roles:
     - monitor/collectl

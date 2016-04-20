@@ -1,0 +1,5 @@
+---
+# Deploy Keystone on the localhost 
+# (this should be enough for CI, since we configure it in the role)
+
+- include: site/site.yml

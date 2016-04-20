@@ -1,0 +1,7 @@
+---
+# Defines deployment design and assigns role to server groups
+
+- hosts: keystone
+  become: True
+  roles:
+  - keystone

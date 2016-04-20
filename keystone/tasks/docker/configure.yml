@@ -1,0 +1,45 @@
+---
+# These are adapted from Radek's directions and https://www.swiftstack.com/docs/integration/keystone.html
+
+- name: make it easier for us to execute keystone command
+  set_fact: keystone="docker exec keystone keystone"
+
+- name: add an admin role
+  command: "{{ keystone }} --os-endpoint http://127.0.0.1:35357/v2.0  --os-token ADMIN role-create --name admin"
+
+- name: setup the swift service
+  command: "{{ keystone }} service-create --name=swift --type=object-store --description=\"Swift Service\""
+
+- name: create the service tenant
+  command: "{{ keystone }} tenant-create --name=service --description=\"Service Tenant\""
+
+- name: get the tenant id
+  shell: "{{ keystone }} tenant-get service | grep id | awk '{print $4}'"
+  register: tenantid
+
+- name: create the admin user account
+  command: "{{ keystone }} user-create --name=swift --pass=password --tenant-id {{ tenantid.stdout }}"
+
+- name: get the admin role id
+  shell: "{{ keystone }} role-list | grep admin | awk '{print $2}'"
+  register: roleid
+
+- name: the the swift user id
+  shell: "{{ keystone }} user-list | grep swift | awk '{print $2}'"
+  register: swiftid
+
+- name: assign admin role to add to admin user
+  command: "{{ keystone }} user-role-add --user-id {{ swiftid.stdout }} --role-id {{ roleid.stdout }} --tenant-id {{ tenantid.stdout }}"
+
+- name: get the service id
+  shell: "{{ keystone }} service-get swift | grep id | awk '{print $4}'"
+  register: serviceid
+
+- name: create the swift endpoint
+  command: "{{ keystone }} endpoint-create --service {{ serviceid.stdout }} --publicurl {{ endpoint_public }} --internalurl {{ endpoint_private }} --adminurl {{ endpoint_admin }} --region RegionOne"
+
+- name: add users to the swift service
+  command: "{{ keystone }} tenant-create --name=root"
+
+- name: enable the new user
+  command: "{{ keystone }} user-create --name=root --pass=ssmssm99 --tenant-id=root --enabled=true"

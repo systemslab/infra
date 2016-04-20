@@ -14,6 +14,7 @@ env:
   - JOB="gassyfs"
   - JOB="swift"
   - JOB="monitor"
+  - JOB="keystone"
 
 script:
   # setup: passwordless ssh, hosts configuration, change to dir

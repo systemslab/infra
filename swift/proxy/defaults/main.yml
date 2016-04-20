@@ -15,3 +15,8 @@ fetch_directory: "/tmp/fetch"           # Where to get configs from
 swift_proxy_docker_interface: eth0      # Ethernet device to use
 swift_proxy_docker_ports: [8080]        # Multiple ports starts multiple proxies on the same node
 swift_proxy_extra_envs: "SWIFT_NAME={{ ansible_hostname }}" # comma separated variables
+
+############
+# KEYSTONE #
+############
+keystone_port: "5000"                   # Where to contact keystone

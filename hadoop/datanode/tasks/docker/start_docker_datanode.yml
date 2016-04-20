@@ -2,10 +2,10 @@
 - name: run the hadoop datanode docker image
   docker:
     image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "{{ container_name_datanode }}"
+    name: "hadoop-datanode"
     net: "host"
     state: "running"
-    env: "HADOOP_DAEMON=DATANODE"
+    env: "HADOOP_DAEMON=DATANODE,HADOOP_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*,YARN_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*"
     volumes: "/etc/hadoop:/etc/hadoop"
     detach: true
     tty: true

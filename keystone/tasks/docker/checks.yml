@@ -1,0 +1,18 @@
+---
+- name: stat for swift config and keys
+  stat:
+    path: "/tmp/etc/swift/proxy{{ item.1 }}{{ item.0 }}"
+  with_nested:
+    - swift_configs
+    - swift_proxy_docker_ports
+  changed_when: false
+  failed_when: false
+  register: statleftover
+
+- name: fail if we find do not find the server templates
+  fail:
+    msg: "cannot find the server templates; does your site.yml have swift/common?"
+  with_together:
+    - swift_configs
+    - statleftover.results
+  when: item.1.stat.exists == false

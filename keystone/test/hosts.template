@@ -1,5 +1,2 @@
-[master]
-localhost
-
-[worker]
+[keystone]
 localhost

@@ -15,9 +15,15 @@
   set_fact:
     server_types: [container, account, object]
     conf: "/etc/swift"
-- command: mv {{ conf }}/{{ item }}-server/1.conf {{ conf }}/{{ item }}-server.template
+
+- name: grab the first configuration file and make it the template
+  command: mv {{ conf }}/{{ item }}-server/1.conf {{ conf }}/{{ item }}-server.template
   with_items: server_types
-- file: path={{ conf }}/{{ item }}-server state=absent
+
+- name: remove all other confs
+  file: path={{ conf }}/{{ item }}-server state=absent
   with_items: server_types
-- command: mv {{ conf }}/proxy-server.conf {{ conf }}/proxy-server.template
+
+- name: create the proxy conf
+  command: mv {{ conf }}/proxy-server.conf {{ conf }}/proxy-server.template
 

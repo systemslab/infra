@@ -1,0 +1,3 @@
+---
+swift_account_docker_interface: lo                   # Travis has weird nics
+swift_account_docker_ports: [6012, 6022, 6032, 6042] # Start 4 account servers 

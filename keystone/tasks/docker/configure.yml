@@ -1,5 +1,5 @@
 ---
-# These are adapted from Radek's directions and https://www.swiftstack.com/docs/integration/keystone.html
+# These are adapted from https://www.swiftstack.com/docs/integration/keystone.html
 
 - name: make it easier for us to execute keystone command
   set_fact: keystone="docker exec keystone keystone"

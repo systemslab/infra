@@ -1,0 +1,3 @@
+---
+swift_proxy_docker_interface: lo  # Travis has weird nics
+swift_proxy_docker_ports: [8080]  # Only 1 proxyer server

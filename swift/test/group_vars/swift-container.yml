@@ -1,0 +1,3 @@
+---
+swift_container_docker_interface: lo                   # Travis has weird nics
+swift_container_docker_ports: [6011, 6021, 6031, 6041] # Start 4 container servers

@@ -4,7 +4,7 @@
 ##########
 # DOCKER #
 ##########
-install_docker: "False"                 # Install docker/docker-py on host
+install_docker: "True"                  # Install docker/docker-py on host
 swift_docker_username: "michaelsevilla" # Docker username
 swift_docker_imagename: "swiftdev"      # Docker image name
 fetch_directory: "/tmp/fetch"           # Where to get configs from

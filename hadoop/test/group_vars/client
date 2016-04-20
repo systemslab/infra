@@ -3,4 +3,4 @@
 
 hadoop_bin: "/usr/local/hadoop/bin/hadoop"
 examples:   "/usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.1.jar"
-hadoop:     "docker exec {{ container_name_namenode }} {{ hadoop_bin }}"
+hadoop:     "docker exec hadoop-namenode {{ hadoop_bin }}"

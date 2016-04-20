@@ -1,0 +1,4 @@
+---
+swift_object_docker_interface: lo                     # Travis has weird nics
+swift_object_docker_ports: [6010, 6020, 6030, 6040]   # Start 4 object servers
+

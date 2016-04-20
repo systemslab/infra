@@ -1,0 +1,17 @@
+---
+# Variables for the keystone role
+
+##########
+# DOCKER #
+##########
+install_docker: "True"                     # Install docker/docker-py on host
+keystone_docker_username: "michaelsevilla" # Docker username
+keystone_docker_imagename: "keystone"      # Docker image name
+
+##########
+# SERVER #
+##########
+keystone_port: "5000"                      # Port for clients
+endpoint_public: "http://localhost:8080/v1/AUTH_$(tenant_id)s" # Swift proxy
+endpoint_private: "http://localhost:8080/v1/AUTH_$(tenant_id)s" # Swift proxy
+endpoint_admin: "http://localhost:8080"    # Swit proxy

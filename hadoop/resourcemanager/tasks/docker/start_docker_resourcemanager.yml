@@ -2,10 +2,10 @@
 - name: run the hadoop resourcemanager docker image
   docker:
     image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "{{ container_name_resourcemanager }}"
+    name: "hadoop-resourcemanager"
     net: "host"
     state: "running"
-    env: "HADOOP_DAEMON=RESOURCEMANAGER"
+    env: "HADOOP_DAEMON=RESOURCEMANAGER,HADOOP_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*,YARN_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*"
     volumes: "/etc/hadoop:/etc/hadoop"
     detach: true
     tty: true

@@ -2,11 +2,11 @@
 - name: generate hadoop configs 
   docker:
     image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "{{ ansible_hostname }}-config"
+    name: "hadoop-config"
     net: "host"
     state: "running"
     env: "HADOOP_DAEMON=CONFIG"
     volumes: "/etc/hadoop:/etc/hadoop"
 
 - name: wait for the container to populate the configs
-  shell: docker wait {{ ansible_hostname }}-config
+  shell: docker wait hadoop-config

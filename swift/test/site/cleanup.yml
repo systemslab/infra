@@ -4,7 +4,8 @@
   roles:
     - role: cleanup
       delete:
-        - /etc/swift
-        - /tmp/etc/swift
+        - "/etc/swift"
+        - "/tmp/etc/swift"
+        - "/tmp/fetch"
       #images:
       #  - michaelsevilla/swiftdev

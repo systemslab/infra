@@ -15,7 +15,7 @@
 	url = https://github.com/michaelsevilla/docker-hadoop.git
 [submodule "ceph/ceph-ansible"]
 	path = ceph/ceph-ansible
-	url = https://github.com/ceph/ceph-ansible.git
+	url = https://github.com/michaelsevilla/ceph-ansible.git
 [submodule "gassyfs/dockerfiles"]
 	path = gassyfs/dockerfiles
 	url = https://github.com/michaelsevilla/gassyfs.git

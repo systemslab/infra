@@ -2,6 +2,7 @@
 # Variables here override the default configurations, which can be found in the
 # ceph-ansible roles directory
 
+fsid: "e9570dd8-03ad-45f0-8a74-ec9b3bb7095f"
 ceph_origin: 'upstream' # or 'distro'
 ceph_stable_release: infernalis 
 monitor_interface: eth0

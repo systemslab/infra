@@ -15,7 +15,7 @@ else
 fi
 
 sed -i "s/Listen 80/Listen $APACHE_PORT/g" /etc/apache2/ports.conf
-service apache2 start
+service apache2 restart
 
 ./bin/carbon-cache.py start
 ./bin/run-graphite-devel-server.py /opt/graphite

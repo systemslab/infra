@@ -5,7 +5,7 @@
     name: "{{ ansible_hostname }}-port{{ item }}-container"
     net: "host"
     state: "running"
-    env: "IP={{ hostvars[inventory_hostname]['ansible_' + swift_container_docker_interface]['ipv4']['address'] }},PORT={{ item }},SWIFT_DAEMON=CONTAINER,{{ swift_container_extra_envs }}"
+    env: "IP={{ ansible_host }},PORT={{ item }},SWIFT_DAEMON=CONTAINER,{{ swift_container_extra_envs }}"
     volumes: "/tmp/etc/swift/container{{ item }}/etc/swift:/etc/swift"
     detach: true
     tty: true

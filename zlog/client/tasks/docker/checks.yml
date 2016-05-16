@@ -1,0 +1,11 @@
+---
+- name: set config and keys paths
+  set_fact:
+    ceph_config_keys:
+      - /etc/ceph/ceph.client.admin.keyring
+      - /etc/ceph/ceph.conf
+      - /etc/ceph/monmap
+      - /etc/ceph/ceph.mon.keyring
+      - /var/lib/ceph/bootstrap-osd/ceph.keyring
+      - /var/lib/ceph/bootstrap-rgw/ceph.keyring
+      - /var/lib/ceph/bootstrap-mds/ceph.keyring

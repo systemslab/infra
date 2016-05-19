@@ -1,13 +1,13 @@
 ---
 - name: run the swift proxy docker image
-  docker:
-    image: "{{ swift_docker_username }}/{{ swift_docker_imagename }}"
-    name: "{{ ansible_hostname }}-port{{ item }}-proxy"
-    net: "host"
-    state: "running"
-    env: "IP={{ ansible_host }},PORT={{ item }},SWIFT_DAEMON=PROXY,{{ swift_proxy_extra_envs }}"
-    volumes: "/tmp/etc/swift/proxy{{ item }}/etc/swift:/etc/swift"
-    detach: true
-    tty: true
-    privileged: true
+  shell: >
+         docker run -it -d \
+         --name "{{ ansible_hostname }}-port{{ item }}-proxy" \
+         --net host \
+         --privileged \
+         -e "IP={{ ansible_host }}" \
+         -e "PORT={{ item }}" \
+         -e "SWIFT_DAEMON=PROXY" \
+         -v "/tmp/etc/swift/proxy{{ item }}/etc/swift:/etc/swift" \
+         "{{ swift_docker_username }}/{{ swift_docker_imagename }}"
   with_items: swift_proxy_docker_ports

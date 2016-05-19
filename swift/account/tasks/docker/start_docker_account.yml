@@ -1,13 +1,13 @@
 ---
 - name: run the swift account daemon
-  docker:
-    image: "{{ swift_docker_username }}/{{ swift_docker_imagename }}"
-    name: "{{ ansible_hostname }}-port{{ item }}-account"
-    net: "host"
-    state: "running"
-    env: "IP={{ ansible_host }},PORT={{ item }},SWIFT_DAEMON=ACCOUNT,{{ swift_account_extra_envs }}"
-    volumes: "/tmp/etc/swift/account{{ item }}/etc/swift:/etc/swift"
-    detach: true
-    tty: true
-    privileged: true
+  shell: >
+         docker run -it -d \
+           --name "{{ ansible_hostname }}-port{{ item }}-account" \
+           --net host \
+           --privileged \
+           -e "IP={{ ansible_host }}" \
+           -e "PORT={{ item }}" \
+           -e "SWIFT_DAEMON=ACCOUNT" \
+           -v "/tmp/etc/swift/account{{ item }}/etc/swift:/etc/swift" \
+           "{{ swift_docker_username }}/{{ swift_docker_imagename }}" 
   with_items: swift_account_docker_ports

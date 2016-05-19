@@ -1,12 +1,12 @@
 ---
 - name: generate Swift configs 
-  docker:
-    image: "{{ swift_docker_username }}/{{ swift_docker_imagename }}"
-    name: "{{ ansible_hostname }}-config"
-    net: "host"
-    state: "running"
-    env: "SWIFT_DAEMON=CONFIG"
-    volumes: "/etc/swift:/etc/swift"
+  shell: >
+         docker run \
+         --name "{{ ansible_hostname }}-config" \
+         --net host \
+         -e "SWIFT_DAEMON=CONFIG" \
+         -v "/etc/swift:/etc/swift" \
+         "{{ swift_docker_username }}/{{ swift_docker_imagename }}"
 
 - name: wait for the container to populate the configs
   shell: docker wait {{ ansible_hostname }}-config

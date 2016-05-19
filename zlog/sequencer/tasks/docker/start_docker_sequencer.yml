@@ -1,0 +1,9 @@
+---
+- name: run the zlog sequencer docker image
+  shell: >
+         docker run -d \
+           --name=zlog-sequencer \
+           --net=host \
+           -v /etc/ceph:/etc/ceph \
+           "{{ ceph_sequencer_docker_username }}/{{ ceph_sequencer_docker_imagename }}" \
+           --port 5678 --report-sec 10

@@ -1,0 +1,13 @@
+---
+# You can override vars by using host or group vars
+
+###########
+# GENERAL #
+###########
+
+fetch_directory: fetch/
+copy_admin_key: false
+cephx: true
+
+ceph_zlog_client_docker_username: ceph
+ceph_zlog_client_docker_imagename: daemon

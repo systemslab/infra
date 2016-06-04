@@ -18,4 +18,4 @@ sed -i "s/Listen 80/Listen $APACHE_PORT/g" /etc/apache2/ports.conf
 service apache2 restart
 
 ./bin/carbon-cache.py start
-./bin/run-graphite-devel-server.py /opt/graphite
+./bin/run-graphite-devel-server.py --port $WEBUI_PORT /opt/graphite

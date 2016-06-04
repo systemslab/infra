@@ -12,5 +12,5 @@
     state: "running"
     volumes: "/tmp/graphite:/tmp/graphite"
     env:
-      APACHE_PORT: "8081"
-      WEBUI_PORT: "8080"
+      APACHE_PORT: "{{ apache_port }}"
+      WEBUI_PORT: "{{ webui_port }}"

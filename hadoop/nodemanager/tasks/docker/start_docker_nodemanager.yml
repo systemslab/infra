@@ -1,10 +1,11 @@
 ---
 - name: run the hadoop nodemanager docker image
-  docker:
-    image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "hadoop-nodemanager"
-    net: "host"
-    state: "running"
-    env: "HADOOP_DAEMON=NODEMANAGER,HADOOP_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*,YARN_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*"
-    volumes: "/etc/hadoop:/etc/hadoop"
-    detach: true
+  shell: >
+    docker run -d \
+      --name "hadoop-nodemanager" \
+      --net "host" \
+      -e "HADOOP_DAEMON=NODEMANAGER" \
+      -e "HADOOP_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*" \
+      -e "YARN_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*" \
+      -v "/etc/hadoop:/etc/hadoop" \
+      "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"

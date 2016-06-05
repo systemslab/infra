@@ -1,11 +1,11 @@
 ---
 - name: run the hadoop namenode docker image
-  docker:
-    image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "hadoop-namenode"
-    net: "host"
-    state: "running"
-    env: "HADOOP_DAEMON=NAMENODE,HADOOP_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*,YARN_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*"
-    volumes: "/etc/hadoop:/etc/hadoop"
-    detach: true
-    tty: true
+  shell: >
+    docker run -dt \
+      --name "hadoop-namenode" \
+      --net "host" \
+      -e "HADOOP_DAEMON=NAMENODE" \
+      -e "HADOOP_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*" \
+      -e "YARN_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/*" \
+      -v "/etc/hadoop:/etc/hadoop" \
+      "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"

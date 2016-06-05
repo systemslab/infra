@@ -1,14 +1,11 @@
 ---
-- include: pre_requisite.yml
-  when: install_docker
 - include: selinux.yml
   when: ansible_os_family == 'RedHat'
 
 - name: start collectl
-  docker:
-    image: "{{ collectl_docker_username }}/{{ collectl_docker_imagename }}"
-    name: "collectl"
-    net: "host"
-    state: "running"
-    env: 
-      ARGS: "{{ args }} --export graphite,{{ groups.graphite[0] }}"
+  shell: >
+    docker run \
+      --name "collectl" \
+      --net host \
+      -e "ARGS={{ args }} --export graphite,{{ groups.graphite[0] }}" \
+      "{{ collectl_docker_username }}/{{ collectl_docker_imagename }}"

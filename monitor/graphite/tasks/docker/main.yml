@@ -1,16 +1,13 @@
 ---
-- include: pre_requisite.yml
-  when: install_docker
 - include: selinux.yml
   when: ansible_os_family == 'RedHat'
 
 - name: start graphite
-  docker:
-    image: "{{ graphite_docker_username }}/{{ graphite_docker_imagename }}"
-    name: "graphite"
-    net: "host"
-    state: "running"
-    volumes: "/tmp/graphite:/tmp/graphite"
-    env:
-      APACHE_PORT: "{{ apache_port }}"
-      WEBUI_PORT: "{{ webui_port }}"
+  shell:
+    docker run \
+      --name "graphite" \
+      --net host \
+      -v "/tmp/graphite:/tmp/graphite" \
+      -e "APACHE_PORT={{ apache_port }}" \
+      -e "WEBUI_PORT={{ webui_port }}" \
+      "{{ graphite_docker_username }}/{{ graphite_docker_imagename }}"

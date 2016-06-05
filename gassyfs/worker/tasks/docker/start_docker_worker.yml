@@ -1,24 +1,21 @@
 ---
 - name: run the gassyfs docker image
-  docker:
-    image: "{{ gassyfs_docker_username }}/{{ gassyfs_docker_imagename }}"
-    name: "{{ container_name_worker }}"
-    net: "host"
-    state: "running"
-    env: 
-      DAEMON: "WORKER"
-      SRC_DIR: "{{ src_directory }}"
-      SSHD_PORT: "{{ worker_sshd_port }}"
-      AUTHORIZED_KEYS: "{{ authkey }}"
-      INFINIBAND: "{{ infiniband }}"
-      GASNET_COMPILE_ARGS: "{{ gasnet_compile_args }}"
-      GASNET_MASTERIP: "{{ ansible_host }}"
-      NO_UNIX_SOCKETS: 1 
-      GIT_URL: "{{ git_url }}"
-      GIT_COMMIT: "{{ git_commit }}"
-    volumes:
-      - "{{ src_directory }}/worker:{{ src_directory }}"
-      - "/dev/shm:/dev/shm"
-      - "/run/shm:/run/shm"
-      - "{{ home_directory }}:/home"
-    privileged: True
+  shell:
+    docker run --privileged \
+      --name "{{ container_name_worker }}" \
+      --net host \
+      -e "DAEMON=WORKER" \
+      -e "SRC_DIR={{ src_directory }}" \
+      -e "SSHD_PORT={{ worker_sshd_port }}" \
+      -e "AUTHORIZED_KEYS={{ authkey }}" \
+      -e "INFINIBAND={{ infiniband }}" \
+      -e "GASNET_COMPILE_ARGS={{ gasnet_compile_args }}" \
+      -e "GASNET_MASTERIP={{ ansible_host }}" \
+      -e "NO_UNIX_SOCKETS=1" \
+      -e "GIT_URL={{ git_url }}" \
+      -e "GIT_COMMIT={{ git_commit }}" \
+      -v "{{ src_directory }}/worker:{{ src_directory }}" \
+      -v "/dev/shm:/dev/shm" \
+      -v "/run/shm:/run/shm" \
+      -v "{{ home_directory }}:/home" \
+      "{{ gassyfs_docker_username }}/{{ gassyfs_docker_imagename }}"

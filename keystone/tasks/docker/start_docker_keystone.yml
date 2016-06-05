@@ -1,7 +1,7 @@
 ---
 - name: run the keystone docker image
   shell:
-    docker run \
+    docker run -d \
       --name "keystone" \
       --net host \
       -e "OS_USERNAME=admin" \

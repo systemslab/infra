@@ -1,11 +1,11 @@
 ---
 - name: run the gassyfs docker image
-  shell: >
+  shell: 
     docker run --privileged -d \
       --name "{{ container_name_master }}" \
       --net "host" \
       -e "DAEMON=MASTER" \
-      -e "SSH_SERVERS={{ groups.worker | join(\" \") }}" \
+      -e "SSH_SERVERS={{ groups.worker | join(" ") }}" \
       -e "SRC_DIR={{ src_directory }}" \
       -e "SSH_PORT={{ worker_sshd_port }}" \
       -e "SSHD_PORT={{ master_sshd_port }}" \

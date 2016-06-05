@@ -9,7 +9,6 @@ service:
   - docker
 
 env:
-  - JOB="ceph"
   - JOB="hadoop"
   - JOB="gassyfs"
   - JOB="swift"

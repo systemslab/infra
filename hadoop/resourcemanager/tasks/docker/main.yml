@@ -1,7 +1,5 @@
 ---
 #- include: checks.yml
-- include: pre_requisite.yml
-  when: install_docker
 - include: selinux.yml
   when: ansible_os_family == 'RedHat'
 

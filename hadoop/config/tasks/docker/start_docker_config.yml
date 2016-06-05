@@ -1,12 +1,12 @@
 ---
-- name: generate hadoop configs 
-  docker:
-    image: "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
-    name: "hadoop-config"
-    net: "host"
-    state: "running"
-    env: "HADOOP_DAEMON=CONFIG"
-    volumes: "/etc/hadoop:/etc/hadoop"
+- name: generate hadoop configs
+  shell: >
+    docker run \
+      --name hadoop-config \
+      --net host \
+      -e "HADOOP_DAEMON=CONFIG" \
+      -v "/etc/hadoop:/etc/hadoop" \
+      "{{ hadoop_docker_username }}/{{ hadoop_docker_imagename }}"
 
 - name: wait for the container to populate the configs
   shell: docker wait hadoop-config

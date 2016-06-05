@@ -1,26 +1,23 @@
 ---
 - name: run the gassyfs docker image
-  docker:
-    image: "{{ gassyfs_docker_username }}/{{ gassyfs_docker_imagename }}"
-    name: "{{ container_name_master }}"
-    net: "host"
-    state: "running"
-    env: 
-      DAEMON: "MASTER"
-      SSH_SERVERS: "{{ groups.worker | join(\" \") }}"
-      SRC_DIR: "{{ src_directory }}"
-      SSH_PORT: "{{ worker_sshd_port }}"
-      SSHD_PORT: "{{ master_sshd_port }}"
-      AUTHORIZED_KEYS: "{{ authkey }}"
-      MOUNT_ARGS: "{{ mount_args }}"
-      INFINIBAND: "{{ infiniband }}"
-      GASNET_COMPILE_ARGS: "{{ gasnet_compile_args }}"
-      GASNET_MASTERIP: "{{ ansible_host }}"
-      GIT_URL: "{{ git_url }}"
-      GIT_COMMIT: "{{ git_commit }}"
-    volumes:
-      - "{{ src_directory }}/master:{{ src_directory }}"
-      - "{{ ssh_tmpdir }}:/root/.ssh"
-      - "/dev/shm:/dev/shm"
-      - "/run/shm:/run/shm"
-    privileged: True
+  shell: 
+    docker run --privileged -d \
+      --name "{{ container_name_master }}" \
+      --net "host" \
+      -e "DAEMON=MASTER" \
+      -e "SSH_SERVERS={{ groups.worker | join(" ") }}" \
+      -e "SRC_DIR={{ src_directory }}" \
+      -e "SSH_PORT={{ worker_sshd_port }}" \
+      -e "SSHD_PORT={{ master_sshd_port }}" \
+      -e "AUTHORIZED_KEYS={{ authkey }}" \
+      -e "MOUNT_ARGS={{ mount_args }}" \
+      -e "INFINIBAND={{ infiniband }}" \
+      -e "GASNET_COMPILE_ARGS={{ gasnet_compile_args }}" \
+      -e "GASNET_MASTERIP={{ ansible_host }}" \
+      -e "GIT_URL={{ git_url }}" \
+      -e "GIT_COMMIT={{ git_commit }}" \
+      -v "{{ src_directory }}/master:{{ src_directory }}" \
+      -v "{{ ssh_tmpdir }}:/root/.ssh" \
+      -v "/dev/shm:/dev/shm" \
+      -v "/run/shm:/run/shm" \
+      "{{ gassyfs_docker_username }}/{{ gassyfs_docker_imagename }}"

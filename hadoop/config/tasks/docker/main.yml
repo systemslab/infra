@@ -8,8 +8,6 @@
 - include: checks.yml
   when: hadoop_health.rc != 0
 
-- include: pre_requisite.yml
-  when: install_docker
 - include: selinux.yml
   when: ansible_os_family == 'RedHat'
 

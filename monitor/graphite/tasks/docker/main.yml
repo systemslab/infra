@@ -4,7 +4,7 @@
 
 - name: start graphite
   shell:
-    docker run \
+    docker run -d \
       --name "graphite" \
       --net host \
       -v "/tmp/graphite:/tmp/graphite" \

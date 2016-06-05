@@ -1,7 +1,7 @@
 ---
 - name: run the gassyfs docker image
   shell:
-    docker run --privileged \
+    docker run --privileged -d \
       --name "{{ container_name_worker }}" \
       --net host \
       -e "DAEMON=WORKER" \

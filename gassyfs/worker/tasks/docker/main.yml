@@ -1,5 +1,3 @@
 ---
-- include: pre_requisite.yml
-  when: install_docker
 - include: start_docker_worker.yml
 - include: check.yml

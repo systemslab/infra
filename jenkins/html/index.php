@@ -117,7 +117,7 @@ echo "Last Check: " . $lastcheck . " [<a href='?run=true'>click to re-check!</a>
       <br> 
       <br>
       Notes:
-      <br> - <b>Restarting Jenkins</b>: Download <a href='https://raw.githubusercontent.com/systemslab/srl-roles/master/jenkins/run.sh' target='_blank'><font face='courier'>run.sh</font></a> and execute it.
+      <br> - <b>Restarting Jenkins</b>: Fill out a cluster directory (see GitHub repo), download <a href='https://raw.githubusercontent.com/systemslab/srl-roles/master/jenkins/run.sh' target='_blank'><font face='courier'>run.sh</font></a> and execute it. 
       <br> - <b>Jenkins Docker Image</b>: <a href='https://github.com/systemslab/srl-roles/tree/master/jenkins' target='_blank'>GitHub</a>, <a href='https://hub.docker.com/r/michaelsevilla/jenkins/tags/' target='_blank'>Docker Hub</a>
       <br>
       <br>";

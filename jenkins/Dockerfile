@@ -11,7 +11,7 @@ RUN echo "===> Install Ansible..."  && \
     echo "deb-src http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" | tee -a /etc/apt/sources.list.d/ansible.list && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7BB9C367 && \
     apt-get update && \
-    apt-get install -yq --force-yes ansible apache2 php5 && \
+    apt-get install -yq --force-yes ansible=2.0.2.0* apache2 php5 && \
     apt-get clean && rm -rf \
       /var/lib/apt/lists/* /etc/apt/sources.list.d/ansible.list \
       tmp/* /var/tmp/* 

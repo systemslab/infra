@@ -7,10 +7,10 @@ docker run -d \
   --net host \
   -v ~/.ssh/:/root/.ssh \
   -v /user/jenkins_home:/var/jenkins_home \
+  -v /user:/user \
   -v `pwd`/cluster:/cluster \
   michaelsevilla/jenkins
 
-docker exec jenkins /bin/bash -c "echo `date +"%A %B %d %r"` > /tmp/lastrun"
 docker exec jenkins cp /cluster/hosts /etc/ansible/hosts
 docker exec jenkins cp /cluster/ansible.cfg /etc/ansible/ansible.cfg
 docker exec jenkins cp /root/.ssh/id_rsa /tmp/private_key

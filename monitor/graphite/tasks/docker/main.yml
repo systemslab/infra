@@ -8,6 +8,7 @@
       --name "graphite" \
       --net host \
       -v "/tmp/graphite:/tmp/graphite" \
+      -v "{{ playbook_dir }}/group_vars/graphite_conf:/tmp/graphite/conf" \
       -e "APACHE_PORT={{ apache_port }}" \
       -e "WEBUI_PORT={{ webui_port }}" \
       "{{ graphite_docker_username }}/{{ graphite_docker_imagename }}"

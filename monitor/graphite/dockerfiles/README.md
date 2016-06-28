@@ -15,4 +15,7 @@ docker run \
   michaelsevilla/graphite
 ```
 
+You can fill in STORAGE_SCHEMAS, CARBON, and DASHBOARD environment variables to
+append values to the conf files.
+
 EOF

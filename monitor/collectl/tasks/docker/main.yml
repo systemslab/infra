@@ -5,7 +5,7 @@
 - name: start collectl
   shell: >
     docker run -d \
-      --name "collectl" \
+      --name "{{ collectl_container_name }}" \
       --net host \
-      -e "ARGS={{ args }} --export graphite,{{ groups.graphite[0] }}" \
+      -e "ARGS={{ collectl_args }} --export graphite,{{ groups.graphite[0] }}" \
       "{{ collectl_docker_username }}/{{ collectl_docker_imagename }}"

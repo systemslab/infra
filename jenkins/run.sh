@@ -6,7 +6,7 @@ docker run -d \
   --name jenkins \
   --net host \
   -v ~/.ssh/:/root/.ssh \
-  -v /user/jenkins_home:/var/jenkins_home \
+  -v /user/var/jenkins_home:/var/jenkins_home \
   -v /user:/user \
   -v `pwd`/cluster:/cluster \
   michaelsevilla/jenkins

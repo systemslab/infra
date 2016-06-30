@@ -2,13 +2,24 @@
 - include: selinux.yml
   when: ansible_os_family == 'RedHat'
 
+- name: make a spot for the confs
+  file: path=/tmp/graphite/conf state=directory
+
+- name: figure out which confs the user defined
+  local_action: command ls {{ playbook_dir }}/group_vars/graphite_conf
+  register: confs
+  ignore_errors: True
+
+- name: copy the confs over
+  copy: src={{ playbook_dir }}/group_vars/graphite_conf/{{ item }}  dest=/tmp/graphite/conf/{{ item }}
+  with_items: "{{ confs.stdout_lines }}"
+
 - name: start graphite
   shell:
     docker run -d \
       --name "graphite" \
       --net host \
       -v "/tmp/graphite:/tmp/graphite" \
-      -v "{{ playbook_dir }}/group_vars/graphite_conf:/tmp/graphite/conf" \
       -e "APACHE_PORT={{ apache_port }}" \
       -e "WEBUI_PORT={{ webui_port }}" \
       "{{ graphite_docker_username }}/{{ graphite_docker_imagename }}"

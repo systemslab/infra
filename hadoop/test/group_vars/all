@@ -1,0 +1,17 @@
+---
+# Variables here are applicable to all host groups NOT roles
+
+# This MUST be a full path
+fetch_directory: /tmp/fetch/
+
+##########
+# DOCKER #
+##########
+install_docker: True
+hadoop_docker_username: michaelsevilla
+hadoop_docker_imagename: hadoopdev
+
+container_name_namenode: "namenode"
+container_name_datanode: "datanode"
+container_name_resourcemanager: "resourcemanager"
+container_name_nodemanager: "nodemanager"

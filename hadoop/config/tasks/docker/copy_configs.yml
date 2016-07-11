@@ -1,16 +1,13 @@
 ---
-- name: get the current directory
-  shell: dirname {{ playbook_dir }}
-  register: dir
 
 - name: figure out which configs the user has defined
   connection: local
-  command: ls {{ dir.stdout }}/group_vars/hadoop_conf
+  command: ls {{ playbook_dir }}/group_vars/hadoop_conf
   register: confs
   ignore_errors: True
 
 - name: copy the user-defined configs to the remote note
-  copy: src={{ dir.stdout }}/group_vars/hadoop_conf/{{ item }} dest=/etc/hadoop/{{ item }}
+  copy: src={{ playbook_dir }}/group_vars/hadoop_conf/{{ item }} dest=/etc/hadoop/{{ item }}
   with_items: confs.stdout_lines
 
 - name: set config and keys paths

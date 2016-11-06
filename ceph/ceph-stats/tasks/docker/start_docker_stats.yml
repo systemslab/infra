@@ -4,25 +4,16 @@
   when: ceph_perf_dump is not defined
 
 - name: make sure the monitoring script is over there
-  stat: path=/etc/ceph-stats/ceph_perf_dump.py
+  stat: path=/etc/ceph/ceph_perf_dump.py
   register: st
 
 - name: make the directory
-  file: path=/etc/ceph-stats/ state=directory
+  file: path=/etc/ceph/ state=directory
   ignore_errors: True
 
 - name: push the script if it doesn't exist
-  copy: src={{ ceph_perf_dump }} dest=/etc/ceph-stats/ceph_perf_dump.py mode=0750
+  copy: src={{ ceph_perf_dump }} dest=/etc/ceph/ceph_perf_dump.py mode=0750
   when: st.stat.islnk is not defined
 
 - name: run the ceph container that collects stats
-  shell: >
-         docker run -d \
-           --name "{{ perfdump_container_name }}" \
-           --net host \
-           -v /etc/ceph:/etc/ceph \
-           -v /var/run/ceph:/var/run/ceph \
-           -v /etc/ceph-stats:/etc/ceph-stats \
-           --entrypoint="/bin/bash" \
-           "{{ ceph_mds_docker_username }}/{{ ceph_mds_docker_imagename }}" \
-           -c "/etc/ceph-stats/ceph_perf_dump.py {{ groups.graphite[0] }}"
+  shell: docker exec -d {{ ceph_stats_daemon }} /etc/ceph/ceph_perf_dump.py {{ groups.graphite[0] }}

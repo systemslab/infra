@@ -16,4 +16,4 @@
   when: st.stat.islnk is not defined
 
 - name: run the ceph container that collects stats
-  shell: docker exec -d {{ ceph_stats_daemon }} /etc/ceph/ceph_perf_dump.py {{ groups.graphite[0] }}
+  shell: docker exec -d {{ ceph_stats_daemon }} /etc/ceph/ceph_perf_dump.py --interval {{ ceph_stats_interval }} {{ groups.graphite[0] }}

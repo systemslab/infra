@@ -3,17 +3,12 @@
   fail: msg="Whoops! Looks like you didn't specify which monitor script to use in ceph-perf-dump"
   when: ceph_perf_dump is not defined
 
-- name: make sure the monitoring script is over there
-  stat: path=/etc/ceph/ceph_perf_dump.py
-  register: st
-
 - name: make the directory
   file: path=/etc/ceph/ state=directory
   ignore_errors: True
 
 - name: push the script if it doesn't exist
   copy: src={{ ceph_perf_dump }} dest=/etc/ceph/ceph_perf_dump.py mode=0750
-  when: st.stat.islnk is not defined
 
 - name: run the ceph container that collects stats
-  shell: docker exec -d {{ ceph_stats_daemon }} /etc/ceph/ceph_perf_dump.py --interval {{ ceph_stats_interval }} {{ groups.graphite[0] }}
+  shell: docker exec -d {{ ceph_stats_daemon }} /bin/bash -c "/etc/ceph/ceph_perf_dump.py {{ ceph_stats_args }} {{ groups.graphite[0] }}"
